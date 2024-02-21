@@ -2,14 +2,6 @@ const { Client, IntentsBitField } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
-// Read bot token from environment variable
-const botToken = process.env.BOT_TOKEN;
-
-if (!botToken) {
-    console.error("Bot token not provided in the environment variable BOT_TOKEN");
-    process.exit(1); // Exit the process if bot token is not provided
-}
-
 const client = new Client({
     intents: [
         IntentsBitField.Flags.Guilds,
@@ -36,6 +28,9 @@ function sendRandomQuote() {
     return randomQuote;
 }
 
+// Variable to track if 'g' has been replied to in the N chain
+let gReplied = false;
+
 // Function to send a random quote if 6 hours have passed since the previous message
 function sendRandomQuoteIfNeeded() {
     const lastMessageTime = client.lastMessageTime || 0;
@@ -53,6 +48,47 @@ function sendRandomQuoteIfNeeded() {
     }
 }
 
+// Event listener for messageCreate event
+client.on('messageCreate', (message) => {
+    const content = message.content.toLowerCase(); // Convert message content to lowercase for case-insensitive matching
+
+    // Define message-response pairs for the N chain
+    const responses = {
+        'n': 'i',
+        'i': 'g',
+        'g': 'e',
+        'e': 'r',
+    };
+
+    // Check if the message author is the bot itself
+    if (message.author.bot) return;
+
+    // Check if the message content matches any key in the responses object
+    if (responses.hasOwnProperty(content)) {
+        // If the content is 'g' and 'g' has not been replied to yet
+        if (content === 'g' && !gReplied) {
+            message.reply('g'); // Send 'g' a second time
+            gReplied = true; // Set gReplied to true to indicate that 'g' has been replied to
+        } else {
+            // Respond with the corresponding value from the responses object
+            message.reply(responses[content]);
+        }
+    }
+
+    // Check if the bot was mentioned in the message
+    if (message.mentions.users.has(client.user.id)) {
+        // Reply to the user who mentioned the bot with a random quote
+        const randomQuote = sendRandomQuote();
+        message.reply(randomQuote);
+    }
+
+    // Check if the message author's ID matches the specified ID and the message content matches the specific phrase
+    if (message.author.id === '151170388708032512' && content === 'hello my child') {
+        // Reply with a specific response
+        message.reply('Hello Father.');
+    }
+});
+
 // Event listener that checks if the bot is online and sends console log when client is on.
 client.on('ready', () => {
     console.log(`✅ ${client.user.tag} is online.`);
@@ -60,20 +96,9 @@ client.on('ready', () => {
     setInterval(sendRandomQuoteIfNeeded, 60 * 60 * 1000); // Check every hour if a random quote needs to be sent
 });
 
-// Event listener for messageCreate event
-client.on('messageCreate', (message) => {
-    const botMention = message.mentions.users.has(client.user.id);
-    
-    // Check if the bot was mentioned in the message
-    if (botMention) {
-        // Reply to the user who mentioned the bot with a random quote
-        const randomQuote = sendRandomQuote();
-        message.reply(randomQuote);
-    }
-});
 
 // Event listener that logs the bot in with token from environment variable
-client.login(botToken);
+// client.login(botToken);
 
 // Event listener that logs the bot in with token (without docker).
-// client.login('TOKEN_HERE');
+client.login('OTIyNTc5MjY5NjM5NjE4NjQw.Ge2dfm.bj3QXqydEIf5H9eNopLZUWq9qELRR54UFnL3aE');
