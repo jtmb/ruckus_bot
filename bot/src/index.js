@@ -98,7 +98,7 @@ client.on('ready', () => {
 
 
 // Event listener that logs the bot in with token from environment variable
-// client.login(botToken);
+client.login(botToken);
 
 // Event listener that logs the bot in with token (without docker).
-client.login('OTIyNTc5MjY5NjM5NjE4NjQw.Ge2dfm.bj3QXqydEIf5H9eNopLZUWq9qELRR54UFnL3aE');
+// client.login('');
