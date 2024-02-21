@@ -11,6 +11,14 @@ const client = new Client({
     ]
 });
 
+// Read bot token from environment variable
+const botToken = process.env.BOT_TOKEN;
+
+if (!botToken) {
+    console.error("Bot token not provided in the environment variable BOT_TOKEN");
+    process.exit(1); // Exit the process if bot token is not provided
+}
+
 // Path to the ruckus_quotes.txt file
 const quotesFilePath = path.join(__dirname, 'ruckus_quotes.txt');
 
@@ -95,7 +103,6 @@ client.on('ready', () => {
     sendRandomQuoteIfNeeded(); // Send a random quote when the bot is ready
     setInterval(sendRandomQuoteIfNeeded, 60 * 60 * 1000); // Check every hour if a random quote needs to be sent
 });
-
 
 // Event listener that logs the bot in with token from environment variable
 client.login(botToken);

@@ -6,7 +6,7 @@ services:
       context: .
     environment:
       TZ: America/Toronto
-      BOT_TOKEN: 
+      BOT_TOKEN:
       # MYSQL_DATABASE: db
       # MYSQL_USER: user
       # MYSQL_PASSWORD: "password"
