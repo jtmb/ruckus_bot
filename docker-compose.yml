@@ -6,8 +6,8 @@ services:
       context: .
     environment:
       TZ: America/Toronto
-      BOT_TOKEN: OTIyNTc5MjY5NjM5NjE4NjQw.GMOKWl.ii0Voqp9UEwdA3SkoSE1YdMPFv_RIhWw_egno0
-      OPENWEATHERMAP_API_KEY: 807921ab5bfd7d8c346c0fdcecd95386
+      BOT_TOKEN:
+      OPENWEATHERMAP_API_KEY:
       # MYSQL_DATABASE: db
       # MYSQL_USER: user
       # MYSQL_PASSWORD: "password"
