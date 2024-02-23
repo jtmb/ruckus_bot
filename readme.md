@@ -17,3 +17,9 @@
     1. npm init -y #init project
     2. npm install mysql2
     3. nodemon
+
+### tabler
+
+    1. npx create-react-app tabler-react
+    2. npm install react-router-dom
+    3. sudo gem install jekyll bundler
