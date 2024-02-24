@@ -1,6 +1,4 @@
 import mysql from "mysql2"
-import dotenv from 'dotenv'
-dotenv.config()
 
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
@@ -30,9 +28,9 @@ async function createUser(username, password) {
     return result
 }
 
-const result = await createUser('lol', 'nuts')
-console.log(result)
+// const result = await createUser('lol', 'nuts')
+// console.log(result)
 
 
-// const user = await getUsers() 
-// console.log(user) 
+const user = await getUsers() 
+console.log(user) 
