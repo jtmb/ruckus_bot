@@ -1,9 +1,8 @@
-// botResponses.js
-
 // Imports
 const sendRandomQuote = require('./randomQuote');
 const { logEvent } = require('./mysql');
-const { handleWeatherCommand } = require('./weatherAPI'); // Import handleWeatherCommand function from weatherAPI.js
+const { handleWeatherCommand } = require('./weatherAPI');
+const { fetchJoke } = require('./jokeAPI'); // Import fetchJoke function from jokeAPI.js
 
 // Variable to track if 'g' has been replied to in the N chain
 let gReplied = false;
@@ -69,6 +68,17 @@ async function handleBotResponses(client) {
             return;
         }
 
+        // Check if the message mentions the bot and mentions a joke
+        if (message.mentions.users.has(client.user.id) && (content.includes('joke') || content.includes('tell me a joke'))) {
+            // Fetch a joke from the JokeAPI
+            const joke = await fetchJoke();
+            // Reply to the user with the fetched joke
+            message.reply(joke);
+            // Add the message ID to the map of replied messages
+            repliedMessages.set(message.id, true);
+            return;
+        }
+
         // Define message-response pairs for the N chain
         const responses = {
             'n': 'i',
@@ -123,4 +133,3 @@ async function handleBotResponses(client) {
 }
 
 module.exports = handleBotResponses;
-

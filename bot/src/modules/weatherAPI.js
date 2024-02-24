@@ -30,7 +30,6 @@ async function getWeather(city) {
     }
 }
 
-
 // Function to handle weather commands
 async function handleWeatherCommand(messageContent) {
     // Extract city name from message content
