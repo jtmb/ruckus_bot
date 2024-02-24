@@ -33,4 +33,4 @@ async function createUser(username, password) {
 
 
 const user = await getUsers() 
-console.log(user) 
+console.log(user)  
