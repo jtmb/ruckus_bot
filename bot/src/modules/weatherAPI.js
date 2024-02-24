@@ -17,6 +17,9 @@ async function getWeather(city) {
             const weatherDescription = data.weather[0].description;
             const temperature = data.main.temp;
             return { description: weatherDescription, temperature: temperature, cityName: city };
+        } else if (response.status === 404) {
+            console.error('City not found:', city);
+            return 'City not found. Please provide a valid city name.';
         } else {
             console.error('Error fetching weather data:', data.message || 'Unknown error');
             return 'Unable to fetch weather data. Please try again later.';
@@ -27,25 +30,46 @@ async function getWeather(city) {
     }
 }
 
+
 // Function to handle weather commands
-async function handleWeatherCommand(message) {
-    const content = message.content.toLowerCase();
-    const match = content.match(/weather\s+in\s+(\w+)/);
-    if (match) {
-        const city = match[1];
-        try {
-            const weatherData = await getWeather(city); // Correct function call
-            // Include additional weather information in the response
-            message.reply(`The current weather in ${weatherData.cityName} is ${weatherData.description} with a temperature of ${weatherData.temperature}°C.`);
-        } catch (error) {
-            console.error('Error fetching weather:', error.message);
-            message.reply('Sorry, I could not retrieve the weather information for that city.');
+async function handleWeatherCommand(messageContent) {
+    // Extract city name from message content
+    const cityRegex = /(?:\bin\b\s+)?(.+)/i;
+    const match = messageContent.match(cityRegex);
+    let city = '';
+
+    if (match && match[1]) {
+        city = match[1].trim().toLowerCase();
+    }
+
+    if (!city) {
+        console.error('City name is missing.');
+        return 'City name is missing.';
+    }
+
+    try {
+        const weatherData = await getWeather(city);
+        if (weatherData.description && weatherData.temperature && weatherData.cityName) {
+            // Weather data retrieved successfully
+            return { cityName: weatherData.cityName, description: weatherData.description, temperature: weatherData.temperature };
+        } else {
+            // Weather data is incomplete
+            console.error('Incomplete weather data:', weatherData);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching weather:', error.message);
+        // Check if the error message indicates city not found
+        if (error.message.includes('city not found')) {
+            return 'City not found. Please provide a valid city name.';
+        } else {
+            return 'An error occurred while fetching weather data. Please try again later.';
         }
     }
 }
 
-// Export the getWeather and handleWeatherCommand functions
+
+// Export the handleWeatherCommand function
 module.exports = {
-    getWeather,
     handleWeatherCommand
 };
