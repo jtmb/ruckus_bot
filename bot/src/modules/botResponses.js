@@ -1,7 +1,7 @@
-// botResponses.js
 // Imports
-const sendRandomQuote = require('./randomQuote'); // Import the sendRandomQuote function from randomQuote module
-const { handleWeatherCommand } = require('./weatherAPI'); // Import the handleWeatherCommand function from weatherAPI module
+const sendRandomQuote = require('./randomQuote');
+const { handleWeatherCommand } = require('./weatherAPI');
+const { logEvent } = require('./mysql');
 
 // Variable to track if 'g' has been replied to in the N chain
 let gReplied = false;
@@ -13,10 +13,17 @@ function handleBotResponses(client) {
 
     // Event listener for messageCreate event
     client.on('messageCreate', async (message) => {
-        const content = message.content.toLowerCase(); // Convert message content to lowercase for case-insensitive matching
+        const content = message.content.toLowerCase();
 
         // Check if the message author is the bot itself
         if (message.author.bot) return;
+
+        // Log user interactions
+        logEvent('user_interaction', {
+            userId: message.author.id,
+            messageContent: message.content,
+            timestamp: new Date()
+        });
 
         // Weather command handling
         if (content.startsWith('weather in')) {
@@ -40,7 +47,14 @@ function handleBotResponses(client) {
                 gReplied = true; // Set gReplied to true to indicate that 'g' has been replied to
             } else {
                 // Respond with the corresponding value from the responses object
-                message.reply(responses[content]);
+                const response = responses[content];
+                message.reply(response);
+                // Log the bot response to the N chain
+                logEvent('bot_response', {
+                    eventType: 'N_chain_response',
+                    responseData: response,
+                    timestamp: new Date()
+                });
             }
         }
 
@@ -62,7 +76,12 @@ function handleBotResponses(client) {
             }
         }
     });
+
+    // Event listener for bot ready event
+    client.once('ready', () => {
+        console.log('Bot is ready');
+        logEvent('bot_login', { botId: client.user.id, timestamp: new Date() });
+    });
 }
 
-// Export the function
 module.exports = handleBotResponses;
