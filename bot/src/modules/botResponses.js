@@ -25,12 +25,15 @@ async function handleBotResponses(client) {
         // Check if the message author is the bot itself
         if (message.author.bot) return;
 
-        // Log user interactions
-        logEvent('user_interaction', {
-            userId: message.author.id,
-            messageContent: message.content,
-            timestamp: new Date()
-        });
+        // Check if the bot was mentioned or replied to
+        if (message.mentions.users.has(client.user.id) || repliedMessages.has(message.id)) {
+            // Log user interactions
+            logEvent('user_interaction', {
+                userId: message.author.id,
+                messageContent: message.content,
+                timestamp: new Date()
+            });
+        }
 
         // Check if the bot is awaiting the city
         if (awaitingCity) {
