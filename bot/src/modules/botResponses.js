@@ -3,12 +3,20 @@ const sendRandomQuote = require('./randomQuote');
 const { logEvent } = require('./mysql');
 const { fetchJoke } = require('./jokeAPI'); // Import fetchJoke function from jokeAPI.js
 const handleWeatherCommands = require('./weatherComHandling');
-const handleNChainResponse = require('./nChain'); // Import handleNChainResponse function from nChain.js
+const handleNChainResponse = require('./nChain');
+const handleJokeCommand = require('./jokeComHandling');
+const handleEasterEgg = require('./easterEgg'); // Import handleEasterEgg function from easterEgg.js
+const handleBotReady = require('./isOnline'); // Import handleBotReady function from isOnline.js
 
 // Function to handle bot responses
 async function handleBotResponses(client) {
     // Map to track messages the bot has replied to
     const repliedMessages = new Map();
+
+    // Event listener for bot ready event
+    client.once('ready', () => {
+        handleBotReady(client);
+    });
 
     // Event listener for messageCreate event
     client.on('messageCreate', async (message) => {
@@ -36,33 +44,13 @@ async function handleBotResponses(client) {
         // Handle N chain responses
         handleNChainResponse(message, client, repliedMessages, logEvent);
 
-        // Check if the message mentions the bot and mentions a joke
-        if (message.mentions.users.has(client.user.id) && (content.includes('joke') || content.includes('tell me a joke'))) {
-            // Fetch a joke from the JokeAPI
-            const joke = await fetchJoke();
-            // Reply to the user with the fetched joke
-            message.reply(joke);
-            // Add the message ID to the map of replied messages
-            repliedMessages.set(message.id, true);
-            return;
+        // Handle joke command
+        if (await handleJokeCommand(message, client, repliedMessages)) {
+            return; // If the joke command was handled, return early
         }
 
-        // Check if the message author's ID matches the specified ID and the message content matches the specific phrase
-        if (message.author.id === '151170388708032512' && content === 'hello my child') {
-            // Check if the bot has already replied to this message
-            if (!repliedMessages.has(message.id)) {
-                // Reply with a specific response
-                message.reply('Hello Father.');
-                // Add the message ID to the map of replied messages
-                repliedMessages.set(message.id, true);
-            }
-        }
-    });
-
-    // Event listener for bot ready event
-    client.once('ready', () => {
-        console.log('Bot is ready');
-        logEvent('bot_login', { botId: client.user.id, timestamp: new Date() });
+        // Handle Easter egg
+        handleEasterEgg(message, repliedMessages);
     });
 }
 
