@@ -1,5 +1,3 @@
-// botResponses.js
-
 // Imports
 const sendRandomQuote = require('./randomQuote');
 const { logEvent } = require('./mysql');
@@ -42,7 +40,8 @@ async function handleBotResponses(client) {
         }
 
         // Handle insults in messages
-        await handleInsults(message);
+        const insultReplied = await handleInsults(message, repliedMessages); // Pass repliedMessages here
+        if (insultReplied) return; // Return if an insult was replied
 
         // Handle weather commands
         await handleWeatherCommands(message, client, repliedMessages);

@@ -13,6 +13,8 @@ async function getWeather(city) {
         const response = await fetch.default(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
         const data = await response.json();
 
+        console.log('API Response:', data); // Log the API response for debugging
+
         if (response.ok) {
             const weatherDescription = data.weather[0].description;
             const temperature = data.main.temp;
@@ -33,7 +35,7 @@ async function getWeather(city) {
 // Function to handle weather commands
 async function handleWeatherCommand(messageContent) {
     // Extract city name from message content
-    const cityRegex = /(?:\bin\b\s+)?(.+)/i;
+    const cityRegex = /(?:in\s+)?(.+)/i;
     const match = messageContent.match(cityRegex);
     let city = '';
 
@@ -67,8 +69,8 @@ async function handleWeatherCommand(messageContent) {
     }
 }
 
-
 // Export the handleWeatherCommand function
 module.exports = {
-    handleWeatherCommand
+    handleWeatherCommand,
+    getWeather // Also export getWeather function
 };

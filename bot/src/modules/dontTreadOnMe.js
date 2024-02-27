@@ -31,7 +31,7 @@ function escapeRegExp(string) {
 }
 
 // Function to handle insults in messages
-async function handleInsults(message) {
+async function handleInsults(message, repliedMessages) {
     const insults = await fetchInsultsFromWikipedia();
     const insultRegex = constructInsultRegex(insults);
     const content = message.content;
@@ -40,11 +40,10 @@ async function handleInsults(message) {
     if (insultRegex.test(content)) {
         // Fetch an insult and reply with it
         const insult = insults[Math.floor(Math.random() * insults.length)];
-        message.reply(insult);
+        await message.reply(insult);
+        return true; // Indicate that an insult was replied
     } else {
-        // If the message is not an insult, respond with a random quote
-        const randomQuote = sendRandomQuote();
-        message.reply(randomQuote);
+        return false; // Indicate that no insult was replied
     }
 }
 
