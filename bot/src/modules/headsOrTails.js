@@ -1,4 +1,5 @@
 // headsOrTails.js
+
 // Import the necessary modules
 const { MessageCollector } = require('discord.js');
 
@@ -18,35 +19,26 @@ let coinFlipInProgress = false;
 
 async function handleHeadsOrTails(message) {
     try {
-      // Check if a coin flip game is already in progress
-      if (coinFlipInProgress) {
-        await message.reply('A coin flip game is already in progress. Please wait for the current game to finish.');
-        return;
-      }
-  
-      // Set the flag indicating that a coin flip game is now in progress
-      coinFlipInProgress = true;
-
-      // Parse the user's command
-      const content = message.content.toLowerCase();
-      const choiceIndex = content.indexOf('heads') !== -1 ? content.indexOf('heads') : content.indexOf('tails');
-      if (choiceIndex === -1) {
-        await message.reply('Please specify either "heads" or "tails" in your command.');
-        coinFlipInProgress = false;
-        return;
-      }
-
-      const choice = content.substr(choiceIndex, 5); // Extract "heads" or "tails" from the message
-      const result = coinFlip();
-      await message.channel.send(`You chose ${choice}. The result is ${result}.`);
-  
-      // Reset the flag indicating that a coin flip game is in progress
-      coinFlipInProgress = false;
+        // Check if the message contains the "flip a coin" command
+        if (message.content.toLowerCase().includes('flip a coin')) {
+            // Parse the user's command
+            const content = message.content.toLowerCase();
+            const choiceIndex = content.indexOf('heads') !== -1 ? content.indexOf('heads') : content.indexOf('tails');
+            if (choiceIndex === -1) {
+                await message.reply('Please specify either "heads" or "tails" in your command.');
+                return;
+            }
+            const choice = content.substr(choiceIndex, 5); // Extract "heads" or "tails" from the message
+            const result = coinFlip();
+            await message.channel.send(`You chose ${choice}. The result is ${result}.`);
+        } else {
+            // If the message is not a "flip a coin" command, do nothing
+            return;
+        }
     } catch (error) {
-      console.error('Error in handleHeadsOrTails:', error);
-      // Reset the flag indicating that a coin flip game is in progress in case of error
-      coinFlipInProgress = false;
+        console.error('Error in handleHeadsOrTails:', error);
     }
 }
 
 module.exports = handleHeadsOrTails;
+
