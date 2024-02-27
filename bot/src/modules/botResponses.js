@@ -1,3 +1,4 @@
+// botResponses.js
 // Imports
 const sendRandomQuote = require('./randomQuote');
 const { logEvent } = require('./mysql');
@@ -8,6 +9,7 @@ const handleJokeCommand = require('./jokeComHandling');
 const handleEasterEgg = require('./easterEgg'); // Import handleEasterEgg function from easterEgg.js
 const handleBotReady = require('./isOnline'); // Import handleBotReady function from isOnline.js
 const handleInsults = require('./dontTreadOnMe'); // Import handleInsults function from dontTreadOnMe.js
+const handleHeadsOrTails = require('./headsOrTails'); // Import handleHeadsOrTails function from headsOrTails.js
 
 // Function to handle bot responses
 async function handleBotResponses(client) {
@@ -56,6 +58,11 @@ async function handleBotResponses(client) {
 
         // Handle Easter egg
         handleEasterEgg(message, repliedMessages);
+
+        // Handle heads or tails command
+        if (content.includes(`<@${client.user.id}> flip a coin`)) {
+            await handleHeadsOrTails(message);
+        }
     });
 }
 
