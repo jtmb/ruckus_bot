@@ -1,4 +1,5 @@
 // botResponses.js
+
 // Imports
 const sendRandomQuote = require('./randomQuote');
 const { logEvent } = require('./mysql');
@@ -46,15 +47,15 @@ async function handleBotResponses(client) {
         if (insultReplied) return; // Return if an insult was replied
 
         // Handle weather commands
-        await handleWeatherCommands(message, client, repliedMessages);
+        const weatherCommandHandled = await handleWeatherCommands(message, client, repliedMessages);
+        if (weatherCommandHandled) return; // Return if a weather command was handled
 
         // Handle N chain responses
         handleNChainResponse(message, client, repliedMessages, logEvent);
 
         // Handle joke command
-        if (await handleJokeCommand(message, client, repliedMessages)) {
-            return; // If the joke command was handled, return early
-        }
+        const jokeCommandHandled = await handleJokeCommand(message, client, repliedMessages);
+        if (jokeCommandHandled) return; // Return if a joke command was handled
 
         // Handle Easter egg
         handleEasterEgg(message, repliedMessages);
@@ -62,7 +63,19 @@ async function handleBotResponses(client) {
         // Handle heads or tails command
         if (content.includes(`<@${client.user.id}> flip a coin`)) {
             await handleHeadsOrTails(message);
+            return;
         }
+
+        // If none of the above commands are detected and the bot is mentioned
+        if (message.mentions.users.has(client.user.id)) {
+            // Do nothing if a weather command was detected
+            return;
+        }
+
+        // If the bot is mentioned without any recognized command
+        // Send a random quote
+        const randomQuote = sendRandomQuote();
+        await message.channel.send(randomQuote);
     });
 }
 
