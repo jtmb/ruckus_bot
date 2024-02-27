@@ -39,7 +39,7 @@ async function handleInsults(message) {
     // Check if the message content contains an insult using the constructed regular expression
     if (insultRegex.test(content)) {
         // Fetch an insult and reply with it
-        const insult = await fetchInsult();
+        const insult = insults[Math.floor(Math.random() * insults.length)];
         message.reply(insult);
     } else {
         // If the message is not an insult, respond with a random quote

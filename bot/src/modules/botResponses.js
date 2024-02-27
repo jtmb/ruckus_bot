@@ -1,3 +1,5 @@
+// botResponses.js
+
 // Imports
 const sendRandomQuote = require('./randomQuote');
 const { logEvent } = require('./mysql');
@@ -7,6 +9,7 @@ const handleNChainResponse = require('./nChain');
 const handleJokeCommand = require('./jokeComHandling');
 const handleEasterEgg = require('./easterEgg'); // Import handleEasterEgg function from easterEgg.js
 const handleBotReady = require('./isOnline'); // Import handleBotReady function from isOnline.js
+const handleInsults = require('./dontTreadOnMe'); // Import handleInsults function from dontTreadOnMe.js
 
 // Function to handle bot responses
 async function handleBotResponses(client) {
@@ -37,6 +40,9 @@ async function handleBotResponses(client) {
                 timestamp: new Date()
             });
         }
+
+        // Handle insults in messages
+        await handleInsults(message);
 
         // Handle weather commands
         await handleWeatherCommands(message, client, repliedMessages);
