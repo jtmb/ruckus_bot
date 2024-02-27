@@ -1,6 +1,6 @@
 // weatherComHandling.js
 // Imports
-const { getWeather } = require('./weatherAPI');
+const { handleWeatherCommand } = require('./weatherAPI');
 
 // Variable to track if the bot is waiting for the city after asking
 let awaitingCity = false;
@@ -12,12 +12,12 @@ async function handleWeatherCommands(message, client, repliedMessages) {
     // Check if the bot is awaiting the city
     if (awaitingCity) {
         // Extract the city name from the message content
-        const city = content.trim();
+        const city = content.trim().replace(/<[^>]*>/g, ''); // Remove any Discord mentions
         try {
-            // Call getWeather with the city
-            const weatherData = await getWeather(city);
+            // Call handleWeatherCommand with the city
+            const weatherData = await handleWeatherCommand(city);
             // Send weather information back to the user
-            if (weatherData && weatherData.description && weatherData.temperature && weatherData.cityName) {
+            if (weatherData) {
                 message.reply(`The current weather in ${weatherData.cityName} is ${weatherData.description} with a temperature of ${weatherData.temperature}°C.`);
             } else {
                 message.reply('Sorry, I could not retrieve the weather information for that city.');
