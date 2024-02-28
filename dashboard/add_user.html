@@ -171,35 +171,60 @@
         <!-- Page body -->
         <div class="page-wrapper">
           <div class="page-body">
-              <div class="container-xl">
-                  <div class="row row-deck row-cards">
-                      <div class="col-12">
-                          <div class="card">
-                              <div class="card-body">
-                                  <h5 class="card-title">Add User</h5>
-                                  <form id="addUserForm" action="http://localhost:3001/users" method="post">
-                                      <div class="mb-3">
-                                          <label for="name" class="form-label">Name</label>
-                                          <input type="text" class="form-control" id="name" name="name" value="" required>
-                                      </div>
-                                      <div class="mb-3">
-                                          <label for="password" class="form-label">Password</label>
-                                          <input type="text" class="form-control" id="password" name="password" value="" required>
-                                      </div>
-                                      <div class="mb-3">
-                                          <label for="role" class="form-label">Role</label>
-                                          <input type="text" class="form-control" id="role" name="role" value="" required>
-                                      </div>
-                                      <button type="submit" class="btn btn-primary">Create User</button>
-                                  </form>
-                              </div>
-                          </div>
-                      </div>
+            <div class="container-xl">
+              <div class="row row-deck row-cards">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Add User</h5>
+                      <form id="addUserForm" action="http://localhost:3001/users" method="post">
+                        <div class="mb-3">
+                          <label for="name" class="form-label">Name</label>
+                          <input type="text" class="form-control" id="name" name="name" value="" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="password" class="form-label">Password</label>
+                          <input type="password" class="form-control" id="password" name="password" value="" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="role" class="form-label">Role</label>
+                          <select class="form-select" id="role" name="role" required>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                          </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create User</button>
+                      </form>
+                    </div>
                   </div>
+                </div>
+                <!-- Table for displaying users -->
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Users</h5>
+                      <div class="table-responsive">
+                        <table class="table table-vcenter table-striped">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Role</th>
+                              <th>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody id="userTableBody"></tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
           </div>
         </div>
         <!-- Page body end -->
+
+
 
         </div>
       </div>
@@ -239,6 +264,7 @@
 <!-- Libs JS -->
 <script src="./dist/js/loged-in-user.js" defer></script>
 <script src="./dist/js/create-user.js" defer></script>
+<script src="./dist/js/display-users.js" defer></script>
 <!-- Tabler Core -->
 <script src="./dist/js/tabler.min.js?1684106062" defer></script>
 <script src="./dist/js/demo.min.js?1684106062" defer></script>
