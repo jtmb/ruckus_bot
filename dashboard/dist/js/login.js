@@ -6,16 +6,27 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
 
     try {
         const response = await fetch(`http://localhost:3001/users?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-        const data = await response.json();
+        const users = await response.json();
 
         if (response.ok) {
-            // Authentication successful
-            console.log("Authentication successful:", data);
-            // Redirect the user to the dashboard
-            window.location.href = "dashboard.html";
+            // Find the logged-in user
+            const loggedInUser = users.find(user => user.username === username);
+            
+            if (loggedInUser) {
+                // Authentication successful
+                console.log("Authentication successful:", loggedInUser);
+                // Save logged-in user's information
+                sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+                // Redirect the user to the dashboard
+                window.location.href = "dashboard.html";
+            } else {
+                // User not found
+                console.error("User not found");
+                // Display error message to the user
+            }
         } else {
             // Authentication failed
-            console.error("Authentication failed:", data.error);
+            console.error("Authentication failed:", users.error);
             // Display error message to the user
         }
     } catch (error) {
