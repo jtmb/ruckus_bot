@@ -5,24 +5,27 @@ async function displayUsers() {
   
     const userTableBody = document.getElementById("userTableBody");
     userTableBody.innerHTML = ""; // Clear previous content
-  
+
     // Loop through each user and generate HTML for the table row
     users.forEach(user => {
-      const userTableRow = `
+        const userTableRow = `
         <tr>
-          <td>${user.username}</td>
-          <td>${user.role}</td>
-          <td>
-            <button type="button" class="btn btn-outline-danger btn-sm">
-              <i class="fe fe-trash-2"></i> Delete
+            <td>${user.username}</td>
+            <td>${user.role}</td>
+            <td>
+            <button type="button" class="btn btn-outline-danger btn-sm delete-user-btn" data-username="${user.username}">
+                <i class="fe fe-trash-2"></i> Delete
             </button>
-          </td>
+            </td>
         </tr>
-      `;
-      // Append the generated HTML to the table body
-      userTableBody.innerHTML += userTableRow;
+        `;
+        // Append the generated HTML to the table body
+        userTableBody.innerHTML += userTableRow;
     });
-  }
+
+    // After populating the user table, attach event listeners to delete buttons
+    attachDeleteButtonListeners(); // Call the function to attach event listeners
+}
   
   // Call the displayUsers function when the page loads
   window.addEventListener("load", displayUsers);

@@ -48,4 +48,13 @@ async function getUserByUsername(username) {
     return rows[0];
 }
 
-module.exports = { getUsers, getUser, createUser, updateUserPassword, getUserByUsername };
+async function deleteUserByUsername(username) {
+    const result = await pool.query(`
+    DELETE FROM credentials
+    WHERE username = ?
+    `, [username]);
+    return result;
+}
+
+module.exports = { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername };
+

@@ -1,7 +1,7 @@
 // api.js
 const express = require("express");
 const bcrypt = require('bcrypt');
-const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername} = require("./modules/database.js");
+const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername} = require("./modules/database.js");
 const bodyParser = require("body-parser");
 const cors = require("cors"); // Import the CORS middleware
 const app = express();
@@ -119,6 +119,26 @@ app.post("/users/authenticate", async (req, res) => {
   } catch (error) {
     // If an error occurs, return an internal server error response
     console.error("Error during authentication:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Define a route for deleting a user by username
+app.delete("/users/:username", async (req, res) => {
+  const username = req.params.username;
+  try {
+    // Call the deleteUserByUsername function from the database module
+    const result = await deleteUserByUsername(username);
+    if (result.affectedRows === 0) {
+      // If no user was deleted, return a not found error
+      res.status(404).json({ error: "User not found" });
+    } else {
+      // If user was deleted successfully, return success message
+      res.json({ message: "User deleted successfully" });
+    }
+  } catch (error) {
+    // If an error occurs, return an internal server error
+    console.error("Error deleting user:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
