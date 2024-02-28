@@ -78,21 +78,23 @@
               </a>
               <div class="nav-item dropdown d-none d-md-flex me-3">
             </div>
-            <div class="nav-item dropdown">
+            <!-- User Drop Down -->
+            <div class="nav-item dropdown" id="userDropdown">
               <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
                   <span class="avatar avatar-sm" style="background-image: url(./static/avatars/000m.jpg)"></span>
                   <div class="d-none d-xl-block ps-2">
-                      <div><?php echo isset($_SESSION['username']) ? $_SESSION['username'] : 'Guest'; ?></div>
-                      <div class="mt-1 small text-muted">Dashboard User</div>
+                      <div id="usernameDisplay">Guest</div>
+                      <div class="mt-1 small text-muted" id="userRoleDisplay">Dashboard User</div>
                   </div>
               </a>
               <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                   <a href="#" class="dropdown-item">Feedback</a>
                   <div class="dropdown-divider"></div>
-                  <a href="./settings.html" class="dropdown-item">Settings</a>
-                  <a href="/index.php?logout=true" class="dropdown-item">Logout</a>
+                  <a href="./add_user.html" class="dropdown-item">Add User</a>
+                  <a href="#" class="dropdown-item" onclick="logout()">Logout</a>
               </div>
-          </div>
+            </div>
+            <!-- User Drop Down -->
         </div>      </header>
       <header class="navbar-expand-md">
         <div class="collapse navbar-collapse" id="navbar-menu">
@@ -176,58 +178,24 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="card-title">Add Webhook</h5>
-                                    <form action="/dist/php/process_webhook.php" method="post">
-                                        <?php
-                                        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filename'])) {
-                                          $filename = urldecode($_GET['filename']);
-                                          $jsonFile = '/data/web-hooker/webhooks/' . $filename;
-
-                                          if (file_exists($jsonFile)) {
-                                              $jsonData = json_decode(file_get_contents($jsonFile), true);
-
-                                              $name = isset($jsonData['Name']) ? $jsonData['Name'] : '';
-                                              $webhook = isset($jsonData['Discord_Webhook']) ? $jsonData['Discord_Webhook'] : '';
-                                              $botName = isset($jsonData['Bot_Name']) ? $jsonData['Bot_Name'] : '';
-                                              $botAvatar = isset($jsonData['Bot_Avatar']) ? $jsonData['Bot_Avatar'] : '';
-                                              $message = isset($jsonData['Message']) ? $jsonData['Message'] : '';
-                                              $tagUser = isset($jsonData['Tag_User']) ? $jsonData['Tag_User'] : '';
-
-                                              echo '<input type="hidden" name="filename" value="' . htmlspecialchars($filename) . '">';
-                                          }
-                                        }
-                                        ?>
+                                    <h5 class="card-title">Add User</h5>
+                                    <form action="" method="post">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Name</label>
                                             <input type="text" class="form-control" id="name" name="name"
-                                                   value="<?php echo htmlspecialchars($name ?? ''); ?>" required>
+                                                   value="" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="webhook" class="form-label">Discord Webhook</label>
-                                            <input type="text" class="form-control" id="webhook" name="webhook"
-                                                   value="<?php echo htmlspecialchars($webhook ?? ''); ?>" required>
+                                            <label for="webhook" class="form-label">Password</label>
+                                            <input type="text" class="form-control" id="password" name="webhook"
+                                                   value="" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="bot_name" class="form-label">Bot Name</label>
-                                            <input type="text" class="form-control" id="bot_name" name="bot_name"
-                                                   value="<?php echo htmlspecialchars($botName ?? ''); ?>" required>
+                                            <label for="bot_name" class="form-label">Role</label>
+                                            <input type="text" class="form-control" id="role" name="bot_name"
+                                                   value="" required>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="bot_avatar" class="form-label">Bot Avatar</label>
-                                            <input type="text" class="form-control" id="bot_avatar" name="bot_avatar"
-                                                   value="<?php echo htmlspecialchars($botAvatar ?? ''); ?>" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="message" class="form-label">Message</label>
-                                            <textarea class="form-control" id="message" name="message" rows="3"
-                                                      required><?php echo htmlspecialchars($message ?? ''); ?></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="tag_user" class="form-label">Tag User</label>
-                                            <input type="text" class="form-control" id="tag_user" name="tag_user"
-                                                   value="<?php echo htmlspecialchars($tagUser ?? ''); ?>" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Add Webhook</button>
+                                        <button type="submit" class="btn btn-primary">Create User</button>
                                     </form>
                                 </div>
                             </div>
@@ -273,9 +241,10 @@
         </footer>
       </div>
     </div>
-    <!-- Libs JS -->
-    <!-- Tabler Core -->  
-    <script src="./dist/js/tabler.min.js?1684106062" defer></script>0
-    <script src="./dist/js/demo.min.js?1684106062" defer></script>
-  </body>
+<!-- Libs JS -->
+<script src="./dist/js/loged-in-user.js" defer></script>
+<!-- Tabler Core -->
+<script src="./dist/js/tabler.min.js?1684106062" defer></script>
+<script src="./dist/js/demo.min.js?1684106062" defer></script>
+</body>
 </html>

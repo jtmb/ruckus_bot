@@ -5,32 +5,64 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
     const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch(`http://localhost:3001/users?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-        const users = await response.json();
+        const response = await fetch(`http://localhost:3001/users/authenticate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+        const data = await response.json();
 
         if (response.ok) {
-            // Find the logged-in user
-            const loggedInUser = users.find(user => user.username === username);
-            
-            if (loggedInUser) {
-                // Authentication successful
-                console.log("Authentication successful:", loggedInUser);
-                // Save logged-in user's information
-                sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
-                // Redirect the user to the dashboard
-                window.location.href = "dashboard.html";
-            } else {
-                // User not found
-                console.error("User not found");
-                // Display error message to the user
-            }
+            // Authentication successful
+            console.log("Authentication successful:", data.user);
+            // Save logged-in user's information
+            sessionStorage.setItem('loggedInUser', JSON.stringify(data.user));
+            // Redirect the user to the dashboard
+            window.location.href = "dashboard.html";
         } else {
             // Authentication failed
-            console.error("Authentication failed:", users.error);
-            // Display error message to the user
+            console.error("Authentication failed:", data.error);
+            displayErrorAlert("Invalid username or password");
         }
     } catch (error) {
         console.error("Error during authentication:", error);
-        // Display error message to the user
+        displayErrorAlert("Error during authentication. Please try again later.");
     }
 });
+
+function displayErrorAlert(message) {
+    // Create the alert message
+    const alertDiv = document.createElement("div");
+    alertDiv.classList.add("alert", "alert-danger", "alert-dismissible", "position-fixed", "top-0", "end-0", "m-3", "fade", "show");
+    alertDiv.setAttribute("role", "alert");
+    alertDiv.style.maxWidth = "20rem"; // Adjust width as needed
+
+    // Create the content of the alert message
+    alertDiv.innerHTML = `
+        <div class="d-flex">
+            <div>
+                <!-- You can add an SVG icon here if needed -->
+            </div>
+            <div>
+                <h4 class="alert-title">ERROR</h4>
+                <div class="text-secondary">${message}</div>
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+
+    // Append the alert message to the document body
+    document.body.appendChild(alertDiv);
+
+    // Automatically remove the "show" class after a certain duration (e.g., 5 seconds)
+    setTimeout(() => {
+        alertDiv.classList.remove("show");
+    }, 5000);
+
+    // Automatically remove the alert message after a certain duration (e.g., 5 seconds)
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 5500); // Delay removal slightly to allow fade-out animation
+}

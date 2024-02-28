@@ -34,9 +34,19 @@
                             <label class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="Your Account Name" autocomplete="off" required>
                         </div>
-                        <div class="mb-2">
+                        <div class="mb-2 position-relative">
                             <label class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Your password" autocomplete="off" required>
+                            <div class="input-group input-group-flat">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Your password" autocomplete="off" required>
+                                <!-- Eye icon to toggle password visibility -->
+                                <button type="button" class="btn btn-icon btn-sm btn-light position-absolute top-0 end-0 m-2" onclick="togglePasswordVisibility()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                        <circle cx="12" cy="12" r="2" />
+                                        <path d="M22 12c-3.333 4 -7.667 6 -12 6s-8.667 -2 -12 -6c3.333 -4 7.667 -6 12 -6s8.667 2 12 6z" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="form-footer">
                             <button type="submit" class="btn btn-primary w-100">Sign in</button>
@@ -64,7 +74,7 @@
     </div>
     <script src="./dist/js/tabler.min.js?1684106062" defer></script>
     <script src="./dist/js/demo.min.js?1684106062" defer></script>
-    <script src="./dist/js/show-password.js" defer></script>
+    <script src="./dist/js/show-password.js" defer></script> <!-- Include the show-password.js file -->
     <script src="./dist/js/login.js" defer></script> <!-- Include the login.js file -->
 </body>
 </html>

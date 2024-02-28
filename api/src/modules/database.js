@@ -1,5 +1,6 @@
 // database.js
 const mysql = require("mysql2");
+const bcrypt = require('bcrypt');
 
 const pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
@@ -9,24 +10,42 @@ const pool = mysql.createPool({
 }).promise();
 
 async function getUsers() {
-    const [rows] = await pool.query("SELECT * FROM credentials");
+    const [rows] = await pool.query("SELECT id, username, role FROM credentials"); // Select only id, username, and role
     return rows;
 }
 
 async function getUser(id) {
     const [rows] = await pool.query(`
-    SELECT * FROM credentials
+    SELECT id, username, role FROM credentials
     WHERE id = ? 
     `, [id]);
     return rows[0];
 }
 
-async function createUser(username, password) {
+async function createUser(username, password, role) {
+    // Hash the password before storing it in the database
+    const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(`
-    INSERT INTO credentials (username, password)
-    VALUES (?, ?)
-    `, [username, password]);
+    INSERT INTO credentials (username, password, role)
+    VALUES (?, ?, ?)
+    `, [username, hashedPassword, role]);
     return result;
 }
 
-module.exports = { getUsers, getUser, createUser };
+async function updateUserPassword(id, newPassword) {
+    const result = await pool.query(`
+    UPDATE credentials
+    SET password = ?
+    WHERE id = ?
+    `, [newPassword, id]);
+    return result;
+}
+async function getUserByUsername(username) {
+    const [rows] = await pool.query(`
+    SELECT id, username, password, role FROM credentials
+    WHERE username = ? 
+    `, [username]);
+    return rows[0];
+}
+
+module.exports = { getUsers, getUser, createUser, updateUserPassword, getUserByUsername };
