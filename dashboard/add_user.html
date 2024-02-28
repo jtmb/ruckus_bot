@@ -145,7 +145,6 @@
                 </li>
               </ul>
         <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-          <form action="./" method="get" autocomplete="off" novalidate>
             <div class="input-icon">
               <span class="input-icon-addon">
                 <!-- Download SVG icon from http://tabler-icons.io/i/search -->
@@ -169,43 +168,39 @@
         </div>
       <div class="page-wrapper">
           <!-- Page header End -->
-
         <!-- Page body -->
         <div class="page-wrapper">
-            <div class="page-body">
-                <div class="container-xl">
-                    <div class="row row-deck row-cards">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Add User</h5>
-                                    <form action="" method="post">
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Name</label>
-                                            <input type="text" class="form-control" id="name" name="name"
-                                                   value="" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="webhook" class="form-label">Password</label>
-                                            <input type="text" class="form-control" id="password" name="webhook"
-                                                   value="" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="bot_name" class="form-label">Role</label>
-                                            <input type="text" class="form-control" id="role" name="bot_name"
-                                                   value="" required>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Create User</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <script src="./dist/js/redirect-webhook.js" defer></script>
-            </div>
+          <div class="page-body">
+              <div class="container-xl">
+                  <div class="row row-deck row-cards">
+                      <div class="col-12">
+                          <div class="card">
+                              <div class="card-body">
+                                  <h5 class="card-title">Add User</h5>
+                                  <form id="addUserForm" action="http://localhost:3001/users" method="post">
+                                      <div class="mb-3">
+                                          <label for="name" class="form-label">Name</label>
+                                          <input type="text" class="form-control" id="name" name="name" value="" required>
+                                      </div>
+                                      <div class="mb-3">
+                                          <label for="password" class="form-label">Password</label>
+                                          <input type="text" class="form-control" id="password" name="password" value="" required>
+                                      </div>
+                                      <div class="mb-3">
+                                          <label for="role" class="form-label">Role</label>
+                                          <input type="text" class="form-control" id="role" name="role" value="" required>
+                                      </div>
+                                      <button type="submit" class="btn btn-primary">Create User</button>
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
         </div>
         <!-- Page body end -->
+
         </div>
       </div>
         <footer class="footer footer-transparent d-print-none">
@@ -243,6 +238,7 @@
     </div>
 <!-- Libs JS -->
 <script src="./dist/js/loged-in-user.js" defer></script>
+<script src="./dist/js/create-user.js" defer></script>
 <!-- Tabler Core -->
 <script src="./dist/js/tabler.min.js?1684106062" defer></script>
 <script src="./dist/js/demo.min.js?1684106062" defer></script>
