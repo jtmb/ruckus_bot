@@ -1,7 +1,8 @@
 // api.js
 const express = require("express");
 const bcrypt = require('bcrypt');
-const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername} = require("./modules/database.js");
+const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername} = require("./modules/dashboardDatabase.js");
+const { } = require("./modules/botDatabase.js");
 const bodyParser = require("body-parser");
 const cors = require("cors"); // Import the CORS middleware
 const app = express();
@@ -13,6 +14,9 @@ app.use(bodyParser.json());
 // Enable CORS for all routes
 app.use(cors());
 
+
+
+// DATABASE ROUTES
 // Define a route for fetching all users
 app.get("/users", async (req, res) => {
   try {
@@ -142,6 +146,19 @@ app.delete("/users/:username", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// DATABASE ROUTES END
+
+
+
+// BOT ROUTES START
+
+
+
+
+
+
+
 
 // Start the server
 app.listen(PORT, () => {
