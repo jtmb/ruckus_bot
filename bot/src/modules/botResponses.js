@@ -37,9 +37,13 @@ async function handleBotResponses(client) {
         // Log user interactions
         logEvent('user_interaction', {
             userId: message.author.id,
+            username: message.author.username,
             messageContent: message.content,
-            timestamp: new Date()
+            timestamp: new Date(),
+            channelId: message.channel.id,
+            guildId: message.guild ? message.guild.id : null, // Check if message.guild exists to avoid errors
         });
+
 
         // Flag to track if the message contains a known command
         let containsCommand = false;

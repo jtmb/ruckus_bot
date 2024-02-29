@@ -1,24 +1,10 @@
-// api.js
 const express = require("express");
+const router = express.Router();
 const bcrypt = require('bcrypt');
-const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername} = require("./modules/dashboardDatabase.js");
-const { } = require("./modules/botDatabase.js");
-const bodyParser = require("body-parser");
-const cors = require("cors"); // Import the CORS middleware
-const app = express();
-const PORT = process.env.PORT || 3001;
+const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername} = require("../modules/dashboardDatabase.js");
 
-// Configure JSON body-parser middleware
-app.use(bodyParser.json());
-
-// Enable CORS for all routes
-app.use(cors());
-
-
-
-// DATABASE ROUTES
 // Define a route for fetching all users
-app.get("/users", async (req, res) => {
+router.get("/users", async (req, res) => {
   try {
     const users = await getUsers();
     // Map the users to include only the required fields (id, username, role)
@@ -34,7 +20,7 @@ app.get("/users", async (req, res) => {
 });
 
 // Define a route for fetching a specific user by ID
-app.get("/users/:id", async (req, res) => {
+router.get("/users/:id", async (req, res) => {
   const userId = req.params.id;
   try {
     const user = await getUser(userId);
@@ -55,7 +41,7 @@ app.get("/users/:id", async (req, res) => {
 });
 
 // Define a route for creating a new user
-app.post("/users", async (req, res) => {
+router.post("/users", async (req, res) => {
   const { username, password, role } = req.body;
   try {
     const [result] = await createUser(username, password, role); // Assuming createUser function now accepts role
@@ -74,7 +60,7 @@ app.post("/users", async (req, res) => {
 });
 
 // Define a route for updating a user's password by username
-app.post("/users/:username/password", async (req, res) => {
+router.post("/users/:username/password", async (req, res) => {
   const username = req.params.username;
   const { newPassword } = req.body;
 
@@ -99,36 +85,8 @@ app.post("/users/:username/password", async (req, res) => {
   }
 });
 
-// Define a route for authenticating a user
-app.post("/users/authenticate", async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    // Retrieve the user from the database based on the provided username
-    const user = await getUserByUsername(username);
-    if (!user) {
-      // If the user is not found, return an error response
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Compare the provided password with the hashed password stored in the database
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      // If the passwords do not match, return an error response
-      return res.status(401).json({ error: "Invalid credentials" });
-    }
-
-    // If authentication is successful, return a success response with user information
-    res.json({ message: "Authentication successful", user });
-  } catch (error) {
-    // If an error occurs, return an internal server error response
-    console.error("Error during authentication:", error);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
 // Define a route for deleting a user by username
-app.delete("/users/:username", async (req, res) => {
+router.delete("/users/:username", async (req, res) => {
   const username = req.params.username;
   try {
     // Call the deleteUserByUsername function from the database module
@@ -147,20 +105,4 @@ app.delete("/users/:username", async (req, res) => {
   }
 });
 
-// DATABASE ROUTES END
-
-
-
-// BOT ROUTES START
-
-
-
-
-
-
-
-
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = router;
