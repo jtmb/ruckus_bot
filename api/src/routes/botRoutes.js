@@ -3,6 +3,7 @@ const router = express.Router();
 const { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById, 
       getBotLoginLogs, getUserInteractionLogs, getTotalLogsCountFromDatabase } = require("../modules/botDatabase");
 
+
 // Define a route for fetching all logs with pagination
 router.get("/logs", async (req, res) => {
   try {
