@@ -27,10 +27,10 @@
                 <mxCell id="204" value="readme.md" style="shape=partialRectangle;whiteSpace=wrap;left=0;right=0;fillColor=none;strokeColor=#DFDFDF;html=1;shadow=0;dashed=0;perimeter=none;whiteSpace=wrap;resizeWidth=1;align=left;spacing=10;rounded=1;glass=0;fillStyle=auto;fontColor=default;" parent="2" vertex="1">
                     <mxGeometry x="100" y="249" width="200" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="205" value="bot" style="shape=partialRectangle;whiteSpace=wrap;left=0;right=0;fillColor=none;strokeColor=#DFDFDF;html=1;shadow=0;dashed=0;perimeter=none;whiteSpace=wrap;resizeWidth=1;align=left;spacing=10;rounded=1;glass=0;fillStyle=auto;fontColor=default;" vertex="1" parent="2">
+                <mxCell id="205" value="bot" style="shape=partialRectangle;whiteSpace=wrap;left=0;right=0;fillColor=none;strokeColor=#DFDFDF;html=1;shadow=0;dashed=0;perimeter=none;whiteSpace=wrap;resizeWidth=1;align=left;spacing=10;rounded=1;glass=0;fillStyle=auto;fontColor=default;" parent="2" vertex="1">
                     <mxGeometry x="100" y="98" width="200" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="206" value="api" style="shape=partialRectangle;whiteSpace=wrap;left=0;right=0;fillColor=none;strokeColor=#DFDFDF;html=1;shadow=0;dashed=0;perimeter=none;whiteSpace=wrap;resizeWidth=1;align=left;spacing=10;rounded=1;glass=0;fillStyle=auto;fontColor=default;" vertex="1" parent="2">
+                <mxCell id="206" value="api" style="shape=partialRectangle;whiteSpace=wrap;left=0;right=0;fillColor=none;strokeColor=#DFDFDF;html=1;shadow=0;dashed=0;perimeter=none;whiteSpace=wrap;resizeWidth=1;align=left;spacing=10;rounded=1;glass=0;fillStyle=auto;fontColor=default;" parent="2" vertex="1">
                     <mxGeometry x="100" y="68" width="200" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="64" value="&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; font-size: 0px;&quot;&gt;re&lt;/span&gt;" style="html=1;strokeColor=none;fillColor=none;fontColor=default;perimeter=none;whiteSpace=wrap;resizeWidth=1;align=left;spacing=10;rounded=1;glass=0;fillStyle=auto;" parent="73" vertex="1">
@@ -59,6 +59,19 @@
                 <mxCell id="39" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;sourcePerimeterSpacing=0;targetPerimeterSpacing=0;startArrow=none;endArrow=none;rounded=0;curved=0;" parent="38" source="40" target="41" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
+                <mxCell id="217" style="edgeStyle=elbowEdgeStyle;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;html=1;startArrow=none;endArrow=none;exitX=1;exitY=0.25;exitDx=0;exitDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="38" source="40">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="264" y="160" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="294" y="108"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="219" value="APP only talks to API" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="217">
+                    <mxGeometry x="-0.1117" y="1" relative="1" as="geometry">
+                        <mxPoint x="74" y="13" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
                 <mxCell id="40" value="NGINX + APP" style="whiteSpace=wrap;html=1;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;glass=0;rounded=1;" parent="38" vertex="1">
                     <mxGeometry x="140" y="60" width="120" height="40" as="geometry"/>
                 </mxCell>
@@ -68,6 +81,18 @@
                 <mxCell id="42" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;targetPerimeterSpacing=0;startArrow=none;endArrow=none;rounded=0;curved=0;" parent="38" source="45" target="43" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="400" y="320" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="216" style="edgeStyle=elbowEdgeStyle;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;html=1;startArrow=none;endArrow=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="38" source="43" target="41">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="309" y="202"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="218" value="db + API bydirectional" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="216">
+                    <mxGeometry x="0.0831" y="2" relative="1" as="geometry">
+                        <mxPoint x="36" y="7" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="43" value="DB" style="whiteSpace=wrap;html=1;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;rounded=1;" parent="38" vertex="1">
@@ -87,9 +112,6 @@
                 </mxCell>
                 <mxCell id="51" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Docker.svg;rounded=1;glass=0;fillStyle=auto;gradientColor=none;" parent="38" vertex="1">
                     <mxGeometry x="335" y="30" width="50" height="41" as="geometry"/>
-                </mxCell>
-                <mxCell id="105" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.computer;pointerEvents=1;rounded=1;glass=0;fillStyle=auto;fontColor=default;" parent="38" vertex="1">
-                    <mxGeometry x="343.34000000000003" y="96" width="33.33" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="114" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.computer;pointerEvents=1;rounded=1;glass=0;fillStyle=auto;fontColor=default;" parent="38" vertex="1">
                     <mxGeometry x="75.00000000000006" y="65" width="33.33" height="30" as="geometry"/>
@@ -111,20 +133,23 @@
                         <mxRectangle x="200" y="220" width="120" height="30" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
+                <mxCell id="223" style="edgeStyle=elbowEdgeStyle;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;html=1;startArrow=none;endArrow=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.25;entryDx=0;entryDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="76" source="78" target="147">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="338" y="90"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="224" value="User is served cached/proxied resource&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="223">
+                    <mxGeometry x="0.1009" y="4" relative="1" as="geometry">
+                        <mxPoint x="141" y="-11" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
                 <mxCell id="78" value="USER" style="whiteSpace=wrap;html=1;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;glass=0;rounded=1;" parent="76" vertex="1">
                     <mxGeometry x="140" y="50" width="120" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="85" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Docker.svg;rounded=1;glass=0;fillStyle=auto;gradientColor=none;" parent="76" vertex="1">
-                    <mxGeometry x="335" y="30" width="50" height="41" as="geometry"/>
-                </mxCell>
                 <mxCell id="111" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.computer;pointerEvents=1;rounded=1;glass=0;fillStyle=auto;fontColor=default;" parent="76" vertex="1">
                     <mxGeometry x="73.34000000000006" y="215" width="33.33" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="112" value="" style="aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image;image=img/lib/active_directory/internet_cloud.svg;rounded=1;glass=0;fillStyle=auto;fontColor=default;gradientColor=none;" parent="76" vertex="1">
-                    <mxGeometry x="335" y="80" width="50" height="31.5" as="geometry"/>
-                </mxCell>
-                <mxCell id="113" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.computer;pointerEvents=1;rounded=1;glass=0;fillStyle=auto;fontColor=default;" parent="76" vertex="1">
-                    <mxGeometry x="343.33000000000004" y="128" width="33.33" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="117" value="" style="aspect=fixed;perimeter=ellipsePerimeter;html=1;align=center;shadow=0;dashed=0;spacingTop=3;image;image=img/lib/active_directory/internet_cloud.svg;rounded=1;glass=0;fillStyle=auto;fontColor=default;gradientColor=none;" parent="76" vertex="1">
                     <mxGeometry x="65.01" y="134.25" width="50" height="31.5" as="geometry"/>
@@ -203,8 +228,32 @@
                 <mxCell id="201" value="GIT/GITHUB" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;glass=0;labelBackgroundColor=none;labelBorderColor=none;fillStyle=auto;fontSize=19;fontColor=default;" parent="193" vertex="1">
                     <mxGeometry x="127.5" y="265" width="60" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="211" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.git_repository;rounded=1;glass=0;fillStyle=auto;" vertex="1" parent="193">
+                <mxCell id="211" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.git_repository;rounded=1;glass=0;fillStyle=auto;" parent="193" vertex="1">
                     <mxGeometry x="30" y="247" width="48" height="48" as="geometry"/>
+                </mxCell>
+                <mxCell id="220" style="edgeStyle=elbowEdgeStyle;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;html=1;startArrow=none;endArrow=none;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=16;" edge="1" parent="1" source="149">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="734" y="-2826.3999633789062" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="799" y="-2753"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="221" value="WAN Proxy validates request for LAN proxy&lt;br&gt;and handles caching + DNS" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="220">
+                    <mxGeometry x="-0.2108" y="1" relative="1" as="geometry">
+                        <mxPoint x="178" y="-34" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="222" value="LAN proxy validates certificates&lt;br&gt;&amp;nbsp;with WAN proxy" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="220">
+                    <mxGeometry x="-0.3228" relative="1" as="geometry">
+                        <mxPoint x="157" y="7" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="227" value="Repo structure is important!" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=default;fillColor=default;fontSize=20;fontFamily=Architects Daughter;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;rounded=0;glass=0;shadow=0;" vertex="1" parent="1">
+                    <mxGeometry x="833" y="-2018" width="286" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="228" value="Modularize your repo into&lt;br&gt;microservices." style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=default;fontSize=20;fontFamily=Architects Daughter;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" vertex="1" parent="1">
+                    <mxGeometry x="844" y="-1978" width="258" height="60" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
