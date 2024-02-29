@@ -191,9 +191,6 @@
                 <mxCell id="196" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Docker.svg;rounded=1;glass=0;fillStyle=auto;gradientColor=none;" parent="193" vertex="1">
                     <mxGeometry x="30" y="190" width="50" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="197" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.github_code;pointerEvents=1;rounded=1;glass=0;fillStyle=auto;" parent="193" vertex="1">
-                    <mxGeometry x="30" y="260" width="40" height="40" as="geometry"/>
-                </mxCell>
                 <mxCell id="198" value="WAN" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;glass=0;labelBackgroundColor=none;labelBorderColor=none;fillStyle=auto;fontSize=19;fontColor=default;" parent="193" vertex="1">
                     <mxGeometry x="127.5" y="50" width="60" height="30" as="geometry"/>
                 </mxCell>
@@ -205,6 +202,9 @@
                 </mxCell>
                 <mxCell id="201" value="GIT/GITHUB" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;glass=0;labelBackgroundColor=none;labelBorderColor=none;fillStyle=auto;fontSize=19;fontColor=default;" parent="193" vertex="1">
                     <mxGeometry x="127.5" y="265" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="211" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.git_repository;rounded=1;glass=0;fillStyle=auto;" vertex="1" parent="193">
+                    <mxGeometry x="30" y="247" width="48" height="48" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
