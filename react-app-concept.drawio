@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="caemsdQhCzEoh4KC35OA" name="Page-1">
-        <mxGraphModel dx="1446" dy="4154" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1600" math="0" shadow="0">
+        <mxGraphModel dx="2002" dy="4522" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="1600" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -53,7 +53,7 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="218" value="db + API bydirectional" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="216">
+                <mxCell id="218" value="db + API bidirectional" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=20;fontFamily=Architects Daughter;" vertex="1" connectable="0" parent="216">
                     <mxGeometry x="0.0831" y="2" relative="1" as="geometry">
                         <mxPoint x="36" y="7" as="offset"/>
                     </mxGeometry>
@@ -120,7 +120,7 @@
                     <mxGeometry x="175" y="400.25" width="50" height="31.5" as="geometry"/>
                 </mxCell>
                 <mxCell id="73" value="" style="group" parent="75" vertex="1" connectable="0">
-                    <mxGeometry y="512" width="400" height="320" as="geometry"/>
+                    <mxGeometry y="458" width="400" height="320" as="geometry"/>
                 </mxCell>
                 <mxCell id="2" value="Git repository structure" style="swimlane;startSize=20;horizontal=1;containerType=tree;swimlaneFillColor=default;" parent="73" vertex="1">
                     <mxGeometry width="400" height="320" as="geometry">
@@ -260,7 +260,7 @@
                 <mxCell id="211" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.git_repository;rounded=1;glass=0;fillStyle=auto;" parent="193" vertex="1">
                     <mxGeometry x="30" y="247" width="48" height="48" as="geometry"/>
                 </mxCell>
-                <mxCell id="276" value="RED = BYDIRECTIONAL" style="text;html=1;strokeColor=#B20000;fillColor=#e51400;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;glass=0;labelBackgroundColor=none;labelBorderColor=none;fillStyle=auto;fontSize=19;fontColor=#ffffff;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="193">
+                <mxCell id="276" value="RED = BIDIRECTIONAL" style="text;html=1;strokeColor=#B20000;fillColor=#e51400;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;glass=0;labelBackgroundColor=none;labelBorderColor=none;fillStyle=auto;fontSize=19;fontColor=#ffffff;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="193">
                     <mxGeometry x="30" y="318" width="261" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="278" value="GREEN = ONE DIRECTION" style="text;html=1;strokeColor=#005700;fillColor=#008a00;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;glass=0;labelBackgroundColor=none;labelBorderColor=none;fillStyle=auto;fontSize=19;fontColor=#ffffff;shadow=0;" vertex="1" parent="193">
@@ -285,10 +285,10 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="227" value="Repo structure is important!" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=default;fillColor=default;fontSize=20;fontFamily=Architects Daughter;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;rounded=0;glass=0;shadow=0;" vertex="1" parent="1">
-                    <mxGeometry x="819" y="-1880" width="286" height="36" as="geometry"/>
+                    <mxGeometry x="819" y="-1934" width="286" height="36" as="geometry"/>
                 </mxCell>
                 <mxCell id="228" value="Modularize your repo into&lt;br&gt;microservices." style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=default;fontSize=20;fontFamily=Architects Daughter;sketch=1;hachureGap=4;jiggle=2;curveFitting=1;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;" vertex="1" parent="1">
-                    <mxGeometry x="830" y="-1840" width="258" height="60" as="geometry"/>
+                    <mxGeometry x="830" y="-1894" width="258" height="60" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

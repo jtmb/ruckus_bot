@@ -1,12 +1,22 @@
-// botRoutes.js
 const express = require("express");
 const router = express.Router();
-const { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById, getBotLoginLogs, getUserInteractionLogs} = require("../modules/botDatabase");
+const { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById, 
+      getBotLoginLogs, getUserInteractionLogs, getTotalLogsCountFromDatabase } = require("../modules/botDatabase");
 
-// Define a route for fetching all logs
+// Define a route for fetching all logs with pagination
 router.get("/logs", async (req, res) => {
   try {
-    const logs = await getAllLogs();
+    // Retrieve pagination parameters from query string or use default values
+    const { offset = 0, limit = 10 } = req.query;
+    const logs = await getAllLogs(offset, limit);
+
+    // Fetch the total count of logs
+    const totalCount = await getTotalLogsCountFromDatabase(); // Use the correct function
+
+    // Set the total count in the response headers
+    res.set('X-Total-Count', totalCount);
+
+    // Send logs as JSON response
     res.json(logs);
   } catch (error) {
     console.error("Error fetching logs:", error);
@@ -92,6 +102,5 @@ router.get("/logins", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
-  
 
 module.exports = router;

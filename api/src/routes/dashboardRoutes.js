@@ -105,4 +105,32 @@ router.delete("/users/:username", async (req, res) => {
   }
 });
 
+// Define a route for authenticating a user
+router.post("/users/authenticate", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    // Retrieve the user from the database based on the provided username
+    const user = await getUserByUsername(username);
+    if (!user) {
+      // If the user is not found, return an error response
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Compare the provided password with the hashed password stored in the database
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      // If the passwords do not match, return an error response
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // If authentication is successful, return a success response with user information
+    res.json({ message: "Authentication successful", user });
+  } catch (error) {
+    // If an error occurs, return an internal server error response
+    console.error("Error during authentication:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = router;

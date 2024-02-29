@@ -33,9 +33,9 @@ async function deleteLogById(id) {
     return result;
 }
 
-// Function to get all logs
-async function getAllLogs() {
-    const [rows] = await pool.query("SELECT * FROM bot_logs");
+// Function to get all logs with pagination
+async function getAllLogs(offset, limit) {
+    const [rows] = await pool.query("SELECT * FROM bot_logs LIMIT ? OFFSET ?", [parseInt(limit), parseInt(offset)]);
     return rows;
 }
 
@@ -51,5 +51,17 @@ async function getUserInteractionLogs() {
     return rows;
 }
 
-// Export the functions
-module.exports = { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById, getBotLoginLogs, getUserInteractionLogs };
+// Function to fetch total count of logs from the database
+async function getTotalLogsCountFromDatabase() {
+    const [result] = await pool.query("SELECT COUNT(*) AS total FROM bot_logs");
+    return result[0].total;
+}
+// Function to fetch total number of logs
+async function getTotalLogsCount() {
+    const totalCount = await getTotalLogsCountFromDatabase();
+    return totalCount;
+}
+
+// Export the function
+module.exports = { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById, getBotLoginLogs, getUserInteractionLogs, getTotalLogsCountFromDatabase };
+
