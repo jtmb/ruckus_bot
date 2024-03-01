@@ -1,4 +1,5 @@
 // displayLogs.js
+
 // Function to fetch logs based on page number and display them
 async function displayLogs(pageNumber = 1, pageSize = 5) {
     try {
@@ -48,8 +49,12 @@ function displayLogsAndPagination(currentPage, pageSize, totalLogsCount, logs) {
         tableBody.insertAdjacentHTML('beforeend', rowData);
     });
 
-    // Display pagination links
+    // Display pagination links for logs
     const paginationContainer = document.querySelector('#pagination');
+    if (!paginationContainer) {
+        console.error('Pagination container not found.');
+        return;
+    }
     paginationContainer.innerHTML = '';
     const totalPages = Math.ceil(totalLogsCount / pageSize);
     for (let page = 1; page <= totalPages; page++) {
@@ -62,18 +67,26 @@ function displayLogsAndPagination(currentPage, pageSize, totalLogsCount, logs) {
         paginationLink.classList.add('page-link');
         if (page === currentPage) {
             paginationItem.classList.add('active'); // Add active class to currently selected page
-            paginationLink.style.color = 'blue'; // Set color to blue for the active page
+            paginationLink.style.color = 'none'; // Set color to blue for the active page
         }
 
         paginationLink.addEventListener('click', (event) => {
             event.preventDefault();
             const clickedPage = parseInt(event.target.textContent);
             displayLogs(clickedPage, pageSize);
+
+            // Retrieve the selected event type
+            const selectedEventType = localStorage.getItem('selectedEventType');
+            // Apply the filter for the selected event type
+            filterLogsByEventType(selectedEventType);
         });
 
         paginationItem.appendChild(paginationLink);
         paginationContainer.appendChild(paginationItem);
     }
+
+    // Apply custom CSS class to pagination container
+    paginationContainer.classList.add('pagination');
 
     // Apply custom CSS to make pagination links horizontal
     paginationContainer.style.display = 'flex';
@@ -85,8 +98,36 @@ function displayLogsAndPagination(currentPage, pageSize, totalLogsCount, logs) {
     paginationContainer.style.gap = '5px'; // Adjust the gap between links as needed
 }
 
+// Function to hide pagination container for logs
+function hideLoginPagination() {
+    const paginationContainer = document.querySelector('#pagination');
+    if (!paginationContainer) {
+        console.error('Pagination container not found.');
+        return;
+    }
+    paginationContainer.style.display = 'none';
+}
+
+// Function to show pagination container for logs
+function showPagination() {
+    const paginationContainer = document.querySelector('#pagination');
+    if (!paginationContainer) {
+        console.error('Pagination container not found.');
+        return;
+    }
+    paginationContainer.style.display = 'flex';
+}
+
 // Call the function to display logs for the first page when the page loads
 window.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM content loaded.");
+    console.log("DOM content loaded for Logs.");
     displayLogs(1, 5);
+
+    // Add event listener for tab clicks
+    const allLogsTab = document.querySelector('#tab-all');
+    allLogsTab.addEventListener('click', () => {
+        showPagination();
+        hideLoginPagination();
+    });
 });
+
