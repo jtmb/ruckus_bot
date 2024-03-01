@@ -121,7 +121,7 @@ function showPagination() {
 // Call the function to display logs for the first page when the page loads
 window.addEventListener('DOMContentLoaded', () => {
     console.log("DOM content loaded for Logs.");
-    displayLogs(1, 5);
+    displayLogs(1, 10); // Change pageSize to 10 to display 10 logs per page
 
     // Add event listener for tab clicks
     const allLogsTab = document.querySelector('#tab-all');
