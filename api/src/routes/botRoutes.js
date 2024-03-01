@@ -1,7 +1,8 @@
+// botRoutes.js
 const express = require("express");
 const router = express.Router();
 const { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById, 
-      getBotLoginLogs, getUserInteractionLogs, getTotalLogsCountFromDatabase } = require("../modules/botDatabase");
+      getBotLoginLogs, getUserInteractionLogs, getTotalLogsCountFromDatabase, getTotalLoginLogsCountFromDatabase } = require("../modules/botDatabase");
 
 
 // Define a route for fetching all logs with pagination
@@ -82,26 +83,51 @@ router.delete("/logs/:id", async (req, res) => {
   }
 });
 
-// Define a route for fetching bot login logs
 router.get("/logins", async (req, res) => {
-    try {
-      const botLoginLogs = await getBotLoginLogs();
+  try {
+      // Retrieve pagination parameters from query string or use default values
+      const { offset = 0, limit = 10 } = req.query;
+      const botLoginLogs = await getBotLoginLogs(offset, limit);
       res.json(botLoginLogs);
-    } catch (error) {
+  } catch (error) {
       console.error("Error fetching bot login logs:", error);
       res.status(500).json({ error: "Internal Server Error" });
-    }
-  });
+  }
+});
   
-  // Define a route for fetching user interaction logs
-  router.get("/interactions", async (req, res) => {
-    try {
-      const userInteractionLogs = await getUserInteractionLogs();
+// Define a route for fetching user interaction logs with pagination
+router.get("/interactions", async (req, res) => {
+  try {
+      // Retrieve pagination parameters from query string or use default values
+      const { offset = 0, limit = 10 } = req.query;
+      const userInteractionLogs = await getUserInteractionLogs(offset, limit);
       res.json(userInteractionLogs);
-    } catch (error) {
+  } catch (error) {
       console.error("Error fetching user interaction logs:", error);
       res.status(500).json({ error: "Internal Server Error" });
-    }
-  });
+  }
+});
+
+  // Define a route for fetching the total count of logs
+router.get("/count", async (req, res) => {
+  try {
+      const totalCount = await getTotalLogsCountFromDatabase();
+      res.json({ totalCount });
+  } catch (error) {
+      console.error("Error fetching total count of logs:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Define a route for fetching the total count of login logs
+router.get("/login_count", async (req, res) => {
+  try {
+      const totalCount = await getTotalLoginLogsCountFromDatabase();
+      res.json({ totalCount });
+  } catch (error) {
+      console.error("Error fetching total count of login logs:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 module.exports = router;

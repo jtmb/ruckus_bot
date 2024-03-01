@@ -39,15 +39,15 @@ async function getAllLogs(offset, limit) {
     return rows;
 }
 
-// Function to get bot login logs
-async function getBotLoginLogs() {
-    const [rows] = await pool.query("SELECT * FROM bot_logs WHERE event_type = 'bot_login'");
+// Function to get bot login logs with pagination
+async function getBotLoginLogs(offset, limit) {
+    const [rows] = await pool.query("SELECT * FROM bot_logs WHERE event_type = 'bot_login' LIMIT ? OFFSET ?", [parseInt(limit), parseInt(offset)]);
     return rows;
 }
 
-// Function to get user interaction logs
-async function getUserInteractionLogs() {
-    const [rows] = await pool.query("SELECT * FROM bot_logs WHERE event_type = 'user_interaction'");
+// Function to get user interaction logs with pagination
+async function getUserInteractionLogs(offset, limit) {
+    const [rows] = await pool.query("SELECT * FROM bot_logs WHERE event_type = 'user_interaction' LIMIT ? OFFSET ?", [parseInt(limit), parseInt(offset)]);
     return rows;
 }
 
@@ -62,6 +62,18 @@ async function getTotalLogsCount() {
     return totalCount;
 }
 
-// Export the function
-module.exports = { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById, getBotLoginLogs, getUserInteractionLogs, getTotalLogsCountFromDatabase };
+// Function to fetch total count of logs from the database
+async function getTotalLogsCountFromDatabase() {
+    const [result] = await pool.query("SELECT COUNT(*) AS total FROM bot_logs");
+    return result[0].total;
+}
+
+// Function to fetch total count of login logs from the database
+async function getTotalLoginLogsCountFromDatabase() {
+    const [result] = await pool.query("SELECT COUNT(*) AS total FROM bot_logs WHERE event_type = 'bot_login'");
+    return result[0].total;
+}
+
+// Export the functions
+module.exports = { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById, getBotLoginLogs, getUserInteractionLogs, getTotalLogsCountFromDatabase, getTotalLoginLogsCountFromDatabase };
 

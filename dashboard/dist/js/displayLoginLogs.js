@@ -1,42 +1,43 @@
-// displayLogs.js
-// Function to fetch logs based on page number and display them
-async function displayLogs(pageNumber = 1, pageSize = 5) {
+// displayLoginLogs.js
+
+// Function to fetch login logs based on page number and display them
+async function displayLoginLogs(pageNumber = 1, pageSize = 5) {
     try {
         // Calculate the offset based on page number and page size
         const offset = (pageNumber - 1) * pageSize;
 
-        // Fetch total count of logs from the API
-        const totalCountResponse = await fetch('http://localhost:3001/bot/count');
+        // Fetch total count of login logs from the API
+        const totalCountResponse = await fetch('http://localhost:3001/bot/login_count');
         if (!totalCountResponse.ok) {
-            throw new Error('Error fetching total logs count');
+            throw new Error('Error fetching total login logs count');
         }
         const totalCountData = await totalCountResponse.json();
-        const totalLogsCount = totalCountData.totalCount;
+        const totalLoginLogsCount = totalCountData.totalCount;
 
-        // Fetch logs from the API
-        const logsResponse = await fetch(`http://localhost:3001/bot/logs?offset=${offset}&limit=${pageSize}`);
-        if (!logsResponse.ok) {
-            throw new Error('Error fetching logs');
+        // Fetch login logs from the API
+        const loginLogsResponse = await fetch(`http://localhost:3001/bot/logins?offset=${offset}&limit=${pageSize}`);
+        if (!loginLogsResponse.ok) {
+            throw new Error('Error fetching login logs');
         }
-        const logs = await logsResponse.json();
+        const loginLogs = await loginLogsResponse.json();
 
-        // Display logs and pagination links
-        displayLogsAndPagination(pageNumber, pageSize, totalLogsCount, logs);
+        // Display login logs and pagination links
+        displayLoginLogsAndPagination(pageNumber, pageSize, totalLoginLogsCount, loginLogs);
     } catch (error) {
-        console.error('Error fetching logs:', error);
+        console.error('Error fetching login logs:', error);
     }
 }
 
-// Function to display logs and pagination links
-function displayLogsAndPagination(currentPage, pageSize, totalLogsCount, logs) {
-    console.log("Current Page:", currentPage);
-    console.log("Page Size:", pageSize);
-    console.log("Total Logs Count:", totalLogsCount);
+// Function to display login logs and pagination links
+function displayLoginLogsAndPagination(currentPage, pageSize, totalLoginLogsCount, loginLogs) {
+    console.log("Current Page (Login Logs):", currentPage);
+    console.log("Page Size (Login Logs):", pageSize);
+    console.log("Total Login Logs Count:", totalLoginLogsCount);
 
-    // Display logs in the table
-    const tableBody = document.querySelector('#allLogsTable tbody');
+    // Display login logs in the table
+    const tableBody = document.querySelector('#botLoginsTable tbody');
     tableBody.innerHTML = '';
-    logs.forEach(log => {
+    loginLogs.forEach(log => {
         const rowData = `
             <tr>
                 <td>${log.id}</td>
@@ -48,10 +49,10 @@ function displayLogsAndPagination(currentPage, pageSize, totalLogsCount, logs) {
         tableBody.insertAdjacentHTML('beforeend', rowData);
     });
 
-    // Display pagination links
+    // Display pagination links for login logs
     const paginationContainer = document.querySelector('#pagination');
     paginationContainer.innerHTML = '';
-    const totalPages = Math.ceil(totalLogsCount / pageSize);
+    const totalPages = Math.ceil(totalLoginLogsCount / pageSize);
     for (let page = 1; page <= totalPages; page++) {
         const paginationItem = document.createElement('li');
         paginationItem.classList.add('page-item');
@@ -68,7 +69,8 @@ function displayLogsAndPagination(currentPage, pageSize, totalLogsCount, logs) {
         paginationLink.addEventListener('click', (event) => {
             event.preventDefault();
             const clickedPage = parseInt(event.target.textContent);
-            displayLogs(clickedPage, pageSize);
+            // Pass 'logins' as the tab parameter to display login logs
+            displayLoginLogs(clickedPage, pageSize, 'logins');
         });
 
         paginationItem.appendChild(paginationLink);
@@ -85,8 +87,8 @@ function displayLogsAndPagination(currentPage, pageSize, totalLogsCount, logs) {
     paginationContainer.style.gap = '5px'; // Adjust the gap between links as needed
 }
 
-// Call the function to display logs for the first page when the page loads
+// Call the function to display login logs for the first page when the page loads
 window.addEventListener('DOMContentLoaded', () => {
     console.log("DOM content loaded.");
-    displayLogs(1, 5);
+    displayLoginLogs(1, 5);
 });
