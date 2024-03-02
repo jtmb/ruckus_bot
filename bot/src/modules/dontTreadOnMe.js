@@ -2,18 +2,18 @@
 
 const axios = require('axios');
 const cheerio = require('cheerio');
-const sendRandomQuote = require('./randomQuote');
 
-// Function to fetch insults from the Wikipedia page
-async function fetchInsultsFromWikipedia() {
+// Function to fetch insults from the provided URL
+async function fetchInsultsFromURL() {
     try {
-        const response = await axios.get('https://en.wikipedia.org/wiki/Category:English_profanity');
+        const response = await axios.get('https://www.purgomalum.com/profanitylist.html');
         const $ = cheerio.load(response.data);
-        const insultElements = $('.mw-category li a'); // Assuming insults are listed as links within list items
+        const insultElements = $('ul li'); // Assuming insults are listed as list items within an unordered list
         const insults = insultElements.map((index, element) => $(element).text().trim()).get();
+        console.log("Insults:", insults); // Log the insults to check if they are fetched correctly
         return insults;
     } catch (error) {
-        console.error('Error fetching insults from Wikipedia:', error.message);
+        console.error('Error fetching insults from URL:', error.message);
         return [];
     }
 }
@@ -32,7 +32,7 @@ function escapeRegExp(string) {
 
 // Function to handle insults in messages
 async function handleInsults(message, repliedMessages) {
-    const insults = await fetchInsultsFromWikipedia();
+    const insults = await fetchInsultsFromURL();
     const insultRegex = constructInsultRegex(insults);
     const content = message.content;
 
@@ -40,8 +40,14 @@ async function handleInsults(message, repliedMessages) {
     if (insultRegex.test(content)) {
         // Fetch an insult and reply with it
         const insult = insults[Math.floor(Math.random() * insults.length)];
-        await message.reply(insult);
-        return true; // Indicate that an insult was replied
+        console.log("Insult:", insult); // Log the insult to see if it's empty
+        if (insult) {
+            await message.reply(insult);
+            return true; // Indicate that an insult was replied
+        } else {
+            console.error("Empty insult!"); // Log if insult is empty
+            return false; // Indicate that no insult was replied
+        }
     } else {
         return false; // Indicate that no insult was replied
     }
