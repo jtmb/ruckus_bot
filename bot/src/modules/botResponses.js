@@ -11,6 +11,7 @@ const handleEasterEgg = require('./easterEgg');
 const handleBotReady = require('./isOnline');
 const handleInsults = require('./dontTreadOnMe');
 const handleHeadsOrTails = require('./headsOrTails');
+const handleGameGiveaways = require('./gameGiveaways'); // Import handleGameGiveaways
 
 async function handleBotResponses(client) {
     // Map to track messages the bot has replied to
@@ -44,9 +45,14 @@ async function handleBotResponses(client) {
             guildId: message.guild ? message.guild.id : null, // Check if message.guild exists to avoid errors
         });
 
-
-        // Flag to track if the message contains a known command
+        // Flag to track if the message contains a known command or "game giveaways"
         let containsCommand = false;
+
+        // Check if the message contains "game giveaways"
+        if (content.includes('game giveaways')) {
+            await handleGameGiveaways(message);
+            containsCommand = true;
+        }
 
         // Array of handler functions
         const handlers = [
@@ -54,8 +60,8 @@ async function handleBotResponses(client) {
             handleNChainResponse,
             handleJokeCommand,
             handleEasterEgg,
-            handleInsults, // Add handleInsults to the list of handlers
-            handleHeadsOrTails
+            handleInsults,
+            handleHeadsOrTails,
         ];
 
         // Loop through handler functions
@@ -68,14 +74,14 @@ async function handleBotResponses(client) {
             }
         }
 
-        // If the message contains a known command, do not send a random quote
+        // If the message contains a known command or "game giveaways", do not send a random quote
         if (containsCommand) {
             // Mark the message as processed
             repliedMessages.set(message.id, true);
             return;
         }
 
-        // If no specific commands are detected and the bot is mentioned
+        // If the bot is mentioned and the message doesn't contain specific commands
         // Send a random quote
         if (message.mentions.has(client.user) && !content.includes('flip a coin')) {
             const randomQuote = sendRandomQuote();

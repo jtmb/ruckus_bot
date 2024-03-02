@@ -21,6 +21,9 @@ function handleNChainResponse(message, client, repliedMessages, logEvent) {
         if (content === 'g' && !gReplied) {
             message.reply('g'); // Send 'g' a second time
             gReplied = true; // Set gReplied to true to indicate that 'g' has been replied to
+        } else if (content === 'e' && !gReplied) {
+            // If 'g' has not been replied to yet, do not reply with 'e'
+            message.reply(''); // Send an empty message
         } else {
             // Respond with the corresponding value from the responses object
             const response = responses[content];
@@ -33,6 +36,9 @@ function handleNChainResponse(message, client, repliedMessages, logEvent) {
             });
         }
     }
+
+    // Mark the message as processed
+    repliedMessages.set(message.id, true);
 }
 
 module.exports = handleNChainResponse;

@@ -1,42 +1,42 @@
+// gameGiveaways
 const axios = require('axios');
-const { MessageEmbed } = require('discord.js');
+const { Client, MessageEmbed } = require('discord.js');
 
-// Function to fetch game giveaways from the provided API
-async function fetchGameGiveaways() {
+// Function to handle game giveaways
+async function handleGameGiveaways(message) {
+    // Fetch game giveaways data from the API
     try {
         const response = await axios.get('https://www.gamerpower.com/api/giveaways?platform=pc&type=game');
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching game giveaways:', error.message);
-        return [];
-    }
-}
+        const giveaways = response.data;
 
-// Function to handle game giveaway command
-async function handleGameGiveaways(message) {
-    const content = message.content.toLowerCase();
+        // Create an embed for each giveaway
+        const embeds = [];
+        giveaways.forEach(giveaway => {
+            const embed = {
+                title: giveaway.title,
+                description: `${giveaway.description}\n\n**Worth**: ${giveaway.worth}\n**Platforms**: ${giveaway.platforms}\n**End Date**: ${new Date(giveaway.end_date).toLocaleString()}`,
+                fields: [
+                    { name: 'Instructions', value: giveaway.instructions }
+                ],
+                thumbnail: { url: giveaway.thumbnail },
+                image: { url: giveaway.image },
+                url: giveaway.open_giveaway_url,
+                color: 39423 // You can specify the color if needed
+            };
+            embeds.push(embed);
+        });
 
-    // Check if the message contains the trigger phrase
-    if (content.includes('game giveaways')) {
-        // Fetch game giveaways from the API
-        const giveaways = await fetchGameGiveaways();
-
-        // Check if there are any giveaways
-        if (giveaways.length > 0) {
-            // Create an embed for each giveaway
-            giveaways.forEach(giveaway => {
-                const embed = new MessageEmbed()
-                    .setTitle(giveaway.title)
-                    .setURL(giveaway.open_giveaway_url)
-                    .setDescription(giveaway.description)
-                    .setColor('#0099ff')
-                    .addField('Ends At', giveaway.end_date);
-
+        // Send each embed
+        embeds.forEach(embed => {
+            // Check if the embed contains fields
+            if (embed.fields.length > 0) {
                 message.channel.send({ embeds: [embed] });
-            });
-        } else {
-            message.channel.send('No game giveaways found.');
-        }
+            } else {
+                console.error('Embed does not contain required fields:', embed);
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching or sending game giveaways:', error.message);
     }
 }
 
