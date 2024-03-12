@@ -6,7 +6,7 @@ async function handleJokeCommand(message, client, repliedMessages) {
     const content = message.content.toLowerCase();
 
     // Check if the message mentions the bot and mentions a joke
-    if (message.mentions.users.has(client.user.id) && (content.includes('joke') || content.includes('tell me a joke'))) {
+    if (content.includes('!joke') || (message.mentions.users.has(client.user.id) && (content.includes('!joke')) || content.includes('tell me a joke'))) {
         // Fetch a joke from the JokeAPI
         const joke = await fetchJoke();
         // Reply to the user with the fetched joke

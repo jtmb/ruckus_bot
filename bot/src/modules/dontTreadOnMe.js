@@ -10,7 +10,7 @@ async function fetchInsultsFromURL() {
         const $ = cheerio.load(response.data);
         const insultElements = $('ul li'); // Assuming insults are listed as list items within an unordered list
         const insults = insultElements.map((index, element) => $(element).text().trim()).get();
-        console.log("Insults:", insults); // Log the insults to check if they are fetched correctly
+        // console.log("Insults:", insults); // Commented out console.log() statement
         return insults;
     } catch (error) {
         console.error('Error fetching insults from URL:', error.message);

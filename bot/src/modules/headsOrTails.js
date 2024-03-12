@@ -5,13 +5,13 @@ const { MessageCollector } = require('discord.js');
 
 // Function to generate a random number between 0 and 1
 function getRandomNumber() {
-  return Math.random();
+    return Math.random();
 }
 
 // Function to determine the result of the coin flip
 function coinFlip() {
-  const randomNumber = getRandomNumber();
-  return randomNumber < 0.5 ? 'Heads' : 'Tails';
+    const randomNumber = getRandomNumber();
+    return randomNumber < 0.5 ? 'Heads' : 'Tails';
 }
 
 // Define a global variable to track if a coin flip game is in progress
@@ -20,7 +20,7 @@ let coinFlipInProgress = false;
 async function handleHeadsOrTails(message) {
     try {
         // Check if the message contains the "flip a coin" command
-        if (message.content.toLowerCase().includes('flip a coin')) {
+        if (message.content.toLowerCase().includes('!flipacoin')) {
             // Parse the user's command
             const content = message.content.toLowerCase();
             const choiceIndex = content.indexOf('heads') !== -1 ? content.indexOf('heads') : content.indexOf('tails');

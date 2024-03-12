@@ -12,6 +12,7 @@ const handleBotReady = require('./isOnline');
 const handleInsults = require('./dontTreadOnMe');
 const handleHeadsOrTails = require('./headsOrTails');
 const handleGameGiveaways = require('./gameGiveaways'); // Import handleGameGiveaways
+const { getCommandList, getHelpList } = require('./commandList');
 
 async function handleBotResponses(client) {
     // Map to track messages the bot has replied to
@@ -49,7 +50,7 @@ async function handleBotResponses(client) {
         let containsCommand = false;
 
         // Check if the message contains "game giveaways"
-        if (content.includes('game giveaways')) {
+        if (content.includes('!freegames') || (message.mentions.users.has(client.user.id) && (content.includes('free games')))) {
             await handleGameGiveaways(message);
             containsCommand = true;
         }
@@ -67,7 +68,7 @@ async function handleBotResponses(client) {
         // Loop through handler functions
         for (const handler of handlers) {
             // Execute handler and check if it was triggered
-            const result = await handler(message, client, repliedMessages);
+            const result = await handler(message, client, repliedMessages, logEvent); // Pass logEvent
             if (result) {
                 containsCommand = true;
                 break;
@@ -80,6 +81,22 @@ async function handleBotResponses(client) {
             repliedMessages.set(message.id, true);
             return;
         }
+        // Check if the message is "!commands"
+        if (content === '!commands') {
+            // Get the list of available commands
+            const commandList = getCommandList();
+            // Send the list of commands as a reply
+            await message.channel.send(commandList);
+        }
+
+        // Check if the message is "!help" or "!commands"
+        if (content === '!help') {
+            // Get the list of available commands
+            const helpList = getHelpList();
+            // Send the list of commands as a reply
+            await message.channel.send(helpList);
+        }
+
 
         // If the bot is mentioned and the message doesn't contain specific commands
         // Send a random quote
