@@ -6,7 +6,7 @@ function getHelpList() {
         "- `!flipacoin HEADS_OR_TAILS` - flip a coin.\n" +
         "- `!weather in YOUR_CITY_HERE` or <@\!922579269639618640> and say `'weather in YOUR_CITY_HERE'` - Get weather information in your city.\n" +
         "- `!freegames` or <@\!922579269639618640> and say `'free games'` - Get a list of free to keep games across multiple distribution platforms.\n" +
-        "- `!joke` or <@\!922579269639618640> and say `'tell me a joke'` - Get a list of free to keep games across multiple distribution platforms.\n" +
+        "- `!joke` or <@\!922579269639618640> and say `'tell me a joke'` - I will tell you a joke.\n" +
         "- `!help` - Display the full help dialog.\n" +
         "- `!commands` - Display only the list of available commands" +
         "\n" +
@@ -25,7 +25,7 @@ function getCommandList() {
         "- `!flipacoin HEADS_OR_TAILS` - flip a coin.\n" +
         "- `!weather in YOUR_CITY_HERE` or <@\!922579269639618640> and say `'weather in YOUR_CITY_HERE'` - Get weather information in your city.\n" +
         "- `!freegames` or <@\!922579269639618640> and say `'free games'` - Get a list of free to keep games across multiple distribution platforms.\n" +
-        "- `!joke` or <@\!922579269639618640> and say `'tell me a joke'` - Get a list of free to keep games across multiple distribution platforms.\n" +
+        "- `!joke` or <@\!922579269639618640> and say `'tell me a joke'` - I will tell you a joke.\n" +
         "- `!help` - Display the full help dialog." +
         "- `!commands` - Display only the list of available commands" +
         "\n"
