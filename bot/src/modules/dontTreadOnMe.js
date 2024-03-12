@@ -1,5 +1,3 @@
-// dontTreadOnMe.js
-
 const axios = require('axios');
 const cheerio = require('cheerio');
 
@@ -15,6 +13,18 @@ async function fetchInsultsFromURL() {
     } catch (error) {
         console.error('Error fetching insults from URL:', error.message);
         return [];
+    }
+}
+
+// Function to fetch an insult from the Evil Insult API
+async function fetchInsultFromAPI() {
+    try {
+        const response = await axios.get('https://evilinsult.com/generate_insult.php?lang=en&type=json');
+        const insultData = response.data;
+        return insultData.insult;
+    } catch (error) {
+        console.error('Error fetching insult from API:', error.message);
+        return null;
     }
 }
 
@@ -38,14 +48,13 @@ async function handleInsults(message, repliedMessages) {
 
     // Check if the message content contains an insult using the constructed regular expression
     if (insultRegex.test(content)) {
-        // Fetch an insult and reply with it
-        const insult = insults[Math.floor(Math.random() * insults.length)];
-        console.log("Insult:", insult); // Log the insult to see if it's empty
-        if (insult) {
-            await message.reply(insult);
+        // Fetch an insult from the Evil Insult API and reply with it
+        const apiInsult = await fetchInsultFromAPI();
+        if (apiInsult) {
+            await message.reply(apiInsult);
             return true; // Indicate that an insult was replied
         } else {
-            console.error("Empty insult!"); // Log if insult is empty
+            console.error("Error fetching insult from API or no insult returned.");
             return false; // Indicate that no insult was replied
         }
     } else {
