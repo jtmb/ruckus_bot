@@ -1,0 +1,32 @@
+---
+services:
+  bot:
+    build: .
+    environment:
+      - MYSQL_HOST=192.168.0.6
+      - MYSQL_PORT=3306
+      - MYSQL_USER=bot
+      - MYSQL_PASSWORD=bot_db_password1234!
+      - MYSQL_DATABASE=db
+      - BOT_TOKEN=your-bot-token-here
+    ports:
+      - "8080:8080"
+      - "3001:3001"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./config/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    environment:
+      - MYSQL_DATABASE=db
+      - MYSQL_USER=bot
+      - MYSQL_PASSWORD=bot_db_password1234!
+      - MYSQL_RANDOM_ROOT_PASSWORD=1
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql_data:

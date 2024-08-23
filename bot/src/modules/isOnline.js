@@ -12,8 +12,15 @@ function handleBotReady(client) {
     const botId = client.user.id;
     const botName = client.user.username;
 
-    console.log(`Bot is Online ✅ Bot ID: ${botId}, Bot Name: ${botName}`);
-    logEvent('bot_login', { botId, botName, timestamp: new Date() });
+    // Get the name of the first guild the bot is connected to
+    let guildName = 'Unknown Guild';
+    if (client.guilds.cache.size > 0) {
+        const firstGuild = client.guilds.cache.first();
+        guildName = firstGuild.name;
+    }
+
+    console.log(`Bot is Online ✅ Bot ID: ${botId}, Bot Name: ${botName}, Guild Name: ${guildName}`);
+    logEvent('bot_login', { botId, botName, guildName, timestamp: new Date() });
 }
 
 module.exports = handleBotReady;

@@ -76,4 +76,3 @@ async function getTotalLoginLogsCountFromDatabase() {
 
 // Export the functions
 module.exports = { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById, getBotLoginLogs, getUserInteractionLogs, getTotalLogsCountFromDatabase, getTotalLoginLogsCountFromDatabase };
-

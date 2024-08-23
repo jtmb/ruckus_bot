@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername} = require("../modules/dashboardDatabase.js");
+const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername } = require("../modules/dashboardDatabase.js");
 
 // Define a route for fetching all users
 router.get("/users", async (req, res) => {
@@ -65,23 +65,23 @@ router.post("/users/:username/password", async (req, res) => {
   const { newPassword } = req.body;
 
   try {
-      // Retrieve the user from the database
-      const user = await getUserByUsername(username);
-      if (!user) {
-          res.status(404).json({ error: "User not found" });
-          return;
-      }
+    // Retrieve the user from the database
+    const user = await getUserByUsername(username);
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
 
-      // Hash the new password
-      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    // Hash the new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
-      // Update the user's password in the database
-      const result = await updateUserPassword(user.id, hashedNewPassword);
-      console.log(`Password updated for user ${username}`);
-      res.json({ message: "Password updated successfully" });
+    // Update the user's password in the database
+    const result = await updateUserPassword(user.id, hashedNewPassword);
+    console.log(`Password updated for user ${username}`);
+    res.json({ message: "Password updated successfully" });
   } catch (error) {
-      console.error("Error updating password:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    console.error("Error updating password:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

@@ -57,4 +57,3 @@ async function deleteUserByUsername(username) {
 }
 
 module.exports = { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername };
-
