@@ -5,13 +5,26 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #111111, #980a95);
+  background: linear-gradient(135deg, #111111, #2c2a2a);
   font-family: Arial, sans-serif;
   color: #fff;
 }
 
 .App {
   text-align: center;
+  transition: background-color 0.5s ease;
+}
+
+/* Default theme background */
+.default-background {
+  background-color: #f0f0f0;
+  /* light gray, or any default color */
+}
+
+/* Custom theme background */
+.custom-background {
+  background: linear-gradient(45deg, #ff4081, #f50057);
+  background-size: 200% 200%;
 }
 
 .picture-container {
@@ -24,6 +37,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  /* Shadow effect */
 }
 
 .picture-container img {
@@ -42,6 +57,7 @@ body {
   /* Rounded corners */
   color: #fff;
   box-sizing: border-box;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   display: inline-block;
   /* Makes the background wrap around the text */
   text-align: center;
@@ -52,15 +68,29 @@ body {
 }
 
 .status-line.down {
-  background-color: #f44336;
+  background-color: #9e1006;
 }
 
 .guild-name {
-  font-size: 1.5em;
-  /* Smaller than the status-line */
-  font-style: italic;
-  /* Markdown-like italic */
+  font-size: 1.8em;
   color: #ddd;
-  /* Lighter color for the guild name */
-  margin-top: 10px;
+  text-align: center;
+  /* Center the text */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Center items horizontally */
+  width: 100%;
+  /* Make sure it takes the full width available */
+}
+
+.guild-item {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 7px 0;
+  /* Adjust the top and bottom margin to add space between items */
+  text-indent: 0;
+  white-space: nowrap;
+  /* Prevent text wrapping */
 }

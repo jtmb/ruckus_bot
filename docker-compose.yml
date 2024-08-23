@@ -8,7 +8,7 @@ services:
       - MYSQL_USER=bot
       - MYSQL_PASSWORD=bot_db_password1234!
       - MYSQL_DATABASE=db
-      - BOT_TOKEN=your-bot-token-here
+      - BOT_TOKEN=
     ports:
       - "8080:8080"
       - "3001:3001"

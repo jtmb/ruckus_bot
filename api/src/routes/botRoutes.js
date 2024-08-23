@@ -1,6 +1,7 @@
 // botRoutes.js
 const express = require("express");
 const router = express.Router();
+const { exec } = require('child_process'); // Import exec from child_process
 const { getAllLogs, getLogById, insertLog, updateLogById, deleteLogById,
   getBotLoginLogs, getUserInteractionLogs, getTotalLogsCountFromDatabase, getTotalLoginLogsCountFromDatabase } = require("../modules/botDatabase");
 
@@ -129,5 +130,19 @@ router.get("/login_count", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// Restart bot route
+router.post('/restart', (req, res) => {
+  exec('supervisorctl restart bot_run', (error, stdout, stderr) => {
+    if (error) {
+      console.error(`exec error: ${error}`);
+      return res.status(500).send('Error restarting bot');
+    }
+    console.log(`stdout: ${stdout}`);
+    console.error(`stderr: ${stderr}`);
+    res.send('Bot restarted successfully');
+  });
+});
+
 
 module.exports = router;

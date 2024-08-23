@@ -1,41 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Header from './Header'; // Import Header component
-import Footer from './Footer'; // Import Footer component
+import Header from './Header';
+import Footer from './Footer';
 
 function App() {
-  const [botStatus, setBotStatus] = useState({ isBotUp: false, guildName: '', botName: '' });
-  const botImage = 'https://i1.sndcdn.com/artworks-nSOgrVzKLAJe0Kod-IpWrCw-t500x500.jpg';
+  const [botStatus, setBotStatus] = useState({ isBotUp: false, botName: '', guilds: [] });
+
+  const botImageUp = 'https://i1.sndcdn.com/artworks-nSOgrVzKLAJe0Kod-IpWrCw-t500x500.jpg';
+  const botImageDown = 'https://www.freeiconspng.com/uploads/error-icon-4.png';
 
   useEffect(() => {
-    // Fetch bot status from the updated API
     fetch('http://localhost:3001/bot/logins')
       .then(response => response.json())
       .then(data => {
-        // Check if the data array is not empty
         if (Array.isArray(data) && data.length > 0) {
-          // Get the latest event
-          const latestEvent = data[data.length - 1];
-          // Check if the latest event is a bot_login event
-          if (latestEvent.event_type === 'bot_login') {
-            const eventData = JSON.parse(latestEvent.event_data);
-            setBotStatus({
-              isBotUp: true,
-              guildName: eventData.guildName || 'Unknown Guild',
-              botName: eventData.botName || 'Unknown Bot'
-            });
-          } else {
-            setBotStatus({
-              isBotUp: false,
-              guildName: 'Unknown Guild',
-              botName: 'Unknown Bot'
-            });
-          }
+          const botLoginEvents = data.filter(event => event.event_type === 'bot_login');
+          const latestEvent = botLoginEvents[botLoginEvents.length - 1];
+          const eventData = JSON.parse(latestEvent.event_data);
+          const guilds = eventData.guilds.map(guild => guild.name.trim());
+
+          setBotStatus({
+            isBotUp: true,
+            botName: eventData.botName || 'Unknown Bot',
+            guilds: guilds
+          });
         } else {
           setBotStatus({
             isBotUp: false,
-            guildName: 'Unknown Guild',
-            botName: 'Unknown Bot'
+            botName: 'Unknown Bot',
+            guilds: []
           });
         }
       })
@@ -43,11 +36,17 @@ function App() {
         console.error('Error fetching bot status:', error);
         setBotStatus({
           isBotUp: false,
-          guildName: 'Unknown Guild',
-          botName: 'Unknown Bot'
+          botName: 'Unknown Bot',
+          guilds: []
         });
       });
   }, []);
+
+  useEffect(() => {
+    document.title = botStatus.botName ? `${botStatus.botName} Bot Dashboard` : '';
+  }, [botStatus.botName]);
+
+  const botImage = botStatus.isBotUp ? botImageUp : botImageDown;
 
   return (
     <div className="App">
@@ -57,10 +56,16 @@ function App() {
           <img src={botImage} alt="Bot" />
         </div>
         <div className={`status-line ${botStatus.isBotUp ? 'up' : 'down'}`}>
-          {botStatus.isBotUp ? `${botStatus.botName} is Online ✅` : `${botStatus.botName} is Offline ❌`}
+          {botStatus.isBotUp ? `${botStatus.botName} is Online ✅` : `${botStatus.botName} is Offline ❌🤖`}
         </div>
         <div className="guild-name">
-          {botStatus.isBotUp ? `Connected to: ➡️ ${botStatus.guildName}` : ''}
+          {botStatus.isBotUp && botStatus.guilds.length > 0 && (
+            <div>
+              {botStatus.guilds.map((guildName, index) => (
+                <div key={index} className="guild-item">➡️ {guildName}</div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <Footer />

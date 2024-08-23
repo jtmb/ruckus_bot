@@ -1,4 +1,5 @@
 /* Header.css */
+
 .header {
     position: fixed;
     top: 0;
@@ -6,37 +7,46 @@
     width: 100%;
     padding: 10px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    /* background: rgba(0, 0, 0, 0.3); */
-    /* Semi-transparent background */
     color: #fff;
-    /* border-bottom: 2px solid #4caf50; */
     box-sizing: border-box;
     backdrop-filter: blur(10px);
-    /* Optional: adds a blur effect behind the header */
     z-index: 10;
-    /* Ensure header is above other content */
 }
 
 .header-logo {
     display: flex;
     align-items: center;
     text-decoration: none;
-    /* Remove underline */
 }
 
 .logo-img {
     width: 40px;
-    /* Adjust size as needed */
     height: 40px;
-    /* Adjust size as needed */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .header-logo:hover .logo-img {
     transform: scale(1.1);
-    /* Slightly scale up the logo on hover */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    /* Add a shadow on hover */
+}
+
+.restart-button {
+    background-color: #4c6faf;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.restart-button:hover {
+    background-color: #a04549;
 }

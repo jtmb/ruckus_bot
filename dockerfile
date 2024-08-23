@@ -41,6 +41,7 @@ COPY config/conf.d /etc/nginx/conf.d/
 
 # Copy Supervisor configuration
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY config/supervisord.conf /etc/supervisor/supervisord.conf
 
 # Install global packages
 RUN npm install -g nodemon
