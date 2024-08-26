@@ -2,8 +2,9 @@
 services:
   bot:
     build: .
+    # image: jtmb92/ruckus-bot:latest
     environment:
-      - MYSQL_HOST=192.168.0.6
+      - MYSQL_HOST=db
       - MYSQL_PORT=3306
       - MYSQL_USER=bot
       - MYSQL_PASSWORD=bot_db_password1234!
@@ -11,9 +12,10 @@ services:
       - BOT_TOKEN=
     ports:
       - "8080:8080"
-      - "3001:3001"
+      - "3003:3003"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: mysql:5.7
@@ -25,6 +27,12 @@ services:
       - MYSQL_USER=bot
       - MYSQL_PASSWORD=bot_db_password1234!
       - MYSQL_RANDOM_ROOT_PASSWORD=1
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "--silent" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     ports:
       - "3306:3306"
 

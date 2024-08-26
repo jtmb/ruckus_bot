@@ -6,7 +6,7 @@ function Header() {
 
     const restartBot = async () => {
         try {
-            const response = await fetch('http://localhost:3001/bot/restart', {
+            const response = await fetch('http://127.0.0.1:3003/bot/restart', {
                 method: 'POST', // Assuming POST is used for triggering the restart
                 headers: {
                     'Content-Type': 'application/json',
