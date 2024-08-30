@@ -9,8 +9,14 @@ function App() {
   const botImageUp = 'https://i1.sndcdn.com/artworks-nSOgrVzKLAJe0Kod-IpWrCw-t500x500.jpg';
   const botImageDown = 'https://www.freeiconspng.com/uploads/error-icon-4.png';
 
+  // Use the environment variable for API endpoint
+  const apiEndpoint = process.env.REACT_APP_API_URL || 'http://127.0.0.1:3003';
+  console.log(`API Endpoint: ${apiEndpoint}`);  // Debugging line
+
   useEffect(() => {
-    fetch('http://127.0.0.1:3003/bot/logins')
+    alert(`API Endpoint is: ${apiEndpoint}`);  // Display API endpoint in an alert for debugging
+
+    fetch(`${apiEndpoint}/bot/logins`)
       .then(response => response.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
@@ -40,7 +46,7 @@ function App() {
           guilds: []
         });
       });
-  }, []);
+  }, [apiEndpoint]);
 
   useEffect(() => {
     document.title = botStatus.botName ? `${botStatus.botName} Bot Dashboard` : '';

@@ -9,6 +9,7 @@ services:
       - MYSQL_USER=bot
       - MYSQL_PASSWORD=bot_db_password1234!
       - MYSQL_DATABASE=db
+      # - REACT_APP_API_URL=http://proxy.branconet.lan:3003
       - BOT_TOKEN=
     ports:
       - "8080:8080"

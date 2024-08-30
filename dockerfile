@@ -2,9 +2,9 @@
 FROM node:16-alpine AS build-react
 WORKDIR /app
 COPY bot-landing-page /app/dashboard
-WORKDIR /app/dashboard
-RUN npm install
-RUN npm run build
+# WORKDIR /app/dashboard
+# RUN npm install
+# RUN npm run build
 
 # Stage 2: Build Node.js bot
 FROM node:16-alpine AS build-node
@@ -19,7 +19,8 @@ RUN npm install
 
 # Stage 3: Serve React App with Nginx
 FROM nginx:alpine AS serve-react
-COPY --from=build-react /app/dashboard/build /usr/share/nginx/html
+# COPY --from=build-react /app/dashboard/build /usr/share/nginx/html
+COPY --from=build-react /app/dashboard /app/dashboard/
 
 # Stage 4: Final Stage with Supervisor to Manage Node.js and Nginx
 FROM node:16-alpine
@@ -33,7 +34,8 @@ COPY --from=build-node /app/api /app/api
 RUN apk add --no-cache supervisor nginx
 
 # Copy React build from serve-react stage
-COPY --from=serve-react /usr/share/nginx/html /usr/share/nginx/html
+# COPY --from=serve-react /usr/share/nginx/html /usr/share/nginx/html
+COPY --from=serve-react /app/dashboard  /app/dashboard 
 
 # Copy NGINX configs
 COPY config/nginx.conf /etc/nginx/nginx.conf
