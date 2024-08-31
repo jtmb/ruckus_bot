@@ -1,10 +1,9 @@
-// Footer.js
 import React from 'react';
-import './Footer.css'; // Ensure you have this file with the appropriate styles
+import '../styles/Footer.css';
 
-function Footer() {
-    const releaseVersion = 'v1.0.0'; // Replace with your actual release version
-    const githubUrl = 'https://github.com/jtmb/ruckus_bot'; // Replace with your actual GitHub URL
+const Footer = () => {
+    const releaseVersion = 'v1.0.0';
+    const githubUrl = 'https://github.com/jtmb/ruckus_bot';
 
     return (
         <footer className="footer">

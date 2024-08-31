@@ -1,15 +1,15 @@
 ---
+#This is a compose file meant for testing local builds before building and shipping the image.
+# Please refer to the readme for an example docker-compose for this app with a prebuilt image.
 services:
   bot:
     build: .
-    # image: jtmb92/ruckus-bot:latest
     environment:
       - MYSQL_HOST=db
       - MYSQL_PORT=3306
       - MYSQL_USER=bot
       - MYSQL_PASSWORD=bot_db_password1234!
       - MYSQL_DATABASE=db
-      # - REACT_APP_API_URL=http://proxy.branconet.lan:3003
       - BOT_TOKEN=
     ports:
       - "8080:8080"
@@ -22,7 +22,6 @@ services:
     image: mysql:5.7
     volumes:
       - mysql_data:/var/lib/mysql
-      # - ./config/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     environment:
       - MYSQL_DATABASE=db
       - MYSQL_USER=bot
