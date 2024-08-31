@@ -1,16 +1,19 @@
-
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/jtmb/ruckus_bot?sort=semver&color=008000)
-![Docker Image Version](https://img.shields.io/docker/v/jtmb92/ruckus-bot?sort=semver)
-![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/jtmb92/ruckus-bot)
-![Docker Pulls](https://img.shields.io/docker/pulls/jtmb92/ruckus-bot?&color=FF5733)
-
-<!-- <br></br> -->
-
 <h1 align="center">
   <a href="https://github.com/jtmb">
     <img src="https://www2.d125.org/applied_arts/teched/courses/WEB/portfolios/2014_FallP5/Stencel_Portfolio/HTML/Projects/Character%20Page/Image%20Files/ruckus_image.png" height="150">
   </a>
 </h1>
+
+<div align="center">
+  
+  ![GitHub release (latest by date)](https://img.shields.io/github/v/release/jtmb/ruckus_bot?sort=semver&color=008000)
+  ![Docker Image Version](https://img.shields.io/docker/v/jtmb92/ruckus-bot?sort=semver)
+  ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/jtmb92/ruckus-bot)
+  ![Docker Pulls](https://img.shields.io/docker/pulls/jtmb92/ruckus-bot?&color=FF5733)
+  
+</div>
+
+
 
 <div align="center">
   <b>ruckus-bot</b> - A full stack discord bot in the likeness of Uncle Ruckus built in nodeJS.
