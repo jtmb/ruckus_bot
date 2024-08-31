@@ -1,52 +1,28 @@
-# Stage 1: Build React App
-FROM node:16-alpine AS build-react
-WORKDIR /app
-COPY bot-landing-page /app/dashboard
-# WORKDIR /app/dashboard
-# RUN npm install
-# RUN npm run build
+FROM node:18-alpine AS build-node
 
-# Stage 2: Build Node.js bot
-FROM node:16-alpine AS build-node
+# Copy static content 
 WORKDIR /app
 COPY bot /app/bot
 COPY api /app/api
+COPY dashboard /app/dashboard
+
+# Install dependencies and run builds
+WORKDIR /app/dashboard
+RUN npm install
+RUN npm run build
 WORKDIR /app/bot
 RUN npm install
-RUN npm install -g nodemon
 WORKDIR /app/api
 RUN npm install
 
-# Stage 3: Serve React App with Nginx
-FROM nginx:alpine AS serve-react
-# COPY --from=build-react /app/dashboard/build /usr/share/nginx/html
-COPY --from=build-react /app/dashboard /app/dashboard/
-
-# Stage 4: Final Stage with Supervisor to Manage Node.js and Nginx
-FROM node:16-alpine
-WORKDIR /app
-
-# Copy Node.js bot from build stage
-COPY --from=build-node /app/bot /app/bot
-COPY --from=build-node /app/api /app/api
-
-# Install Supervisor and Nginx
-RUN apk add --no-cache supervisor nginx
-
-# Copy React build from serve-react stage
-# COPY --from=serve-react /usr/share/nginx/html /usr/share/nginx/html
-COPY --from=serve-react /app/dashboard  /app/dashboard 
-
-# Copy NGINX configs
-COPY config/nginx.conf /etc/nginx/nginx.conf
-COPY config/conf.d /etc/nginx/conf.d/
+# Manage global packages
+RUN npm install -g nodemon
+RUN apk add --no-cache supervisor
+RUN apk del --no-cache nginx
 
 # Copy Supervisor configuration
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY config/supervisord.conf /etc/supervisor/supervisord.conf
-
-# Install global packages
-RUN npm install -g nodemon
 
 # Expose port 8080 for Supervisor and Nginx
 EXPOSE 8080

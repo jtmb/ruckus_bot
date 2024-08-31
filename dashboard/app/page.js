@@ -1,0 +1,60 @@
+"use client";
+
+import { useEffect, useState } from 'react';
+import './styles/App.css';
+
+export default function HomePage() {
+  const [botStatus, setBotStatus] = useState({
+    botName: '',
+    isBotUp: false,
+    guilds: []
+  });
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      try {
+        const response = await fetch('/api/bot-status');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const initialBotStatus = await response.json();
+        console.log('Initial bot status:', initialBotStatus); // Debugging line
+        setBotStatus(initialBotStatus);
+      } catch (error) {
+        console.error('Error fetching bot status:', error);
+      }
+    };
+
+    fetchStatus();
+  }, []);
+
+  useEffect(() => {
+    document.title = botStatus.botName ? `${botStatus.botName} Bot Dashboard` : '';
+  }, [botStatus.botName]);
+
+  const botImageUp = 'https://i1.sndcdn.com/artworks-nSOgrVzKLAJe0Kod-IpWrCw-t500x500.jpg';
+  const botImageDown = 'https://www.freeiconspng.com/uploads/error-icon-4.png';
+  const botImage = botStatus.isBotUp ? botImageUp : botImageDown;
+
+  return (
+    <div className="App">
+      <div className="container">
+        <div className="picture-container">
+          <img src={botImage} alt="Bot" />
+        </div>
+        <div className={`status-line ${botStatus.isBotUp ? 'up' : 'down'}`}>
+          {botStatus.isBotUp ? `${botStatus.botName} is Online ✅` : `${botStatus.botName} is Offline ❌🤖`}
+        </div>
+        <div className="guild-name">
+          {botStatus.isBotUp && botStatus.guilds.length > 0 && (
+            <div>
+              {botStatus.guilds.map((guildName, index) => (
+                <div key={index} className="guild-item">➡️ {guildName}</div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

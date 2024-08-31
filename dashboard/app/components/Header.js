@@ -8,20 +8,17 @@ export default function Header() {
 
     const restartBot = async () => {
         try {
-            const response = await fetch('http://127.0.0.1:3003/bot/restart', {
+            const response = await fetch('/api/restart-bot', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
-            if (response.ok) {
-                alert('Bot is restarting...');
-            } else {
-                alert('Failed to restart bot. Please try again.');
-            }
+            const result = await response.json();
+            alert(result.message);
         } catch (error) {
-            console.error('Error restarting bot:', error);
+            console.error('Error calling restart API:', error);
             alert('An error occurred. Please try again.');
         }
     };
