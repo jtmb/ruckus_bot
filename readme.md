@@ -37,10 +37,8 @@
 
 A full stack discord bot written in the likeness of uncle ruckus from the boondocks.
 
-<div style="border: 2px solid #ffcc00; background-color: #fff8e1; padding: 10px; border-radius: 5px; color: #333;">
-  <strong>NOTE:</strong> Ruckus is a fictional joke character from <a href="https://en.wikipedia.org/wiki/The_Boondocks_(TV_series)" target="_blank" style="color: #1a73e8;">The Boondocks TV Series</a> and in no way shape or form represents or is affiliated with the values of the creator of the ruckus-bot application.
-</div>
-
+> [!WARNING]  
+> Ruckus is a fictional joke character from  [The Boondocks TV Series](https://en.wikipedia.org/wiki/The_Boondocks_(TV_series)) and in no way shape or form represents or is affiliated with the values of the creator of the ruckus-bot application.
 
 ### Highlighted Features:
 
