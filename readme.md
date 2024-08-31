@@ -24,7 +24,6 @@
 - [Getting Started](#getting-started)
     - [Docker Image](#docker-image)
     - [Running on Docker Compose](#running-on-docker-compose)
-    ### 
 - [Environment Variables Explained](#environment-variables-explained)
 - [Contributing](#contributing)
 - [License](#license)
@@ -54,8 +53,8 @@ A full stack discord bot written in the likeness of uncle ruckus from the boondo
 
 
     <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    <img src="src/image.png" alt="Image 1" style="width: 400px; height: auto; border-radius: 5%;">
-    <img src="src/image1.png" alt="Image 2" style="width: 400px; height: auto; border-radius: 5%;">
+    <img src="src/image.png" alt="Image 1" style="width: 300px; height: auto; border-radius: 5%;">
+    <img src="src/image1.png" alt="Image 2" style="width: 300px; height: auto; border-radius: 5%;">
     </div>
 
 
