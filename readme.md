@@ -4,9 +4,10 @@
   </a>
 </h1>
 
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/jtmb/ruckus_bot?sort=semver&color=008000)
 ![Docker Image Version](https://img.shields.io/docker/v/jtmb92/ruckus-bot?sort=semver)
 ![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/jtmb92/ruckus-bot)
-![Docker Pulls](https://img.shields.io/docker/pulls/jtmb92/ruckus-bot)
+![Docker Pulls](https://img.shields.io/docker/pulls/jtmb92/ruckus-bot?&color=FF5733)
 
 
 <div align="center">
