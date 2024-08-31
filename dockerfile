@@ -24,7 +24,8 @@ RUN apk del --no-cache nginx
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY config/supervisord.conf /etc/supervisor/supervisord.conf
 
-# Expose port 8080 for Supervisor and Nginx
+# Finish
+WORKDIR /app/
 EXPOSE 8080
 
 # Start Supervisor to manage Node.js and Nginx services
