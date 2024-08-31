@@ -10,7 +10,7 @@ function App() {
   const botImageDown = 'https://www.freeiconspng.com/uploads/error-icon-4.png';
 
   // Use the environment variable for API endpoint
-  const apiEndpoint = process.env.REACT_APP_API_URL || 'http://127.0.0.1:3003';
+  const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
   console.log(`API Endpoint: ${apiEndpoint}`);  // Debugging line
 
   useEffect(() => {
