@@ -1,30 +1,43 @@
+# Stage 1: Build node
 FROM node:18-alpine AS build-node
 
 # Copy static content 
-WORKDIR /app
 COPY bot /app/bot
 COPY api /app/api
 COPY dashboard /app/dashboard
 
 # Install dependencies and run builds
-WORKDIR /app/dashboard
-RUN npm install
-RUN npm run build
-WORKDIR /app/bot
-RUN npm install
-WORKDIR /app/api
-RUN npm install
+RUN cd /app/dashboard && npm install && npm run build \
+    && cd /app/bot && npm install \
+    && cd /app/api && npm install
 
-# Manage global packages
-RUN npm install -g nodemon
-RUN apk add --no-cache supervisor
-RUN apk del --no-cache nginx
+# Stage 2: Final Stage - production
+FROM node:18-alpine
+
+# Copy build files from Stage 1 into Final Stage image
+COPY --from=build-node /app /app
+
+# Install global package dependencies
+RUN npm install -g nodemon && \
+    apk add --no-cache supervisor
+
+# Remove image bloat
+RUN apk del --no-cache \
+    nginx \
+    py3-packaging \
+    apk-tools \
+    bzip2 \
+    py3-packaging \
+    py3-setuptools \
+    py3-parsing \
+    python3 \
+    busybox
 
 # Copy Supervisor configuration
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY config/supervisord.conf /etc/supervisor/supervisord.conf
 
-# Finish
+# Finish | Set WORKDIR and expose dashboard port
 WORKDIR /app/
 EXPOSE 8080
 
