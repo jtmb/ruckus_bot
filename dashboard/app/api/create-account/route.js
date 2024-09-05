@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
-    const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
+    const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://host.docker.internal:3003';
     const { username, password } = await request.json();
 
     const role = 'admin'; // Force the role to 'admin'

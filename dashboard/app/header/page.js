@@ -50,7 +50,7 @@ export default function Header() {
                 <button onClick={restartBot} className="restart-button">Restart Bot</button>
                 <div className="profile-container">
                     <button onClick={toggleDropdown} className="profile-button">
-                        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" className="profile-img" />
+                        <img src="/settings.png" alt="Settings" className="profile-img" />
                     </button>
                     {isDropdownVisible && (
                         <div className="dropdown-menu">

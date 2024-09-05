@@ -1,5 +1,3 @@
-/* Header.css */
-
 .header {
     position: fixed;
     top: 0;
@@ -67,6 +65,12 @@
     background: none;
     border: none;
     cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s ease;
+}
+
+.profile-button:hover {
+    transform: scale(1.1);
 }
 
 .profile-img {
@@ -77,14 +81,29 @@
 
 .dropdown-menu {
     position: absolute;
-    top: 50px;
+    top: 60px;
+    /* Adjust based on header height */
     right: 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
+    background-color: #333;
+    /* Matches header background */
+    border: 1px solid #444;
+    /* Subtle border color */
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     width: 150px;
+    color: #fff;
+    /* Text color for dropdown items */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.profile-container:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 .dropdown-item {
@@ -96,8 +115,11 @@
     text-align: left;
     width: 100%;
     box-sizing: border-box;
+    color: #fff;
+    /* Matches header text color */
 }
 
 .dropdown-item:hover {
-    background-color: #f0f0f0;
+    background-color: #555;
+    /* Slightly lighter on hover */
 }

@@ -3,7 +3,7 @@
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-    const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
+    const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://http://host.docker.internal:3003';
 
     try {
         const response = await fetch(`${apiEndpoint}/users`, {
