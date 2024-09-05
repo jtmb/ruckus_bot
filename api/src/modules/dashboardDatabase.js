@@ -9,6 +9,28 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise();
 
+
+async function createDatabaseAndTable() {
+    // Create the database if it doesn't exist
+    await pool.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.MYSQL_DATABASE}\``);
+
+    // Ensure the database is in use
+    await pool.query(`USE \`${process.env.MYSQL_DATABASE}\``);
+
+    // Create the credentials table if it doesn't exist
+    await pool.query(`
+        CREATE TABLE IF NOT EXISTS credentials (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(255) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            role VARCHAR(255) NOT NULL
+        )
+    `);
+
+    return { message: 'Database and credentials table are set up successfully' };
+}
+
+
 async function getUsers() {
     const [rows] = await pool.query("SELECT id, username, role FROM credentials"); // Select only id, username, and role
     return rows;
@@ -56,4 +78,4 @@ async function deleteUserByUsername(username) {
     return result;
 }
 
-module.exports = { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername };
+module.exports = { createDatabaseAndTable, getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername };

@@ -2,21 +2,21 @@
 #This is a compose file meant for testing local builds before building and shipping the image.
 # Please refer to the readme for an example docker-compose for this app with a prebuilt image.
 services:
-  bot:
-    build: .
-    environment:
-      - MYSQL_HOST=db
-      - MYSQL_PORT=3306
-      - MYSQL_USER=bot
-      - MYSQL_PASSWORD=bot_db_password1234!
-      - MYSQL_DATABASE=db
-      - BOT_TOKEN=
-    ports:
-      - "8080:8080"
-      - "3003:3003"
-    depends_on:
-      db:
-        condition: service_healthy
+  # bot:
+  #   build: .
+  #   environment:
+  #     - MYSQL_HOST=db
+  #     - MYSQL_PORT=3306
+  #     - MYSQL_USER=bot
+  #     - MYSQL_PASSWORD=bot_db_password1234!
+  #     - MYSQL_DATABASE=db
+  #     - BOT_TOKEN=
+  #   ports:
+  #     - "8080:8080"
+  #     - "3003:3003"
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
 
   db:
     image: mysql:5.7
@@ -35,6 +35,18 @@ services:
       timeout: 10s
     ports:
       - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_ARBITRARY=1
+      - PMA_USER=bot
+      - PMA_PASSWORD=bot_db_password1234!
 
 volumes:
   mysql_data:

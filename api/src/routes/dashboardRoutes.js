@@ -1,7 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require('bcrypt');
-const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername } = require("../modules/dashboardDatabase.js");
+const { getUsers, getUser, createUser, updateUserPassword, getUserByUsername, deleteUserByUsername, createDatabaseAndTable } = require("../modules/dashboardDatabase.js");
+
+
+// Route to initialize the database and table
+router.post("/initialize-db", async (req, res) => {
+  try {
+    const result = await createDatabaseAndTable();
+    res.json(result);
+  } catch (error) {
+    console.error("Error initializing database:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 // Define a route for fetching all users
 router.get("/users", async (req, res) => {
