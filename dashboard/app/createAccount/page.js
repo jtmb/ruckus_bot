@@ -115,22 +115,6 @@ export default function CreateAccountPage() {
                         />
                     </div>
 
-                    {/* Conditionally show role selection only if no admin exists */}
-                    {!adminExists && (
-                        <div className="input-group">
-                            <label htmlFor="role">Role</label>
-                            <select
-                                id="role"
-                                value={role}
-                                onChange={(e) => setRole(e.target.value)}
-                                required
-                            >
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
-                    )}
-
                     <button type="submit" className="login-button">
                         Create Account
                     </button>

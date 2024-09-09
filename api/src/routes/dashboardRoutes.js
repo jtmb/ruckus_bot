@@ -120,29 +120,44 @@ router.delete("/users/:username", async (req, res) => {
 // Define a route for authenticating a user
 router.post("/users/authenticate", async (req, res) => {
   const { username, password } = req.body;
+  console.log('Received authentication request');
+  console.log('Username:', username);
 
   try {
-    // Retrieve the user from the database based on the provided username
+    console.log('Retrieving user from database...');
     const user = await getUserByUsername(username);
+    console.log('User retrieved:', user);
+
     if (!user) {
-      // If the user is not found, return an error response
+      console.log('User not found');
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Compare the provided password with the hashed password stored in the database
+    console.log('Comparing passwords...');
     const passwordMatch = await bcrypt.compare(password, user.password);
+    console.log('Password match:', passwordMatch);
+
     if (!passwordMatch) {
-      // If the passwords do not match, return an error response
+      console.log('Invalid credentials');
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // If authentication is successful, return a success response with user information
+    console.log('Authentication successful');
     res.json({ message: "Authentication successful", user });
   } catch (error) {
-    // If an error occurs, return an internal server error response
     console.error("Error during authentication:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// Global error handlers
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception thrown:', error);
+});
+
 
 module.exports = router;
