@@ -19,11 +19,11 @@
   <b>ruckus-bot</b> - A full stack discord bot in the likeness of Uncle Ruckus built in nodeJS.
   <br />
   <br />
-  <a href="https://github.com/jtmb/ip_check/issues/new?assignees=&labels=bug&title=bug%3A+">Report a Bug</a>
+  <a href="https://github.com/jtmb/ruckus-bot/issues/new?assignees=&labels=bug&title=bug%3A+">Report a Bug</a>
   ·
-  <a href="https://github.com/jtmb/ip_check/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
+  <a href="https://github.com/jtmb/ruckus-bot/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
   .
-  <a href="https://hub.docker.com/repository/docker/jtmb92/cloudflare_ip_checker/general">Docker Hub</a>
+  <a href="https://hub.docker.com/repository/docker/jtmb92/ruckus-bot/general">Docker Hub</a>
 </div>
 <br>
 <details open="open">
@@ -31,6 +31,7 @@
 
 - [About](#about)
     - [Highlighted Features](#highlighted-features)
+    - [Demo](#demo)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
     - [Docker Image](#docker-image)
@@ -61,7 +62,7 @@ A full stack discord bot written in the likeness of uncle ruckus from the boondo
 - <b>Scalable</b> - Built with scale in mind, Docker Swarm and kubernetes compatible.
 
 
-# Screen Shots
+# Demo
 
 ### Dashboard
   <div style="display: flex; flex-wrap: wrap; gap: 10px;">
@@ -70,8 +71,7 @@ A full stack discord bot written in the likeness of uncle ruckus from the boondo
 
 ### Bot Application
   <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    <img src="src/image1.png" alt="Image 1" style="width: 300px; height: auto; border-radius: 5%;">
-    <img src="src/bot_demo.gif" alt="Image 1" style="width: 300px; height: auto; border-radius: 5%;">
+    <img src="src/bot_demo.gif" alt="Image 1" style="width: 610px; height: auto; border-radius: 5%;">
   </div>
 
 
