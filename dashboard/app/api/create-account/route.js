@@ -28,7 +28,7 @@ export async function POST(request) {
         // Step 3: If an admin exists and the user trying to be created is also an admin, deny the request
         if (adminExists) {
             console.log('Denying account creation. Admin already exists and trying to create another admin.');
-            return NextResponse.json({ error: 'Admin account already exists' }, { status: 400 });
+            return NextResponse.json({ error: 'An Admin account already exists' }, { status: 400 });
         }
 
         // Step 4: Proceed to create the user if no admin exists
