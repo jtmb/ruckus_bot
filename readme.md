@@ -80,7 +80,7 @@ A full stack discord bot written in the likeness of uncle ruckus from the boondo
 - Docker installed on your system
 
 ### <h2>Getting Started</h2>
-### [Docker Image](https://hub.docker.com/r/jtmb92/ez-backups)
+### [Docker Image](https://hub.docker.com/r/jtmb92/ruckus-bot)
 ```docker
  docker pull jtmb92/ruckus-bot
 ```
