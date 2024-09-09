@@ -1,21 +1,37 @@
-// api/check-admin/route.js
-
 import { NextResponse } from 'next/server';
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 export async function GET() {
     const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
 
     try {
-        const response = await fetch(`${apiEndpoint}/users`, {
+        // Initialize the database before checking for admin
+        const initializeResponse = await fetch(`${apiEndpoint}/initialize-db`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!initializeResponse.ok) {
+            throw new Error('Failed to initialize database');
+        }
+
+        const initializeResult = await initializeResponse.json();
+        console.log('Database initialization result:', initializeResult);
+
+        // Fetch users after database initialization
+        const usersResponse = await fetch(`${apiEndpoint}/users`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
 
-        if (!response.ok) {
+        if (!usersResponse.ok) {
             throw new Error('Failed to fetch users');
         }
 
-        const users = await response.json();
+        const users = await usersResponse.json();
         const adminExists = users.some(user => user.role === 'admin'); // Check if any user has role 'admin'
 
         return NextResponse.json({ adminExists });
