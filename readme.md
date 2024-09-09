@@ -49,7 +49,7 @@
 A full stack discord bot written in the likeness of uncle ruckus from the boondocks.
 
 > [!WARNING]  
-> Ruckus is a fictional joke character from  [The Boondocks TV Series](https://en.wikipedia.org/wiki/The_Boondocks_(TV_series)) and in no way shape or form represents or is affiliated with the values of the creator of the ruckus-bot application.
+> [Uncle Ruckus](https://boondocks.fandom.com/wiki/Uncle_Ruckus) is a fictional joke character from  [The Boondocks TV Series](https://en.wikipedia.org/wiki/The_Boondocks_(TV_series)) and in no way shape or form represents or is affiliated with the values of the creator of the ruckus-bot application.
 
 ### Highlighted Features:
 
@@ -61,11 +61,18 @@ A full stack discord bot written in the likeness of uncle ruckus from the boondo
 - <b>Scalable</b> - Built with scale in mind, Docker Swarm and kubernetes compatible.
 
 
-    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    <img src="src/image.png" alt="Image 1" style="width: 300px; height: auto; border-radius: 5%;">
-    <img src="src/image1.png" alt="Image 2" style="width: 300px; height: auto; border-radius: 5%;">
-    </div>
+# Screen Shots
 
+### Dashboard
+  <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <img src="src/demo.gif" alt="Image" style="width: 610px; height: auto; border-radius: 5%;">
+  </div>
+
+### Bot Application
+  <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <img src="src/image1.png" alt="Image 1" style="width: 300px; height: auto; border-radius: 5%;">
+    <img src="src/bot_demo.gif" alt="Image 1" style="width: 300px; height: auto; border-radius: 5%;">
+  </div>
 
 
 ## Prerequisites
