@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import './styles/Login.css'; // Ensure you have this CSS file for styling
 
@@ -8,6 +8,32 @@ export default function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(""); // For displaying authentication errors
+    const [initError, setInitError] = useState(""); // For displaying initialization errors
+
+    useEffect(() => {
+        // Function to initialize the database
+        const initializeDatabase = async () => {
+            try {
+                const response = await fetch('/api/initialize-db', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to initialize database');
+                }
+
+                const result = await response.json();
+                console.log('Database initialization result:', result);
+            } catch (error) {
+                console.error('Error initializing database:', error);
+                setInitError(error.message);
+            }
+        };
+
+        // Call initializeDatabase when the component mounts
+        initializeDatabase();
+    }, []); // Empty dependency array means this runs once on mount
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -38,7 +64,8 @@ export default function LoginPage() {
         <div className="login-container">
             <div className="login-box">
                 <h1 className="login-title">Login</h1>
-                {error && <p className="error-message">{error}</p>} {/* Display error messages */}
+                {initError && <p className="error-message">{initError}</p>} {/* Display initialization errors */}
+                {error && <p className="error-message">{error}</p>} {/* Display authentication errors */}
                 <form onSubmit={handleLogin} className="login-form">
                     <div className="input-group">
                         <label htmlFor="username">Username</label>

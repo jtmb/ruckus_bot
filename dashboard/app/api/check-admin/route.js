@@ -1,15 +1,12 @@
+// api/check-admin/route.js
 import { NextResponse } from 'next/server';
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 export async function GET() {
-    const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
+    const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003'; // Adjust the port for Next.js
 
     try {
-        // Initialize the database before checking for admin
-        const initializeResponse = await fetch(`${apiEndpoint}/initialize-db`, {
+        // Initialize the database by calling the new API route
+        const initializeResponse = await fetch(`${apiEndpoint}/api/initialize-db`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         });
