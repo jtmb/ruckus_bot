@@ -36,5 +36,17 @@ services:
     ports:
       - "3306:3306"
 
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_ARBITRARY=1
+      - PMA_USER=bot
+      - PMA_PASSWORD=bot_db_password1234!
+
 volumes:
   mysql_data:

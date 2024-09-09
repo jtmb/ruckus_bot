@@ -1,12 +1,12 @@
 import './styles/App.css'; // Adjust the path if necessary
-import Header from './components/Header';
-import Footer from './components/Footer';
+import HeaderWrapper from './components/HeaderWrapper';
+import Footer from './footer/page.js';
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Header />
+        <HeaderWrapper />
         {children}
         <Footer />
       </body>

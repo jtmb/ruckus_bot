@@ -1,5 +1,3 @@
-/* Header.css */
-
 .header {
     position: fixed;
     top: 0;
@@ -32,6 +30,11 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
 .restart-button {
     background-color: #4c6faf;
     color: white;
@@ -49,4 +52,74 @@
 
 .restart-button:hover {
     background-color: #a04549;
+}
+
+.profile-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.profile-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.3s ease;
+}
+
+.profile-button:hover {
+    transform: scale(1.1);
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 60px;
+    /* Adjust based on header height */
+    right: 0;
+    background-color: #333;
+    /* Matches header background */
+    border: 1px solid #444;
+    /* Subtle border color */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    width: 150px;
+    color: #fff;
+    /* Text color for dropdown items */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.profile-container:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+    color: #fff;
+    /* Matches header text color */
+}
+
+.dropdown-item:hover {
+    background-color: #555;
+    /* Slightly lighter on hover */
 }

@@ -1,0 +1,153 @@
+/* Reset some basic elements for consistency */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Full screen layout for the login page */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #111111, #2c2a2a);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container for the login form */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    background: #222;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Title at the top of the login form */
+.login-title {
+    text-align: center;
+    font-size: 2.2em;
+    margin-bottom: 20px;
+}
+
+/* Form elements styling */
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Individual input field container */
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    outline: none;
+    transition: background 0.3s ease;
+}
+
+.input-group input:focus {
+    background-color: #444;
+}
+
+/* Button styling */
+.login-button {
+    padding: 12px;
+    font-size: 1.2em;
+    background-color: #f50057;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #ff4081;
+}
+
+/* Create Account section */
+.create-account-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.create-account-button {
+    padding: 12px;
+    font-size: 1.1em;
+    background-color: #03a9f4;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.create-account-button:hover {
+    background-color: #0288d1;
+}
+
+.create-account-container p {
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #ddd;
+}
+
+/* Responsive adjustments for mobile view */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 30px;
+    }
+}
+
+/* Text center styling for the create account section */
+.text-center {
+    text-align: center;
+    margin-top: 15px;
+    /* Adjust top margin if needed */
+    font-size: 0.85em;
+    /* Make the text smaller */
+}
+
+/* Styling for the create account link */
+.text-link {
+    color: #03a9f4;
+    cursor: pointer;
+    text-decoration: none;
+    /* Keep the link size consistent with the text */
+    transition: color 0.3s ease;
+}
+
+.text-link:hover {
+    color: #0288d1;
+    text-decoration: underline;
+}
+
+
+/* Error message styling matching the notification style */
+
+.error-message {
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
+}
