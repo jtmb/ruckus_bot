@@ -1,45 +1,65 @@
-# Stage 1: Build node
-FROM node:18.19.1 AS build-node
+FROM docker.io/library/node:22.23.4-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf AS toolchain
+ARG SOURCE_REVISION
+ENV NPM_CONFIG_CACHE=/var/tmp/ruckus-build/npm-cache \
+    NPM_CONFIG_LOGS_DIR=/var/tmp/ruckus-build/npm-logs \
+    NPM_CONFIG_USERCONFIG=/var/tmp/ruckus-build/user.npmrc \
+    NPM_CONFIG_GLOBALCONFIG=/var/tmp/ruckus-build/global.npmrc \
+    APPDATA=/var/tmp/ruckus-build/appdata \
+    LOCALAPPDATA=/var/tmp/ruckus-build/localappdata \
+    TEMP=/var/tmp/ruckus-build/tmp TMP=/var/tmp/ruckus-build/tmp TMPDIR=/var/tmp/ruckus-build/tmp \
+    NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=768
+ADD --checksum=sha256:228bd64aaef23270dbdbd2cf3d5ef5c467602ef38c4066246cef1984adab9a67 https://registry.npmjs.org/npm/-/npm-12.2.1.tgz /var/tmp/npm.tgz
+RUN mkdir -p /var/tmp/ruckus-build/npm-cache /var/tmp/ruckus-build/npm-logs \
+      /var/tmp/ruckus-build/appdata /var/tmp/ruckus-build/localappdata /var/tmp/ruckus-build/tmp \
+    && touch /var/tmp/ruckus-build/user.npmrc /var/tmp/ruckus-build/global.npmrc \
+    && npm install --global --ignore-scripts --no-audit --no-fund /var/tmp/npm.tgz \
+    && test "$(npm --version)" = 12.2.1 \
+    && test "$(node --version)" = v22.23.4 \
+    && rm /var/tmp/npm.tgz
 
-# Install dependencies for building
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    python3 \
-    && rm -rf /var/lib/apt/lists/*
+FROM toolchain AS build
+WORKDIR /app
+COPY api/package.json api/package-lock.json /app/api/
+COPY bot/package.json bot/package-lock.json /app/bot/
+COPY dashboard/package.json dashboard/package-lock.json /app/dashboard/
+COPY package.json package-lock.json /opt/ruckus-tools/
+RUN npm ci --prefix /app/api --omit=dev --ignore-scripts --no-audit --no-fund \
+    && npm ci --prefix /app/bot --omit=dev --ignore-scripts --no-audit --no-fund \
+    && npm ci --prefix /app/dashboard --omit=dev --ignore-scripts --no-audit --no-fund \
+    && npm ci --prefix /opt/ruckus-tools --omit=dev --ignore-scripts --no-audit --no-fund
+COPY api/src/ /app/api/src/
+COPY bot/src/ /app/bot/src/
+COPY bot/nodemon.json /app/bot/nodemon.json
+COPY dashboard/app/ /app/dashboard/app/
+COPY dashboard/public/ /app/dashboard/public/
+COPY dashboard/jsconfig.json dashboard/next.config.mjs /app/dashboard/
+RUN node -e 'const b=require("/app/api/node_modules/bcrypt"); const h=b.hashSync("isolated-build-compatibility",10); if(!b.compareSync("isolated-build-compatibility",h)||b.compareSync("different",h))process.exit(1);' \
+    && npm run --prefix /app/dashboard build \
+    && rm -rf /app/dashboard/.next/cache
 
-# Copy static content 
-COPY bot /app/bot
-COPY api /app/api
-COPY dashboard /app/dashboard
-
-# Install dependencies and run builds
-RUN cd /app/dashboard && npm install && npm run build \
-    && cd /app/bot && npm install --production \
-    && cd /app/api && npm install --production
-
-# Stage 2: Final Stage - production
-FROM node:18.19.1-slim
-
-# Install only production dependencies and supervisor
-RUN apt-get update && apt-get install -y \
-    supervisor \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy build files from Stage 1 into Final Stage image
-COPY --from=build-node /app /app
-
-# Install nodemon globally
-RUN npm install -g nodemon --production && \
-    npm cache clean --force && \
-    rm -rf /root/.npm /tmp/* /var/tmp/*
-
-# Copy Supervisor configuration
+FROM docker.io/library/node:22.23.4-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf AS runtime
+ARG SOURCE_REVISION
+LABEL org.opencontainers.image.source="https://github.com/jtmb/ruckus_bot" \
+      org.opencontainers.image.revision="$SOURCE_REVISION"
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends supervisor \
+    && dpkg-query -W > /usr/local/share/ruckus-runtime-packages.txt \
+    && rm -rf /var/lib/apt/lists/* /usr/local/lib/node_modules/npm \
+      /usr/local/lib/node_modules/corepack /opt/yarn-v1.22.22 \
+      /usr/local/bin/corepack /usr/local/bin/yarn /usr/local/bin/yarnpkg \
+      /usr/local/bin/pnpm /usr/local/bin/pnpx
+COPY --from=toolchain /usr/local/lib/node_modules/npm/ /usr/local/lib/node_modules/npm/
+COPY --from=build /app/ /app/
+COPY --from=build /opt/ruckus-tools/ /opt/ruckus-tools/
+RUN ln -s /opt/ruckus-tools/node_modules/nodemon/bin/nodemon.js /usr/local/bin/nodemon \
+    && node -e 'require("/app/api/node_modules/bcrypt");require("/app/api/node_modules/mysql2");require("/app/bot/node_modules/discord.js");' \
+    && test "$(node --version)" = v22.23.4 \
+    && test "$(node -p 'require("/usr/local/lib/node_modules/npm/package.json").version')" = 12.2.1 \
+    && supervisord --version
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY config/supervisord.conf /etc/supervisor/supervisord.conf
-
-# Finish | Set WORKDIR and expose dashboard port
-WORKDIR /app/
-EXPOSE 8080
-
-# Start Supervisor to manage Node.js services
+ENV NEXT_TELEMETRY_DISABLED=1 NPM_CONFIG_UPDATE_NOTIFIER=false
+WORKDIR /app
+EXPOSE 3003 8080
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

@@ -48,7 +48,7 @@ export default function HomePage() {
           <img src={botImage} alt="Bot" />
         </div>
         <div className={`status-line ${botStatus.isBotUp ? 'up' : 'down'}`}>
-          {botStatus.isBotUp ? `${botStatus.botName} is Online ✅` : `Bot is Offline ❌🤖`}
+          {botStatus.isBotUp ? `${botStatus.botName} is Online ✅` : `${botStatus.botName} is Offline ❌🤖`}
         </div>
         <div className="guild-name">
           {botStatus.isBotUp && botStatus.guilds.length > 0 && (

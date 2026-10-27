@@ -162,3 +162,19 @@ This project is licensed under the **GNU GENERAL PUBLIC LICENSE v3**. Feel free 
 
 See [LICENSE](LICENSE) for more information. 
 
+
+
+## Maintained production source
+
+Production source/builds/dependency locks now live here rather than an ad hoc
+local-only image recipe. The original repository/default history remains; the new
+maintenance branch removes committed generated node_modules entries without
+materializing them. Two live dashboard source changes are carried forward.
+
+The maintained build pins Node22.23.4/npm12.2.1, Next16.4.3/React19.3.1,
+Discord.js14.27.0, axios1.20.0, bcrypt6.0.0 and mysql2 3.24.6, with complete
+per-application and launcher locks. See ops/ for exact approved local publication,
+security/data verification and Flux delivery. Runtime secrets remain native
+Kubernetes Secrets managed through BORTUS; no credentials belong in this repo.
+Do not invoke historical Dockerfiles or copy host node_modules/build-cache trees
+as the maintained production source.

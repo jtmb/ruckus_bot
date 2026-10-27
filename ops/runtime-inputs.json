@@ -1,0 +1,17 @@
+{
+  "node": {
+    "version": "22.23.4",
+    "reference": "docker.io/library/node:22.23.4-trixie-slim@sha256:8eb619e402eaede1748a3c8173bffab391592812e85136452f781741c7242ddf",
+    "amd64Manifest": "sha256:93c4ef18bd9f668c013e8800677f6709fe426db3f29fe758d34dd72600018a7e"
+  },
+  "npm": {
+    "version": "12.2.1",
+    "url": "https://registry.npmjs.org/npm/-/npm-12.2.1.tgz",
+    "sha256": "228bd64aaef23270dbdbd2cf3d5ef5c467602ef38c4066246cef1984adab9a67",
+    "integrity": "sha512-bKCmFRVT/BB+YPEYbZwQ1XUI3N5t4xKSpU1MxOjo7z3iWzKBJ0ZXRC1xFdEN+TC7N5TdywaBzf2dMXGJq/e2PQ==",
+    "bytes": 3062824,
+    "engines": {
+      "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+    }
+  }
+}

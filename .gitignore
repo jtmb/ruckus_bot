@@ -1,1 +1,9 @@
 dev
+
+# Runtime secrets and reproducible generated work never belong in source.
+**/node_modules/
+**/.next/
+**/.env
+**/.env.*
+!**/.env.example
+npm-debug.log*
