@@ -22,11 +22,9 @@ WORKDIR /app
 COPY api/package.json api/package-lock.json /app/api/
 COPY bot/package.json bot/package-lock.json /app/bot/
 COPY dashboard/package.json dashboard/package-lock.json /app/dashboard/
-COPY package.json package-lock.json /opt/ruckus-tools/
 RUN npm ci --prefix /app/api --omit=dev --ignore-scripts --no-audit --no-fund \
     && npm ci --prefix /app/bot --omit=dev --ignore-scripts --no-audit --no-fund \
-    && npm ci --prefix /app/dashboard --omit=dev --ignore-scripts --no-audit --no-fund \
-    && npm ci --prefix /opt/ruckus-tools --omit=dev --ignore-scripts --no-audit --no-fund
+    && npm ci --prefix /app/dashboard --omit=dev --ignore-scripts --no-audit --no-fund
 COPY api/src/ /app/api/src/
 COPY bot/src/ /app/bot/src/
 COPY bot/nodemon.json /app/bot/nodemon.json
@@ -48,14 +46,12 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* /usr/local/lib/node_modules/npm \
       /usr/local/lib/node_modules/corepack /opt/yarn-v1.22.22 \
       /usr/local/bin/corepack /usr/local/bin/yarn /usr/local/bin/yarnpkg \
-      /usr/local/bin/pnpm /usr/local/bin/pnpx
-COPY --from=toolchain /usr/local/lib/node_modules/npm/ /usr/local/lib/node_modules/npm/
+      /usr/local/bin/pnpm /usr/local/bin/pnpx /usr/local/bin/npm /usr/local/bin/npx
 COPY --from=build /app/ /app/
-COPY --from=build /opt/ruckus-tools/ /opt/ruckus-tools/
-RUN ln -s /opt/ruckus-tools/node_modules/nodemon/bin/nodemon.js /usr/local/bin/nodemon \
-    && node -e 'require("/app/api/node_modules/bcrypt");require("/app/api/node_modules/mysql2");require("/app/bot/node_modules/discord.js");' \
+RUN node -e 'require("/app/api/node_modules/bcrypt");require("/app/api/node_modules/mysql2");require("/app/bot/node_modules/discord.js");' \
     && test "$(node --version)" = v22.23.4 \
-    && test "$(node -p 'require("/usr/local/lib/node_modules/npm/package.json").version')" = 12.2.1 \
+    && test ! -e /usr/local/lib/node_modules/npm \
+    && test ! -e /usr/local/bin/npm \
     && supervisord --version
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY config/supervisord.conf /etc/supervisor/supervisord.conf

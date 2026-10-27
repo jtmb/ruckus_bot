@@ -31,14 +31,17 @@ Both images use the pinned maintained official Node22.23.4 Trixie slim base.
 The official npm12.2.1 tarball is SHA256/SHA512-bound. Application packages install
 from committed locks with scripts disabled; bcrypt's bundled native compatibility
 is checked before publication. The Next build uses one worker. Production keeps
-all three original supervisor program names/commands and the existing native env.
-Unused Yarn/Corepack and build-only Next cache are excluded from the final runtime;
-Node/npm/nodemon retain the required launch paths. The callback MySQL client moves
+all three original supervisor program names and the existing native environment.
+Supervisor directly runs the same API, bot entry point and built Next dashboard
+on their original ports. Its bot_run restart target and restart policy remain.
+Unused npm/npx/nodemon/Yarn/Corepack and build-only Next cache are excluded from
+the final runtime. The API lock overrides proxy-addr to its patched2.0.8 release.
+The callback MySQL client moves
 to maintained mysql2 using the same SQL, credentials and schema.
 
 All compiler/context/cache/client/temp/socket outputs use the established F-backed
 operator task root. The isolated builder uses3GiB RAM, zero swap,1.5CPU,512processes
-and a3GiB allocated budget; C: and both F: filesystems preserve15GiB after the
+and a2GiB allocated budget; C: and both F: filesystems preserve15GiB after the
 estimated stage. No shared container, builder default, image, volume, Strata or user
 settings are stopped/changed. The publisher stops/removes its exact new builder
 on exit. Reconcile its inactive reproducible generated work before completion,

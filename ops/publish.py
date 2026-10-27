@@ -25,7 +25,7 @@ import time
 import uuid
 
 GIB = 1024 ** 3
-RESERVE, BUILD_BUDGET, OUTPUT_LIMIT = 15 * GIB, 3 * GIB, 0
+RESERVE, BUILD_BUDGET, OUTPUT_LIMIT = 15 * GIB, 2 * GIB, 0
 SERVICES = ('ruckus-bot',)
 BASE = Path('/home/brajam/.local/share/branconet-migration/local-image-build-offload-20261025')
 STORAGE = {'kind': 'dedicated-f-drive-ext4-loop', 'filesystem_uuid': '3c792469-ea0e-4a2c-98e8-1185b141607b', 'backing_file': r'F:\branconet-build-storage\native-build-20261025.ext4', 'backing_file_bytes': 152 * GIB, 'docker_root_filesystem_uuid': 'de6eee3d-80cf-41dc-bf4c-91ee606d02da', 'docker_mutable_budget_bytes': 64 * 1024 ** 2, 'docker_physical_reserve_bytes': 15 * GIB}
