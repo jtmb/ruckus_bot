@@ -22,7 +22,7 @@ try:
     for app in ['api','bot','dashboard','.']:
         folder=R if app=='.' else R/app
         assert not(folder/'node_modules').exists()
-        log=O/(prefix+'-'('root' if app=='.'else app)+'.log');assert not log.exists()
+        log=O/(prefix+'-'+('root' if app=='.'else app)+'.log');assert not log.exists()
         argv=[str(NODE),'--max-old-space-size=512',str(NPM),'install','--package-lock-only','--ignore-scripts','--no-audit','--no-fund','--os=linux','--cpu=x64','--libc=glibc','--prefix',str(folder)]
         started=datetime.datetime.now(datetime.timezone.utc).isoformat()
         with log.open('xb') as out:
