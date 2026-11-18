@@ -1,0 +1,189 @@
+RUCKUS_BOT — FRESH CHAT HANDOFF
+Generated 2026-11-16 · planning baseline main@711ff12 · repository /home/brajam/repos/ruckus_bot
+
+=== 0. READ THIS FIRST, IN THIS ORDER ===
+1. AGENTS.md
+2. MEMORY.md
+3. docs/memory/08_FRESH_CHAT_HANDOFF.txt            (this file)
+4. docs/planning/operations/00_START_HERE.md
+5. docs/planning/operations/01_MASTER_PLAN.md
+6. docs/planning/operations/02_DOMAIN_AND_PRODUCT_CONTRACTS.md
+7. docs/planning/operations/03_ARCHITECTURE_AND_REPOSITORY.md
+8. docs/planning/operations/04_SKILL_AND_AGENT_DESIGNS.md
+9. docs/planning/operations/05_DESIGN_AND_ACCESSIBILITY.md
+10. docs/planning/operations/06_SECURITY_AND_OPERATIONS.md
+11. docs/planning/operations/07_IMPLEMENTATION_ROADMAP.md
+12. data/requirements.json, data/decisions.json, data/gates.json, data/work-packages.json
+13. docs/planning/contracts/*.md (the authoritative behaviour)
+14. docs/planning/evidence/2026-11-16-baseline-review.md
+
+Do not act on this summary alone; the records above are authoritative and may have moved.
+
+=== 1. CURRENT STATE ===
+- Repository pulled from https://github.com/jtmb/ruckus_bot at main@711ff12 (2026-09-09).
+- A baseline review was executed on 2026-11-16 (MySQL 8.0 container, API on 3003, dashboard on 18080,
+  mocked bot handlers, headless browser). Evidence: docs/planning/evidence/.
+- A complete planning package exists: 9 documents, 4 contracts, 96 requirements, 24 decisions,
+  18 dependencies, 10 assumptions, 12 sources, 11 gates, 11 work packages, 2 workbooks, 4 diagrams,
+  4 concept mockups, validation report.
+- Planning revision (2026-11-16) facts: NO application code had been changed, no skill installed, nothing
+  deployed. As of 2026-11-17 the WP1-WP7 implementation is present as uncommitted working-tree changes with
+  local evidence in docs/planning/evidence/2026-11-17-implementation.md; still no skills installed, no
+  deployment, no commit or push.
+- Gate states (12 records): G0 passed (planning consistency); G3 retired 2026-11-17 (single-harness project;
+  the OpenCode checks are covered by G2); G1 and G2 not passed (WP0 installation still needs owner approval;
+  G2 is the harness gate only); G4-G6 passed_local and G7 partial_local for WP1-WP7 on focused local evidence;
+  G8-G10 not passed; G11 added 2026-11-17 as the separate WP2 migration-compatibility criterion, not passed.
+  "passed_local" and "partial_local" are not gate closure; no gate was closed from a synthetic test.
+- Harness/setup facts: OpenCode v2.3.0 is the only harness; setup scope is OpenCode-only (DEC-027). Do not
+  reintroduce a second-harness gate. WP2 migration compatibility is tracked separately in G11 and the WP2
+  exit criterion (DEC-028); G2 must not be reused for it, and neither was passed from synthetic tests.
+- Baseline hazards (2026-11-16): committed node_modules (5,290 files), Node 18 image, MySQL 5.7 compose image,
+  invalid readme compose example, missing LICENSE. Per the 2026-11-17 evidence the first four are resolved
+  in the uncommitted tree; LICENSE still awaits the owner's GPLv3 decision and stray files were left untouched.
+- Final local image (2026-11-18): `ruckus_bot:final-verify-f73d1f411426` =
+  `sha256:45c942c97add5dda37ab58a9da370a3995d640547d32ce5995460fc4c1e0f507`, confirmed locally and built
+  from node:26.13.1-slim / Next 16.4.6 with 0 audit findings. Local only: no registry push, no deployment.
+  Reconciliation evidence: docs/planning/evidence/2026-11-18-final-local.md.
+- Test sets are distinct (not one new full suite): the coordinating handoff reports 156 prior integrated
+  tests; the retained verify log verify-9a7943c86481fcd7.log supports 129 (75 API + 31 bot + 23 dashboard).
+  Earlier isolated smoke = smoke-da9a1764da3e.log (health/ready/dashboard 200, bot fail-closed). The final
+  rebuilt image adds focused 28 browser + 23 dashboard + 46 ops checks — not a new integrated suite.
+- Dashboard visual replacement: fresh final-image screens under
+  verify/final-f73d1f411426/screens/ (1280/360 login, dashboard, logs, users + export-logins.csv) supersede
+  the stale 2026-11-16 PNGs as current-state evidence. Browser checks cover keyboard, 360/1280 no-overflow,
+  focus rings, WCAG-AA contrast, logins filter/CSV, anon 401, cross-origin 403 and hardened cookie.
+- Isolated real-migrations recovery scope: state/migration-drill-events.jsonl (run bea6b672) applied the
+  three real shipped migrations in an isolated (network:none) fixture with synthetic RUNMIG rows, verified
+  a mode-600 backup/restore and cleaned up; separate synthetic 8-migration drill in isolated-drill-events.jsonl.
+  Synthetic data only — no real rollback, no production dump, no production compatibility (ASM-003 open).
+  Planning evidence only; no gate was closed from it.
+
+=== 2. THE OWNER'S GOAL (2026-11-16) ===
+Pull and set up the repo, inspect it, find bugs and broken behaviour, suggest improvements and genuine new
+features, fix the current issues, do not remove existing features without permission, then produce this
+planning package. The plan must therefore be fix-first and additive-only (DEC-002).
+
+=== 3. NEXT TASK (start here) ===
+WP0 — Operating kit and harness compatibility checks
+  1. Show the owner the four role cards (docs/operating-kit/roles/), five skill designs
+     (docs/operating-kit/skill-designs/) and three feature-guide templates
+     (docs/operating-kit/feature-guides/).
+  2. Ask for installation approval. Do not install anything before it.
+  3. After approval: install each skill into .opencode/skills/<skill-id>/ — first verify the discovery path
+     for OpenCode v2.3.0 in this environment.
+  4. Run the 7-check harness matrix in 04_SKILL_AND_AGENT_DESIGNS.md §6 for OpenCode.
+  5. Write docs/planning/evidence/<YYYY-MM-DD>-harness-matrix.md with the observed result of each check and
+     update data/gates.json (G1 and G2 only; the second-harness gate G3 was retired 2026-11-17 and the
+     OpenCode checks are covered by G2).
+  6. Then start WP1 only if the owner authorises application changes.
+
+WP1 first concrete edits (after WP0):
+  - remove the committed node_modules from git tracking; extend .gitignore
+  - add .dockerignore
+  - pin Node 26.13.1 / Next 16.4.6 / Express 4.22.3 / mysql2 3.24.6 / discord.js 14.28.1 and fix audits
+  - make the dashboard build hermetic
+  - repair readme + compose example
+Acceptance evidence is listed in 07_IMPLEMENTATION_ROADMAP.md under WP1.
+
+Status 2026-11-17: WP1-WP7 work is evidenced in
+docs/planning/evidence/2026-11-17-implementation.md (G4-G6 passed_local; G7 reduced to partial_local because
+the browser keyboard/responsive/contrast checks were not run) and the continuation record
+docs/planning/evidence/2026-11-17-local-continuation.md. WP0 still needs installation approval; G2 remains
+the harness gate and is not passed; G8-G11 and reviewer sign-off remain open. General "completion" language
+does not waive the installation/review gates.
+
+=== 4. AUTHORITY AND BOUNDARIES ===
+Authorised now: reading, planning records, documentation, local read-only verification, generating planning
+artifacts (workbooks, diagrams, ZIP).
+Requires explicit owner approval: installing skills, writing application code, adding dependencies, changing
+the running service, deploying, purchases, merging branches, deleting files that may be user work.
+Never: remove an existing feature, expose the API/database publicly, disable authentication to unblock a
+problem, commit secrets, fabricate test/benchmark/deployment evidence.
+When the owner's instruction and a document conflict, the current owner instruction wins — record the change
+in data/scope-history.json and update the affected requirement IDs.
+
+=== 5. KNOWN ACTIVATION INPUTS (do not invent them) ===
+- BOT_TOKEN with MESSAGE_CONTENT and GUILD_MEMBERS intents approved (ASM-001).
+- Confirmation whether any production database dump must be migrated (ASM-003).
+- OPENWEATHERMAP_API_KEY and its plan/quota (ASM-006).
+- Hosting target for staging/production, or an explicit decision to stay local (ASM-002).
+- Whether the GNU GPLv3 claim is correct, so LICENSE can be restored or the claim corrected (ASM-008).
+- Owner labour rate for the cost model.
+
+=== 6. CONTINUITY RULES ===
+- Work in /home/brajam/repos/ruckus_bot only. Do not create clones, worktrees or dependency copies.
+- Generated output (node_modules, .next, dumps, screenshots, containers) stays out of the tracked tree.
+- Update data/requirements.json status only from "not_started" when the acceptance evidence exists; keep
+  scope approval separate from verification.
+- Regenerate data/acceptance_tracker.xlsx from the records; never hand-edit it as a source.
+- At each milestone, update this handoff, data/gates.json and the tracker, then continue with the next
+  package without asking for re-authorisation of work already approved.
+- If a check cannot run (no token, no host, no browser), record it as unverified with the exact missing input.
+
+=== 7. COMPLETION CRITERIA FOR THE FIRST RELEASE ===
+- Clean clone builds with npm ci; no tracked node_modules; image on a supported runtime, non-root.
+- npm audit shows no critical/high findings in api, bot, dashboard.
+- Every API route has an allow/deny test for anonymous/viewer/operator/admin.
+- Dashboard shows live heartbeat and goes stale/offline correctly without a rebuild.
+- All REG-001..REG-014 behaviours demonstrated; N-chain never sends an empty message.
+- Fresh MySQL 8.4 initialises from migrations with no manual SQL.
+- Restore drill, offline alert, restart job and rollback each executed once with evidence.
+- npm run verify passes locally from a clean checkout.
+- CHANGELOG lists closed requirement IDs; local guides exist for bot/, api/, dashboard/.
+
+=== 8. FILE MAP QUICK REFERENCE ===
+Plan .................. docs/planning/operations/00..07*.md
+Contracts ............. docs/planning/contracts/{command,api,data-model,session}-contract.md
+Evidence .............. docs/planning/evidence/
+Operating kit ......... docs/operating-kit/{RULES.md,roles/,feature-guides/,skill-designs/,scripts/}
+Memory ................ MEMORY.md, docs/memory/
+Research .............. docs/research/
+Visuals ............... docs/visuals/{diagrams,mockups,manifest.json}
+Canonical records ..... data/*.json, data/acceptance_tracker.xlsx, data/cost-model.xlsx
+Source ................ bot/, api/, dashboard/, config/, src/
+
+=== 9. LOCAL CONTINUATION 2026-11-17 (planning records only) ===
+Source of truth: docs/planning/evidence/2026-11-17-implementation.md for executed checks, plus the
+contracts and docs/deploy/BACKUP-RESTORE.md. No application source, security config, credentials,
+workbooks, ZIP, commits, system/live access, deployment or second checkout was touched.
+
+Confirmed decisions recorded in data/decisions.json:
+- DEC-025: GET /metrics is admin-only; the private-network/address bypass is deliberately absent. This is
+  a valid contract choice (api-contract.md §7 and session-contract.md §4 were aligned to "admin only").
+- DEC-026: live restore is disabled until an exclusively task-owned, isolated disposable MySQL 8.4 fixture
+  with ownership proof exists; dry-run planning only. Synthetic tests are not a drill.
+- DEC-027: setup and harness scope is OpenCode v2.3.0 only; G3 stays retired.
+- DEC-028: G IDs are not repurposed; G2 is harness only and WP2 migration compatibility is the separate G11
+  criterion in the WP2 exit criteria. Neither was passed from a synthetic test.
+
+Evidence hygiene:
+- The 2026-11-16 PNGs (login/create-account/dashboard) and api-runtime.log are stale versus the current
+  2026-11-17 source; do not use them as current-state proof. Current observations are in the 2026-11-17
+  evidence files.
+- No container registry credentials are available (docs/deploy/FLUX-DEPLOY.md), so no image was pushed and
+  nothing was deployed; the chart validator's stand-in digest is not a deployment.
+- The legacy dump prod-pre-1.1.0-20261117T011520.sql sits on a 9p/DrvFS mount reported 0777, cannot provide
+  0600, and is not qualified as a drill fixture or a rollback; it was left untouched.
+- Historical evidence and branch names are preserved: main, origin/main, origin/HEAD -> origin/main,
+  origin/codex/production-source-maintenance-20261027, origin/feat-shak and origin/feat/shak.
+- G7's earlier passed_local wording was too broad: focused tests verified API status/heartbeat and auth
+  responses but not the browser keyboard journey, 360/1280 px screenshots or re-measured contrast.
+
+=== 10. FINAL LOCAL CHECKPOINT 2026-11-18 (records only) ===
+- Source of truth: docs/planning/evidence/2026-11-18-final-local.md plus the H logs it cites. This checkpoint
+  owned only this handoff, data/gates.json, data/decisions.json and that evidence file. No application code,
+  security config, credentials, workbook, ZIP, commit, checkout, deployment or second checkout was touched.
+- Confirmed decisions recorded in data/decisions.json: DEC-029 (final local image and focused browser/dashboard/
+  ops checks are local evidence, not a new full suite or gate closure); DEC-030 (fresh final-image screens replace
+  the stale 2026-11-16 PNGs); DEC-031 (isolated real-migrations recovery drill uses synthetic data, no real
+  rollback or production compatibility, planning evidence only).
+- Gate states after this checkpoint: G4/G5/G6 remain passed_local; G7 remains partial_local, now with the
+  keyboard/responsive/contrast subcriteria locally supported by the 28 browser checks; G1/G2/G8/G9/G10/G11
+  remain not_passed. No gate was closed from a synthetic or focused test.
+- WP0 skill-installation/harness approval is still required (G1/G2 unpassed; no harness matrix ran). WP10
+  (G10) remains pending: rich filters, the role model, security and the remaining additive features are
+  incomplete. The registry has no credentials, so nothing was pushed; the legacy production dump remains
+  unqualified (0777 mount, no 0600) and was left untouched; ASM-003 is still open.
+
+END OF HANDOFF
