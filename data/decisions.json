@@ -1,0 +1,496 @@
+{
+  "schema": "ruckus-plan/decisions@1",
+  "generated": "2026-11-16",
+  "decisions": [
+    {
+      "id": "DEC-001",
+      "title": "Planning baseline",
+      "decision": "main at 711ff12 (2026-09-09), which is what the owner asked to pull. The unmerged branch origin/codex/production-source-maintenance-20261027 (2026-10-26) is treated as prior work to reuse, not as a competing baseline.",
+      "rejected": [
+        "origin/feat/shak (stale help/iOnline experiment)",
+        "Rebuilding from the maintenance branch"
+      ],
+      "rationale": "The maintenance branch is unmerged and carries infrastructure-specific ops/ files; main is the public default.",
+      "reconsideration_trigger": "Revisit if the owner merges that branch.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-002",
+      "title": "Fix-first, additive-only product scope",
+      "decision": "Keep every existing user-visible feature and add fixes, hardening and new features. Removing or rewriting a feature requires a new recorded decision.",
+      "rejected": [
+        "Rewrite the bot around a framework",
+        "Drop message commands when adding slash commands"
+      ],
+      "rationale": "Owner instruction: do not remove current features without permission.",
+      "reconsideration_trigger": "Revisit per feature with explicit owner approval.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-003",
+      "title": "Runtime version",
+      "decision": "Node 26.13.1 LTS (Active LTS) pinned in images and engines; Node 24.22.3 LTS recorded as the fallback if a native dependency fails to build.",
+      "rejected": [
+        "Node 22 LTS (maintenance)",
+        "Node 18 (current, EOL 2025-04-30)"
+      ],
+      "rationale": "Node 26 has Active LTS support to 2027-10-27 and security to 2029-04-30; current Node 18 is end-of-life.",
+      "reconsideration_trigger": "Fall back to 24 LTS if any dependency lacks Node 26 support.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-004",
+      "title": "Database",
+      "decision": "MySQL 8.4 LTS, with mysql2 in bot, API and dashboard.",
+      "rejected": [
+        "MySQL 5.7 (EOL 2023-10-31)",
+        "MySQL 8.0 (EOL 2026-04-30)",
+        "PostgreSQL migration"
+      ],
+      "rationale": "8.4 LTS has premier support to 2029-04-30; existing SQL is simple and portable within MySQL.",
+      "reconsideration_trigger": "Revisit if a managed provider only offers 8.0.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-005",
+      "title": "API framework and HTTP middleware",
+      "decision": "Express 4.22.3 with express.json(), a proxy-addr override pin, and explicit CORS allowlist; no Express 5 rewrite in this scope.",
+      "rejected": [
+        "Express 5.3.0 migration",
+        "Fastify rewrite"
+      ],
+      "rationale": "Keeps route shapes and middleware behaviour while removing the audited 4.18/4.21 advisories; 5.x changes error handling and router semantics.",
+      "reconsideration_trigger": "Revisit when Express 4 loses support.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-006",
+      "title": "Dashboard authentication",
+      "decision": "Server-side sessions stored in MySQL with an HttpOnly session cookie, role checks in the API and in server components; No JWT in localStorage.",
+      "rejected": [
+        "JWT in localStorage",
+        "NextAuth with a new identity provider"
+      ],
+      "rationale": "LocalStorage flags are not authentication and the current API has no authorisation at all.",
+      "reconsideration_trigger": "Revisit if SSO is requested.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-007",
+      "title": "Dashboard framework version",
+      "decision": "Next 16.4.6 with React 19.3.1, pinned, migrated from 14.2.7; route caching behaviour verified with a runtime probe rather than assumed.",
+      "rejected": [
+        "Stay on Next 14.2.7",
+        "Next 15.x"
+      ],
+      "rationale": "Next 14.2.7 carries critical advisories including authorization bypass and RCE classes; the app is small enough to migrate.",
+      "reconsideration_trigger": "If migration exceeds WP1 budget, isolate on 15.x and record the residual advisory.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-008",
+      "title": "Bot data access",
+      "decision": "mysql2 with promise pool in the bot; remove mysql v2 and node-fetch in favour of platform fetch where possible.",
+      "rejected": [
+        "Keep mysql v2 against MySQL 8 (fails auth)"
+      ],
+      "rationale": "mysql v2 cannot authenticate against MySQL 8 default auth; measured error ER_NOT_SUPPORTED_AUTH_MODE.",
+      "reconsideration_trigger": "No planned revisit.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-009",
+      "title": "Bot command handler contract",
+      "decision": "All handlers receive one context object and return Promise<boolean>; the dispatcher owns dedupe, cooldown, logging and error handling.",
+      "rejected": [
+        "Per-file ad-hoc signatures (current)",
+        "discord.js command framework"
+      ],
+      "rationale": "Current signature drift already causes a missed handled result and an unbounded map.",
+      "reconsideration_trigger": "Revisit only if a command needs interaction-specific lifecycle.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-010",
+      "title": "Command metadata source",
+      "decision": "One registry drives help text, slash command registration and cooldowns; the bot id is read from the client.",
+      "rejected": [
+        "Hardcoded help strings per handler"
+      ],
+      "rationale": "The current help hardcodes a bot id and concatenates lines without newlines.",
+      "reconsideration_trigger": "No planned revisit.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-011",
+      "title": "Message commands vs slash commands",
+      "decision": "Message commands remain first-class; slash commands are additive aliases.",
+      "rejected": [
+        "Migrate to slash-only"
+      ],
+      "rationale": "Existing users and the help text rely on message commands; owner asked not to remove features.",
+      "reconsideration_trigger": "Revisit after one release with measured usage.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-012",
+      "title": "Dashboard to API topology",
+      "decision": "The browser talks only to Next route handlers; Next calls the API over the private network. No API origin or secret is shipped to the browser.",
+      "rejected": [
+        "Browser calls the API directly"
+      ],
+      "rationale": "Avoids exposing the API and keeps cookie/session handling server-side.",
+      "reconsideration_trigger": "No planned revisit.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-013",
+      "title": "Configuration",
+      "decision": "One config module per process validates required variables at startup and fails with a named error; .env.example is committed.",
+      "rejected": [
+        "Read process.env ad hoc (current)"
+      ],
+      "rationale": "MYSQL_PORT is currently documented but ignored, and the bot exits silently on a missing token path mismatch.",
+      "reconsideration_trigger": "No planned revisit.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-014",
+      "title": "Schema management",
+      "decision": "Numbered forward-only SQL migrations applied by a migration command and on API start, tracked in a schema_migrations table; no ORM.",
+      "rejected": [
+        "ORM (Prisma/Knex)",
+        "Manual schema.sql only"
+      ],
+      "rationale": "Schema is two small tables; an ORM adds build and migration weight without benefit.",
+      "reconsideration_trigger": "Revisit if tables grow beyond ~10.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-015",
+      "title": "Logging",
+      "decision": "Structured JSON logs to stdout with request/job ids and secret redaction; message content logging is a documented privacy switch.",
+      "rejected": [
+        "Keep console.log prose"
+      ],
+      "rationale": "Operators need correlation between API errors and bot events; content logging has privacy impact.",
+      "reconsideration_trigger": "No planned revisit.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-016",
+      "title": "Log retention",
+      "decision": "Default 30 days for message-content events and 180 days for aggregate events, configurable, enforced by a scheduled prune.",
+      "rejected": [
+        "Retain forever (current unbounded growth)"
+      ],
+      "rationale": "The table currently grows without limit and there is no delete path.",
+      "reconsideration_trigger": "Owner may set a different retention during activation.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-017",
+      "title": "Test tooling",
+      "decision": "node:test + node:assert for unit and HTTP contract tests, with fixtures; dashboard build and HTTP smoke checks in npm run verify.",
+      "rejected": [
+        "Jest",
+        "Playwright/Cypress suites"
+      ],
+      "rationale": "Zero new heavyweight test infrastructure; the environment has Node only and no browser automation requirement.",
+      "reconsideration_trigger": "Add browser E2E only if visual regressions appear.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-018",
+      "title": "Deployment shape",
+      "decision": "Keep the single supervisor image on port 8080 as the default deployment; add a split compose profile for development and diagnosis.",
+      "rejected": [
+        "Kubernetes/Flux manifests (maintenance branch)",
+        "Three-service production stack as the only shape"
+      ],
+      "rationale": "Preserves the existing deployment feature; the owner infrastructure for Kubernetes is not established in this scope.",
+      "reconsideration_trigger": "Revisit if a cluster target is confirmed.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-019",
+      "title": "External providers",
+      "decision": "Keep gamerpower, JokeAPI, OpenWeatherMap, purgomalum/evilinsult; add timeouts, TTL caches and last-known-good fallbacks. Ship a bundled profanity baseline instead of scraping per message.",
+      "rejected": [
+        "Paid weather/aggregator plans",
+        "New LLM-based reply generation"
+      ],
+      "rationale": "All are free and already integrated; the defect is the per-message fetch and unsafe fallback.",
+      "reconsideration_trigger": "Revisit quotas at activation.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-020",
+      "title": "Verification authority",
+      "decision": "Local scripts and documented commands only; no CI provider unless the owner requests it.",
+      "rejected": [
+        "GitHub Actions"
+      ],
+      "rationale": "Owner planning brief: use local validation, no GitHub Actions unless explicitly requested.",
+      "reconsideration_trigger": "Revisit on request.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-021",
+      "title": "Persona and content",
+      "decision": "Keep the Uncle Ruckus persona, existing quotes, assets and disclaimer unchanged.",
+      "rejected": [
+        "Tone down or replace persona content"
+      ],
+      "rationale": "Preserving current features and content is an explicit owner constraint.",
+      "reconsideration_trigger": "Owner decision only.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-022",
+      "title": "Cost model basis",
+      "decision": "Self-hosted single host: Hetzner Cloud Regular Performance from EUR 5.49/month excl. VAT (quoted 2026-11-16) as the low scenario, with domain, backup storage and labour listed separately.",
+      "rejected": [
+        "Managed platform pricing",
+        "Kubernetes cluster"
+      ],
+      "rationale": "Matches the documented Docker Compose deployment; small bot workload.",
+      "reconsideration_trigger": "Re-price at activation.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-023",
+      "title": "Repository layout",
+      "decision": "Keep the three independent package.json apps (bot, api, dashboard) and add root scripts only; no npm workspaces conversion in this scope.",
+      "rejected": [
+        "Convert to npm workspaces",
+        "Monorepo tool"
+      ],
+      "rationale": "Minimises churn in a working repository and keeps Docker stages unchanged.",
+      "reconsideration_trigger": "Revisit if shared code grows beyond config/logger.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-024",
+      "title": "Stray files",
+      "decision": "pagination.js, dashboard/app/page.js.old and the root package.json are removed under FIX-030 unless the owner claims them as intended work-in-progress.",
+      "rejected": [
+        "Keep them as unowned leftovers"
+      ],
+      "rationale": "They are not imported by any app and pagination.js targets port 3001 with hardcoded URLs.",
+      "reconsideration_trigger": "Owner may reclaim any file before WP1 executes.",
+      "status": "accepted",
+      "authority": "planning integrator, owner brief 2026-11-16",
+      "date": "2026-11-16",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-025",
+      "title": "Metrics access is admin-only (valid contract choice)",
+      "decision": "GET /metrics requires an admin session; every other role and anonymous callers receive 403. The private-network/address-based bypass is deliberately absent. This is a valid contract choice, not a defect to be fixed by loosening authorisation.",
+      "rejected": [
+        "Anonymous or private-network address bypass for /metrics",
+        "Exposing /metrics through the dashboard or a browser-callable route"
+      ],
+      "rationale": "The implemented guard (api/src/ops/access.js) denies any non-admin session and never consults a client or proxy address: behind a private ingress an external request can present a private IP, so an address is not a credential. contracts/api-contract.md §7 and contracts/session-contract.md §4 both state admin-only, so the contract and implementation agree.",
+      "reconsideration_trigger": "Only an explicit owner decision with a separate authorisation boundary; no address-based bypass will be restored by this project.",
+      "status": "accepted",
+      "authority": "contract choice confirmed from focused local evidence, recorded by planning integrator 2026-11-17",
+      "date": "2026-11-17",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-026",
+      "title": "Backup live restore disabled until an owned fixture exists",
+      "decision": "The restore drill stays dry-run only and any live restore is refused (fail closed) until an exclusively task-owned, isolated disposable MySQL 8.4 fixture with recorded ownership proof exists. No production dump is a qualified drill fixture or rollback artifact in this environment.",
+      "rejected": [
+        "Using the legacy production dump prod-pre-1.1.0-20261117T011520.sql as a fixture",
+        "Loopback TCP, a schema prefix, or a matching checksum treated as a sandbox",
+        "An opt-in flag that would re-enable live restore without an owned fixture"
+      ],
+      "rationale": "A checksum proves integrity, not authenticity or provenance; a disposable schema is not a SQL sandbox; the interactive mysql client interprets client-side commands. The legacy dump sits on a 9p/DrvFS mount reported 0777 and cannot provide the required private 0600 guarantee, so it is left untouched. Synthetic guard tests are planning evidence only and never a real drill.",
+      "reconsideration_trigger": "Only after a separately authorised, owned isolated fixture is provisioned with the exact prerequisite in docs/deploy/BACKUP-RESTORE.md §6 and its ownership proof recorded.",
+      "status": "accepted",
+      "authority": "focused local backup/restore evidence, recorded by planning integrator 2026-11-17",
+      "date": "2026-11-17",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-027",
+      "title": "Setup and harness scope is OpenCode-only",
+      "decision": "Operating-kit setup and the harness matrix target OpenCode v2.3.0 only. The second-harness gate G3 was retired 2026-11-17 and its OpenCode checks are covered by G2. No second harness or replacement G ID is introduced.",
+      "rejected": [
+        "Reintroducing G3 or any second-harness gate",
+        "Adding a harness other than OpenCode v2.3.0 to this scope"
+      ],
+      "rationale": "OpenCode v2.3.0 is the only harness available and verified in this environment; a single-harness project needs one harness gate. Skill installation still requires owner approval and is not authorised by the planning package.",
+      "reconsideration_trigger": "Only if the owner supplies and authorises a second harness in a new scope decision.",
+      "status": "accepted",
+      "authority": "focused local continuation, recorded by planning integrator 2026-11-17",
+      "date": "2026-11-17",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-028",
+      "title": "Gate IDs are not repurposed: G2 is harness, WP2 compatibility is separate",
+      "decision": "G2 remains the OpenCode harness gate only. WP2 migration compatibility is recorded as an explicit, separately persisted acceptance criterion (gate G11 and the WP2 exit criterion), not as a second meaning of G2. Neither is treated as passed from synthetic or focused tests.",
+      "rejected": [
+        "Reusing G2 for WP2 migration compatibility",
+        "Marking G2 or the WP2 compatibility criterion passed from a synthetic harness/migration test"
+      ],
+      "rationale": "Dual-use of G2 conflated an unauthorised, unexecuted harness matrix with data-layer migration work. Keeping the meanings separate preserves both gates; synthetic tests can only be planning evidence, never gate closure.",
+      "reconsideration_trigger": "No planned revisit; any future gate rename must keep both meanings distinct.",
+      "status": "accepted",
+      "authority": "focused local continuation, recorded by planning integrator 2026-11-17",
+      "date": "2026-11-17",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-029",
+      "title": "Final local image and focused checks are local evidence, not a new full suite or gate closure",
+      "decision": "The locally built image ruckus_bot:final-verify-f73d1f411426 (sha256:45c942c97add5dda37ab58a9da370a3995d640547d32ce5995460fc4c1e0f507) and its final-image run of 28 browser, 23 dashboard and 46 ops checks are a focused re-verification, not a new integrated test suite. The prior integrated run (coordinating handoff reports 156 tests; the retained verify-9a7943c86481fcd7.log supports 129 = 75 API + 31 bot + 23 dashboard) and the earlier isolated smoke (smoke-da9a1764da3e.log) remain distinct. Only locally supported subcriteria are recorded; no gate is closed from these tests.",
+      "rejected": [
+        "Claiming the final-image 28/23/46 checks as a new 156-test full suite",
+        "Closing G4-G11 from focused or synthetic local evidence",
+        "Treating a local image digest as a registry push or deployment"
+      ],
+      "rationale": "The final image was rebuilt and checked locally only. No registry credentials exist, nothing was pushed or deployed, and the wider contracts (rich filters, role model, security) stay incomplete, so gate states are unchanged: G4/G5/G6 passed_local, G7 partial_local, G1/G2/G8/G9/G10/G11 not_passed.",
+      "reconsideration_trigger": "Only after an owner-authorised clean-clone integrated run and reviewer sign-off with a qualified release environment.",
+      "status": "accepted",
+      "authority": "final local reconciliation evidence, recorded by the 2026-11-18 checkpoint from H logs",
+      "date": "2026-11-18",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-030",
+      "title": "Fresh final-image dashboard screens replace the stale 2026-11-16 PNGs",
+      "decision": "The current-state dashboard visual evidence is the set captured from the final image under verify/final-f73d1f411426/screens/ (dashboard_1280/360, login_1280/360, logs_360, users_1280 plus export-logins.csv). The 2026-11-16 login/create-account/dashboard PNGs are historical and are no longer used as current-state proof.",
+      "rejected": [
+        "Using the 2026-11-16 PNGs as proof of current dashboard behaviour",
+        "Treating the 28 passing browser checks as full dashboard gate closure while rich filters/role model/security contracts remain incomplete"
+      ],
+      "rationale": "The old PNGs predate the current source. The final-image browser checks locally cover keyboard, 360/1280 no-overflow, focus rings, WCAG-AA contrast, logins filter/CSV, anon 401, cross-origin 403, hardened cookie and no egress, which supports specific G7 subcriteria but not full acceptance.",
+      "reconsideration_trigger": "Only an owner-authorised visual/reference review against the current source with the wider dashboard contracts complete.",
+      "status": "accepted",
+      "authority": "final local reconciliation evidence, recorded by the 2026-11-18 checkpoint from H logs",
+      "date": "2026-11-18",
+      "supersedes": "",
+      "superseded_by": ""
+    },
+    {
+      "id": "DEC-031",
+      "title": "Isolated real-migrations recovery drill is synthetic-data planning evidence",
+      "decision": "state/migration-drill-events.jsonl (run bea6b672) is an isolated (network:none) fixture using the three real shipped migrations (0001_baseline, 0002_sessions_and_heartbeat, 0003_log_indexes) over synthetic RUNMIG rows, with a mode-600 verified backup/restore and clean teardown; isolated-drill-events.jsonl is a separate synthetic 8-migration drill. Both use synthetic data only: no real rollback, no production dump used or qualified, and no production compatibility claim (ASM-003 remains open). Neither closes G8 or G11.",
+      "rejected": [
+        "Treating a synthetic migration/backup drill as a real restore or rollback",
+        "Using the unqualified legacy production dump as a drill fixture",
+        "Recording G11 or G8 as passed from this evidence"
+      ],
+      "rationale": "Synthetic rows and isolated volumes prove the migration and guard mechanics locally but not authenticity, provenance or compatibility with a real production dump. DEC-026's fixture requirement and the G11 no-synthetic-pass rule still apply.",
+      "reconsideration_trigger": "Only after a separately authorised, owned isolated fixture with recorded ownership proof and an owner-qualified production dump (ASM-003).",
+      "status": "accepted",
+      "authority": "final local reconciliation evidence, recorded by the 2026-11-18 checkpoint from H state logs",
+      "date": "2026-11-18",
+      "supersedes": "",
+      "superseded_by": ""
+    }
+  ]
+}

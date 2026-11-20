@@ -1,0 +1,42 @@
+{
+  "schema": "ruckus-plan/scope-history@1",
+  "generated": "2026-11-16",
+  "entries": [
+    {
+      "id": "SH-001",
+      "title": "Baseline review requested",
+      "origin": "Owner brief 2026-11-16",
+      "description": "Pull, set up and inspect the repository; find bugs; propose improvements and new features; fix current issues without removing features; then produce a project-planning package.",
+      "affected": "All requirement kinds",
+      "authority": "Recorded in 01_MASTER_PLAN.md",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "SH-002",
+      "title": "Prior maintenance branch identified",
+      "origin": "Repository inspection",
+      "description": "origin/codex/production-source-maintenance-20261027 contains dependency pins, .dockerignore, supervisor production commands and ops/ publication scripts.",
+      "affected": "DEC-001, DEC-003..DEP-016",
+      "authority": "Reused where verified; not merged into the baseline.",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "SH-003",
+      "title": "Planning package produced",
+      "origin": "This revision",
+      "description": "Nine deliverables, contracts, canonical records, workbooks, diagrams, mockups and validation report.",
+      "affected": "All",
+      "authority": "docs/planning/",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "SH-004",
+      "title": "Implementation not authorised by planning",
+      "origin": "planning-specification.md §13",
+      "description": "No application code, scaffolding, skill installation, purchase or deployment was performed in this revision.",
+      "affected": "All implementation requirements remain not_started",
+      "authority": "Recorded in the validation report and handoff.",
+      "date": "2026-11-16"
+    }
+  ]
+}

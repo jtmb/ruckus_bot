@@ -1,0 +1,19 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "/home/brajam/repos/AGENTS.md",
+    "MEMORY.md"
+  ],
+  "permissions": [
+    {
+      "action": "external_directory",
+      "resource": "*",
+      "effect": "ask"
+    },
+    {
+      "action": "edit",
+      "resource": "/home/brajam/repos/branconet-homelab/*",
+      "effect": "ask"
+    }
+  ]
+}

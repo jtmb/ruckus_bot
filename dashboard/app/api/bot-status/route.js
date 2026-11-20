@@ -1,18 +1,19 @@
-import { fetchBotStatus } from '../../components/api_bot_status';
 import { NextResponse } from 'next/server';
+import { callApi, tokenOf } from '../../lib/server';
 
-export async function GET() {
-    const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
+// Live data: must never be prerendered or cached at build time.
+export const dynamic = 'force-dynamic';
+
+export async function GET(request) {
+    const token = tokenOf(request);
+    if (!token) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     try {
-        const result = await fetchBotStatus(apiEndpoint);
-        console.log('Bot status result:', result); // Debugging line
-        return NextResponse.json(result);
+        const r = await callApi('/bot/status', { token });
+        if (r.status === 401) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+        if (!r.ok) throw new Error(`API returned ${r.status}`);
+        return NextResponse.json(r.json, { headers: { 'Cache-Control': 'no-store' } });
     } catch (error) {
-        console.error('Error fetching bot status:', error);
-        return NextResponse.json({
-            botName: '',
-            isBotUp: false,
-            guilds: []
-        });
+        console.error('Error fetching bot status:', error.message);
+        return NextResponse.json({ error: 'API unavailable' }, { status: 502 });
     }
 }

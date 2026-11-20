@@ -1,0 +1,204 @@
+{
+  "schema": "ruckus-plan/dependencies@1",
+  "generated": "2026-11-16",
+  "dependencies": [
+    {
+      "id": "DEP-001",
+      "name": "node",
+      "version": "26.13.1",
+      "area": "runtime",
+      "reason": "LTS supported to 2029-04-30; Node 18 currently pinned is EOL 2025-04-30.",
+      "source": "nodejs.org release index 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-002",
+      "name": "mysql",
+      "version": "8.4",
+      "area": "database image",
+      "reason": "LTS premier support to 2029-04-30; 5.7 EOL 2023-10-31, 8.0 EOL 2026-04-30.",
+      "source": "endoflife.date/mysql 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-003",
+      "name": "express",
+      "version": "4.22.3",
+      "area": "api",
+      "reason": "Latest maintained 4.x; avoids audited 4.18/4.21 advisories; 5.3.0 is latest major.",
+      "source": "npm view express 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-004",
+      "name": "proxy-addr",
+      "version": "2.0.8",
+      "area": "api override",
+      "reason": "Remediates the critical IP-spoofing advisory reached through Express.",
+      "source": "npm audit api 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-005",
+      "name": "body-parser",
+      "version": "2.4.0",
+      "area": "api",
+      "reason": "Remediates body-parser DoS advisories; express.json remains the primary parser.",
+      "source": "npm view body-parser 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-006",
+      "name": "cors",
+      "version": "2.8.6",
+      "area": "api",
+      "reason": "Current 2.x with the allowlist configuration used here.",
+      "source": "npm view cors 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-007",
+      "name": "mysql2",
+      "version": "3.24.6",
+      "area": "api, bot, dashboard",
+      "reason": "Remediates critical mysql2 RCE advisories in the API and fixes MySQL 8 auth in the bot.",
+      "source": "npm view mysql2 / npm audit 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-008",
+      "name": "bcrypt",
+      "version": "6.0.0",
+      "area": "api",
+      "reason": "Remediates the critical node-pre-gyp advisory chain in bcrypt 5.1.1.",
+      "source": "npm audit api 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-009",
+      "name": "next",
+      "version": "16.4.6",
+      "area": "dashboard",
+      "reason": "Remediates Next 14.2.7 critical advisories; requires Node >= 20.9.0.",
+      "source": "npm view next 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-010",
+      "name": "react / react-dom",
+      "version": "19.3.1",
+      "area": "dashboard",
+      "reason": "Required peer range for Next 16.4.6.",
+      "source": "npm view react 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-011",
+      "name": "discord.js",
+      "version": "14.28.1",
+      "area": "bot",
+      "reason": "Latest 14.x; uses clientReady event naming and current REST behaviour.",
+      "source": "npm view discord.js 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-012",
+      "name": "axios",
+      "version": "1.21.1",
+      "area": "bot",
+      "reason": "Remediates the audited axios SSRF/credential-leak set; can be replaced by platform fetch.",
+      "source": "npm view axios / npm audit bot 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-013",
+      "name": "cheerio",
+      "version": "1.2.0",
+      "area": "bot",
+      "reason": "Used only for the optional profanity list refresh fixture.",
+      "source": "npm view cheerio 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-014",
+      "name": "dotenv",
+      "version": "18.0.10",
+      "area": "api, bot, dashboard",
+      "reason": "Loads .env in local development only; production uses real environment variables.",
+      "source": "npm view dotenv 2026-11-16",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-015",
+      "name": "node-fetch",
+      "version": "remove",
+      "area": "bot",
+      "reason": "Node 26 provides fetch; node-fetch was imported dynamically per call.",
+      "source": "platform capability",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-016",
+      "name": "mysql (v2)",
+      "version": "remove",
+      "area": "bot",
+      "reason": "Cannot authenticate against MySQL 8, unmaintained, and duplicates mysql2.",
+      "source": "measured ER_NOT_SUPPORTED_AUTH_MODE",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-017",
+      "name": "pino",
+      "version": "10.x",
+      "area": "api, bot",
+      "reason": "Optional structured logger if the built-in wrapper is insufficient; verify version at implementation.",
+      "source": "npm view pino at implementation",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    },
+    {
+      "id": "DEP-018",
+      "name": "helmet",
+      "version": "8.x",
+      "area": "api",
+      "reason": "Security headers for the dashboard-facing API; verify version at implementation.",
+      "source": "npm view helmet at implementation",
+      "status": "planned",
+      "locked_in": "",
+      "verified_on": ""
+    }
+  ]
+}

@@ -10,7 +10,7 @@ services:
       - MYSQL_USER=bot
       - MYSQL_PASSWORD=bot_db_password1234!
       - MYSQL_DATABASE=db
-      - BOT_TOKEN=
+      - BOT_TOKEN=${BOT_TOKEN:?set BOT_TOKEN in your shell or .env}
     ports:
       - "8080:8080"
       - "3003:3003"
@@ -19,7 +19,7 @@ services:
         condition: service_healthy
 
   db:
-    image: mysql:5.7
+    image: mysql:8.4
     volumes:
       - mysql_data:/var/lib/mysql
     environment:

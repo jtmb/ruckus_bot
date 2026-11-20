@@ -1,0 +1,53 @@
+diff --git a/charts/ruckus-bot/Chart.yaml b/charts/ruckus-bot/Chart.yaml
+index 36fc6ba..85bbce8 100644
+--- a/charts/ruckus-bot/Chart.yaml
++++ b/charts/ruckus-bot/Chart.yaml
+@@ -2,4 +2,4 @@ apiVersion: v2
+ name: ruckus-bot
+ description: Individual migration chart; inactive until verified
+ type: application
+-version: 0.1.3
++version: 0.1.4
+diff --git a/charts/ruckus-bot/values.yaml b/charts/ruckus-bot/values.yaml
+index 91c607e 100644
+--- a/charts/ruckus-bot/values.yaml
++++ b/charts/ruckus-bot/values.yaml
+@@ -1,6 +1,6 @@
+ enabled: false
+ replicaCount: 0
+-image: docker.io/jtmb92/ruckus-bot:git-cedb2b32694368ed73883ec8f34459879b1e857e@sha256:f63dd607ee435d24c6b5e97aaecd044b0e3dba5b872db9ff9d3fd8bc4463dd69
++image: docker.io/jtmb92/ruckus-bot:final-verify-f73d1f411426@sha256:45c942c97add5dda37ab58a9da370a3995d640547d32ce5995460fc4c1e0f507
+ environmentSecret: ruckus-bot-runtime
+ migration:
+   verified: false
+@@ -41,7 +41,7 @@ resources:
+         labels:
+           app: ruckus-bot
+         annotations:
+-          maintenance.branconet.lan/restart-proof: owned-ruckus-cedb2b3-20261027
++          maintenance.branconet.lan/restart-proof: ruckus-bot-1.1.0-20261117
+       spec:
+         containers:
+         - name: ruckus-bot
+@@ -60,6 +60,21 @@ resources:
+             requests:
+               cpu: 25m
+               memory: 64Mi
++          readinessProbe:
++            httpGet:
++              path: /ready
++              port: p3003-tcp
++            initialDelaySeconds: 20
++            periodSeconds: 15
++            timeoutSeconds: 5
++          livenessProbe:
++            httpGet:
++              path: /health
++              port: p3003-tcp
++            initialDelaySeconds: 60
++            periodSeconds: 30
++            timeoutSeconds: 5
++            failureThreshold: 5
+           env: []
+           imagePullPolicy: IfNotPresent
+ - apiVersion: v1

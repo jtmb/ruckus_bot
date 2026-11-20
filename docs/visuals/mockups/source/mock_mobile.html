@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ruckus mobile — concept</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body style="display:grid;place-items:start center;background:#08090c;padding:0">
+<div class="mobile" style="border:0" role="img" aria-label="Mobile dashboard concept at 390 by 844 pixels">
+  <div class="top">
+    <div style="font-weight:700">ruckus_bot</div>
+    <div class="badge ok"><span class="status-dot ok" style="margin:0"></span>Online</div>
+  </div>
+  <div class="content">
+    <div class="grid cards">
+      <div class="card"><h2>Uptime</h2><div class="metric" style="font-size:22px">3 d 14 h</div></div>
+      <div class="card"><h2>Guilds</h2><div class="metric" style="font-size:22px">7</div></div>
+      <div class="card"><h2>Latency</h2><div class="metric" style="font-size:22px">41 <small>ms</small></div></div>
+      <div class="card"><h2>Events 24h</h2><div class="metric" style="font-size:22px">412</div></div>
+    </div>
+    <div class="banner bad" role="alert">Retro Corner is missing channel permissions. Last error 6 min ago.</div>
+    <section class="card">
+      <h2>Recent commands</h2>
+      <div class="guild"><div><div class="name">!weather</div><div class="meta">Boondocks Fans · 14:32</div></div><span class="badge ok">ok</span></div>
+      <div class="guild"><div><div class="name">!freegames</div><div class="meta">Late Night Lounge · 14:31</div></div><span class="badge ok">cached</span></div>
+      <div class="guild"><div><div class="name">!joke</div><div class="meta">Boondocks Fans · 14:29</div></div><span class="badge ok">ok</span></div>
+    </section>
+    <button class="btn primary" style="width:100%">Restart bot</button>
+    <p class="muted" style="font-size:12px;margin:0">Restart requires operator role. Job state will appear here.</p>
+  </div>
+  <nav class="tabbar" aria-label="Sections">
+    <a href="#" class="active">Status</a><a href="#">Logs</a><a href="#">Users</a><a href="#">Settings</a>
+  </nav>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+{
+  "schema": "ruckus-plan/assumptions@1",
+  "generated": "2026-11-16",
+  "assumptions": [
+    {
+      "id": "ASM-001",
+      "statement": "The owner can supply a Discord bot token with MESSAGE_CONTENT and GUILD_MEMBERS privileged intents enabled for the application.",
+      "impact": "blocking",
+      "affects": "WP4",
+      "verification": "Activation input; cannot be verified from the repository.",
+      "status": "unverified",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "ASM-002",
+      "statement": "The intended deployment is a single Linux host running Docker Compose, not Kubernetes.",
+      "impact": "high",
+      "affects": "WP8",
+      "verification": "Matches the documented compose deployment; the maintenance branch mentions Flux but no cluster target was provided.",
+      "status": "unverified",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "ASM-003",
+      "statement": "No production database dump must be migrated in this revision; any live data will be provided before WP2 runs.",
+      "impact": "blocking",
+      "affects": "WP2",
+      "verification": "Affects migration and rollback design; unknown until the owner confirms.",
+      "status": "unverified",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "ASM-004",
+      "statement": "The dashboard is an operator-only surface, not a public product with end users.",
+      "impact": "medium",
+      "affects": "WP3",
+      "verification": "All current pages are admin tools; no public signup or SEO requirement.",
+      "status": "unverified",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "ASM-005",
+      "statement": "Initial scale is under 50 guilds and under 20 messages/minute.",
+      "impact": "medium",
+      "affects": "WP8",
+      "verification": "Used for capacity targets only; no measurement exists yet.",
+      "status": "unverified",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "ASM-006",
+      "statement": "Weather requires an OpenWeatherMap API key on a free or paid plan; the exact quota is unverified.",
+      "impact": "high",
+      "affects": "WP5",
+      "verification": "Provider pages did not expose quota text without JavaScript; must be confirmed at activation.",
+      "status": "unverified",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "ASM-007",
+      "statement": "English-only UI and command text is acceptable.",
+      "impact": "low",
+      "affects": "WP7",
+      "verification": "No localisation requirement was stated.",
+      "status": "unverified",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "ASM-008",
+      "statement": "The GPLv3 licence claim is correct even though the LICENSE file is missing from the repository.",
+      "impact": "medium",
+      "affects": "WP1",
+      "verification": "readme.md states GPLv3; the file must be restored or the claim corrected with owner confirmation.",
+      "status": "unverified",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "ASM-009",
+      "statement": "No legal review of the fictional persona content is required for this technical revision.",
+      "impact": "low",
+      "affects": "WP10",
+      "verification": "Persona disclaimer is preserved unchanged.",
+      "status": "unverified",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    },
+    {
+      "id": "ASM-010",
+      "statement": "OpenCode v2 is the only implementation harness.",
+      "impact": "low",
+      "affects": "WP0",
+      "verification": "Owner direction 2026-11-17.",
+      "status": "retired",
+      "owner": "integrator",
+      "date": "2026-11-16"
+    }
+  ]
+}

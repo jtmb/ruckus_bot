@@ -1,0 +1,24 @@
+{
+  "source": {
+    "pod": "ruckus-db-7fbfff87bf-6cdml",
+    "namespace": "ruckus",
+    "database": "db",
+    "captured_utc": "2026-11-18T19:23:29Z"
+  },
+  "artifact": {
+    "path": "/home/brajam/backups/ruckus/ruckus-db-20261118T192328Z.sql",
+    "mode": "0o600",
+    "bytes": 1190210,
+    "sha256": "93684edb853e0177ed795fc4be24b1894d03efaa8de492b25955e65b2374091d",
+    "verified_by_readback": true
+  },
+  "restore": {
+    "engine": "mysql:8.4",
+    "network": "none",
+    "tables": {
+      "bot_logs": "4053",
+      "credentials": "1"
+    },
+    "matches_production": true
+  }
+}

@@ -1,22 +1,21 @@
 {
   "name": "api",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "Ruckus bot dashboard API",
   "type": "commonjs",
   "main": "src/api.js",
+  "private": true,
+  "engines": { "node": ">=24" },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/api.js",
+    "test": "node --test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0-only",
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "body-parser": "^1.20.2",
+    "bcrypt": "6.0.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.18.2",
-    "mysql2": "^3.9.1",
-    "url": "^0.11.3"
-  }
+    "express": "4.22.3",
+    "mysql2": "3.24.6"
+  },
+  "overrides": { "proxy-addr": "2.0.8" }
 }

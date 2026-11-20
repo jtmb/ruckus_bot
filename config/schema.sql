@@ -18,6 +18,5 @@ CREATE TABLE IF NOT EXISTS credentials (
     password VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL
 );
--- Insert a test user into the credentials table
--- INSERT INTO credentials (username, password, role) VALUES ('admin', 'changeme', 'admin');
-INSERT INTO credentials (username, password, role) VALUES ('user', 'changeme', 'user');
+-- No seed user: the first administrator is created from the dashboard's Create Account page.
+-- The API applies numbered migrations automatically at startup; this file is a reference baseline only.

@@ -1,45 +1,42 @@
-# Stage 1: Build node
-FROM node:18.19.1 AS build-node
+# Stage 1: build
+FROM node:26.13.1-slim AS build-node
 
-# Install dependencies for building
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    python3 \
-    && rm -rf /var/lib/apt/lists/*
+COPY bot/package.json bot/package-lock.json /app/bot/
+COPY api/package.json api/package-lock.json /app/api/
+COPY dashboard/package.json dashboard/package-lock.json /app/dashboard/
 
-# Copy static content 
+# Reproducible installs from the lockfiles
+RUN cd /app/bot && npm ci --omit=dev \
+    && cd /app/api && npm ci --omit=dev \
+    && cd /app/dashboard && npm ci
+
 COPY bot /app/bot
 COPY api /app/api
 COPY dashboard /app/dashboard
 
-# Install dependencies and run builds
-RUN cd /app/dashboard && npm install && npm run build \
-    && cd /app/bot && npm install --production \
-    && cd /app/api && npm install --production
+# The build never contacts the API: live routes are dynamic
+RUN cd /app/dashboard && npm run build && npm prune --omit=dev
 
-# Stage 2: Final Stage - production
-FROM node:18.19.1-slim
+# Stage 2: production
+FROM node:26.13.1-slim
 
-# Install only production dependencies and supervisor
-RUN apt-get update && apt-get install -y \
-    supervisor \
-    && rm -rf /var/lib/apt/lists/*
+ENV NODE_ENV=production
 
-# Copy build files from Stage 1 into Final Stage image
+RUN apt-get update && apt-get install -y --no-install-recommends supervisor \
+    && rm -rf /var/lib/apt/lists/* \
+    && npm install -g nodemon@3.1.14 \
+    && npm cache clean --force \
+    && rm -rf /root/.npm /tmp/* /var/tmp/*
+
 COPY --from=build-node /app /app
 
-# Install nodemon globally
-RUN npm install -g nodemon --production && \
-    npm cache clean --force && \
-    rm -rf /root/.npm /tmp/* /var/tmp/*
-
-# Copy Supervisor configuration
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY config/supervisord.conf /etc/supervisor/supervisord.conf
 
-# Finish | Set WORKDIR and expose dashboard port
 WORKDIR /app/
-EXPOSE 8080
+EXPOSE 8080 3003
 
-# Start Supervisor to manage Node.js services
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+    CMD node -e "Promise.all(['http://127.0.0.1:3003/health','http://127.0.0.1:8080/'].map(u=>fetch(u,{signal:AbortSignal.timeout(4000)}).then(r=>{if(!r.ok)throw 1}))).then(()=>process.exit(0),()=>process.exit(1))"
+
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

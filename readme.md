@@ -39,6 +39,7 @@
 - [Environment Variables Explained](#environment-variables-explained)
 - [Contributing](#contributing)
 - [License](#license)
+- [Project planning](#project-planning)
 
 </details>
 <br>
@@ -78,6 +79,8 @@ A full stack discord bot written in the likeness of uncle ruckus from the boondo
 ## Prerequisites
 
 - Docker installed on your system
+- A Discord bot token with the **Message Content** and **Server Members** privileged intents enabled in the developer portal
+- Optional: an [OpenWeatherMap](https://openweathermap.org/api) API key for the weather command
 
 ### <h2>Getting Started</h2>
 ### [Docker Image](https://hub.docker.com/r/jtmb92/ruckus-bot)
@@ -88,33 +91,44 @@ A full stack discord bot written in the likeness of uncle ruckus from the boondo
 Run on Docker Compose (this is the recommended way) by running the command "docker compose up -d".
 
 ```yaml
-version: '3.8'
-
 services:
   bot:
     image: jtmb92/ruckus-bot:latest
     environment:
-      - MYSQL_HOST: db
-      - MYSQL_PORT: 3306
-      - MYSQL_USER: bot
-      - MYSQL_PASSWORD: your-password-here
-      - MYSQL_DATABASE: db
-      - BOT_TOKEN: your-discord-bot-token
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_USER: bot
+      MYSQL_PASSWORD: your-password-here
+      MYSQL_DATABASE: db
+      BOT_TOKEN: your-discord-bot-token
     ports:
       - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
   db:
-    image: mysql:5.7
+    image: mysql:8.4
     volumes:
       - mysql_data:/var/lib/mysql
     environment:
-      - MYSQL_DATABASE: db
-      - MYSQL_USER: bot
-      - MYSQL_PASSWORD: your-password-here
-      - MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_DATABASE: db
+      MYSQL_USER: bot
+      MYSQL_PASSWORD: your-password-here
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
 
 volumes:
   mysql_data:
 ```
+
+On first start open `http://localhost:8080/createAccount` and create the first account; it becomes the administrator.
+Further accounts can only be added by a signed-in administrator (dashboard menu → User Management).
+The API listens on port 3003 inside the container; every route except `/health` and `/ready` requires a signed-in session.
+Do not publish port 3003 or the database port to the internet.
 
 
 ## Environment Variables explained
@@ -145,6 +159,18 @@ Your discord bot token, you can generate one [here](https://discord.com/develope
 ```    
 The root password for the DB, will be randomly generated as it is not used. Your `MYSQL_USER` will have all the permissions necessary.
 
+Optional variables:
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `MYSQL_PORT` | `3306` | Database port |
+| `OPENWEATHERMAP_API_KEY` | unset | Enables `!weather` |
+| `CORS_ORIGINS` | none (same-origin only) | Comma-separated browser origins allowed to call the API directly |
+| `SESSION_TTL_HOURS` | `12` | Dashboard session lifetime |
+| `LOG_RETENTION_DAYS` | `0` (keep everything) | Delete `bot_logs` rows older than this many days |
+| `HEARTBEAT_STALE_SECONDS` | `90` | The dashboard shows the bot offline when its heartbeat is older than this |
+| `API_URL` | `http://localhost:3003` | How the dashboard server reaches the API |
+
 ## Contributing
 
 First off, thanks for taking the time to contribute! Contributions are what makes the open-source community such an amazing place to learn, inspire, and create. Any contributions you make will benefit everybody else and are **greatly appreciated**.
@@ -161,4 +187,11 @@ Please try to create bug reports that are:
 This project is licensed under the **GNU GENERAL PUBLIC LICENSE v3**. Feel free to edit and distribute this template as you like.
 
 See [LICENSE](LICENSE) for more information. 
+
+## Project planning
+
+The implementation-ready plan for fixing defects, hardening security and adding the next feature
+set lives in [docs/planning/operations/00_START_HERE.md](docs/planning/operations/00_START_HERE.md).
+Start with [AGENTS.md](AGENTS.md) and [MEMORY.md](MEMORY.md). The canonical requirement,
+decision and gate records are in [data/](data/).
 

@@ -181,9 +181,68 @@ Evidence hygiene:
 - Gate states after this checkpoint: G4/G5/G6 remain passed_local; G7 remains partial_local, now with the
   keyboard/responsive/contrast subcriteria locally supported by the 28 browser checks; G1/G2/G8/G9/G10/G11
   remain not_passed. No gate was closed from a synthetic or focused test.
-- WP0 skill-installation/harness approval is still required (G1/G2 unpassed; no harness matrix ran). WP10
+- 2026-11-18 UPDATE: WP0 is done. The five skills are installed at .opencode/skills/<skill-id>/ and
+  G1/G2 are passed after the seven-check matrix ran on OpenCode v2.3.2. opencode.json now asks before
+  external-directory access and before edits to /home/brajam/repos/branconet-homelab/*, because the
+  permissions check initially showed cross-repository writes were allowed.
+- 2026-11-18 UPDATE: the registry blocker is cleared. The verified local image is published as
+  docker.io/jtmb92/ruckus-bot:final-verify-f73d1f411426 with digest
+  sha256:45c942c97add5dda37ab58a9da370a3995d640547d32ce5995460fc4c1e0f507, anonymously pullable,
+  and the cluster needs no pull secret. Superseded "Next" step: the owner pinned the chart, rolled
+  out through Flux and verified on 2026-11-18 — see section 11. Earlier evidence:
+  docs/planning/evidence/2026-11-18-harness-and-registry.md.
+- Legacy note retained for history: WP0 skill-installation/harness approval was required (G1/G2 unpassed). WP10
   (G10) remains pending: rich filters, the role model, security and the remaining additive features are
   incomplete. The registry has no credentials, so nothing was pushed; the legacy production dump remains
   unqualified (0777 mount, no 0600) and was left untouched; ASM-003 is still open.
+
+=== 11. OWNER-COMPLETED FLUX ROLLOUT 2026-11-18 (records only) ===
+- This revision owned only: docs/planning/evidence/2026-11-18-flux-rollout.md (new evidence),
+  this handoff and docs/deploy/FLUX-DEPLOY.md. It did NOT edit data/gates.json, credentials, the
+  database, Git state, application source, chart, live Deployment, external repos or artifacts.
+  No gate was closed and no reviewer sign-off was added.
+- Owner executed exact-SHA chart checks at commit 217f24f3ff176791e3ac2a50daf44224c208c8c7:
+  scripts unittest 45 OK; scripts/validate.py 30 charts / 31 HelmReleases, credential scan + render
+  pass; validated fast-forwarded 43fca34..217f24f. These are the first checks tied to the exact
+  promoted commit and pinned digest, not the earlier stand-in-digest run.
+- Owner-observed cluster state: Flux validated@sha1:217f24f3ff176791e3ac2a50daf44224c208c8c7;
+  deployment image docker.io/jtmb92/ruckus-bot:final-verify-f73d1f411426
+  @sha256:45c942c97add5dda37ab58a9da370a3995d640547d32ce5995460fc4c1e0f507 with matching runtime
+  imageID; pod ruckus-bot-7b6df4897-c8xz4 ready, 0 restarts; chart 0.1.4+217f24f upgraded;
+  in-pod GET /health -> {"status":"ok"}. Coordinator independently saw MCP Running 1/1, 0 restarts
+  on node03.
+- Publisher failure: earlier wsl_path_failed, then native_wsl_exact_sha_required (no native WSL
+  charts clone). The owner's exact-SHA validation/promote was a specific one-off action against the
+  existing authoritative checkout — not a replacement or bypass of the normal policy and not
+  permission to clone or fix the controller. Infrastructure owner follow-up: resolve the
+  topology/publisher issue under the checkout rules; no fix was performed here.
+- Rollback target only (no rollback executed): prior digest
+  sha256:f63dd607ee435d24c6b5e97aaecd044b0e3dba5b872db9ff9d3fd8bc4463dd69 plus the qualified
+  private backup receipt docs/planning/evidence/2026-11-18-production-backup-receipt.json.
+- Unverified, not to be conflated with /health OK: public ingress https://ruckus.branconet.lan/,
+  dashboard UI, the /ready readiness endpoint, /api/bot-status bot-online and live Discord behaviour.
+  G8-G11 and reviewer sign-off remain unchanged and open; deployment observation closes no gate.
+
+=== 12. GIT DELIVERY HANDOFF 2026-11-20 (single commit, records + pushed tree) ===
+- Owner-directed single Git delivery in this checkout only. Committed and pushed the previously
+  uncommitted WP1-WP10 working tree: committed node_modules removed from tracking (5290 deletions),
+  application/API/dashboard code, config/schema + migrations, ops scripts, tests, planning records,
+  docs and installed skill files. No build, test, deployment or new remote in this revision.
+- ROLLOUT DONE: the owner completed the exact-SHA Flux rollout on 2026-11-18 (section 11). Do not
+  re-roll out or redeploy as part of resuming work.
+- PLAN: execution source of truth is docs/planning/operations/07_IMPLEMENTATION_ROADMAP.md
+  (planning set dated 2026-11-19). Work packages and gates live in data/work-packages.json and
+  data/gates.json.
+- FIRST OPEN CHECK on resume: verify the items section 11 left unverified — public ingress
+  https://ruckus.branconet.lan/, dashboard UI, /ready readiness endpoint, /api/bot-status
+  bot-online and live Discord behaviour. A passing /health closes none of these.
+- GATES AND SIGNOFF ARE DISTINCT and both still open: G8-G11 are not passed and reviewer sign-off
+  has not been added. Deployment observation and focused/synthetic tests close no gate. Keep gate
+  closure in data/gates.json strictly separate from reviewer sign-off and the acceptance tracker.
+- Publishing safety check on this commit: no secret values, credential values, dumps or private
+  data found in staged text (the env example holds only empty/placeholder values; the production
+  backup receipt holds paths/digests/row counts only, no credentials). Seven generated
+  ops/**/__pycache__/*.pyc bytecode files were intentionally left untracked and excluded from the
+  commit (not deleted); add __pycache__/ to .gitignore during normal follow-up work.
 
 END OF HANDOFF

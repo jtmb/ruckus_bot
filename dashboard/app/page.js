@@ -8,32 +8,15 @@ export default function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(""); // For displaying authentication errors
-    const [initError, setInitError] = useState(""); // For displaying initialization errors
+    const [notice, setNotice] = useState(""); // Upstream-outage notice, not an auth failure
 
+    // Migrations run at API startup; the login view must not trigger anonymous bootstrap.
+    // A protected page redirects here with ?upstream=1 when the API is unreachable.
     useEffect(() => {
-        // Function to initialize the database
-        const initializeDatabase = async () => {
-            try {
-                const response = await fetch('/api/initialize-db', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to initialize database');
-                }
-
-                const result = await response.json();
-                console.log('Database initialization result:', result);
-            } catch (error) {
-                console.error('Error initializing database:', error);
-                setInitError(error.message);
-            }
-        };
-
-        // Call initializeDatabase when the component mounts
-        initializeDatabase();
-    }, []); // Empty dependency array means this runs once on mount
+        if (new URLSearchParams(window.location.search).get('upstream') === '1') {
+            setNotice('The service is temporarily unavailable. Please try again shortly.');
+        }
+    }, []);
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -51,7 +34,6 @@ export default function LoginPage() {
 
             const result = await response.json();
             console.log('Login successful:', result);
-            localStorage.setItem('authenticated', 'true'); // Save authentication status
             // Redirect or handle successful login
             window.location.href = '/dashboard'; // Redirect to the dashboard
         } catch (error) {
@@ -64,7 +46,7 @@ export default function LoginPage() {
         <div className="login-container">
             <div className="login-box">
                 <h1 className="login-title">Login</h1>
-                {initError && <p className="error-message">{initError}</p>} {/* Display initialization errors */}
+                {notice && <p className="error-message" role="status">{notice}</p>}
                 {error && <p className="error-message">{error}</p>} {/* Display authentication errors */}
                 <form onSubmit={handleLogin} className="login-form">
                     <div className="input-group">

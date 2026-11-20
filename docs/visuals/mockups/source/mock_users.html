@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ruckus users — concept</title>
+<link rel="stylesheet" href="tokens.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-label="Primary">
+    <div class="brand"><span class="dot"></span> ruckus_bot</div>
+    <nav class="nav">
+      <a href="#">Status</a><a href="#">Logs</a>
+      <a href="#" class="active" aria-current="page">Users</a>
+      <a href="#">Guild settings</a><a href="#">Operations</a>
+    </nav>
+    <div class="foot"><a href="#">GitHub repository</a><span>Signed in as <strong>james</strong> · admin</span><a href="#">Log out</a></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div><h1>Users</h1><p class="sub">Dashboard access · 4 accounts · last sign-in shown in UTC</p></div>
+      <div class="actions"><button class="btn primary">Add user</button></div>
+    </div>
+
+    <div class="banner" role="status">Invite links are not available. Accounts are created here or with the container reset command.</div>
+
+    <section class="card">
+      <table class="table">
+        <caption class="sr-only">Dashboard accounts</caption>
+        <thead><tr><th scope="col">Username</th><th scope="col">Role</th><th scope="col">State</th><th scope="col">Last sign-in</th><th scope="col">Actions</th></tr></thead>
+        <tbody>
+          <tr><td><strong>james</strong></td><td><span class="badge ok">admin</span></td><td>Active</td><td>2 min ago</td><td><button class="btn ghost">Edit</button></td></tr>
+          <tr><td><strong>mika</strong></td><td><span class="badge">operator</span></td><td>Active</td><td>3 h ago</td><td><button class="btn ghost">Edit</button> <button class="btn danger">Delete</button></td></tr>
+          <tr><td><strong>dex</strong></td><td><span class="badge">viewer</span></td><td>Active</td><td>Yesterday</td><td><button class="btn ghost">Edit</button> <button class="btn danger">Delete</button></td></tr>
+          <tr><td><strong>old-ops</strong></td><td><span class="badge">operator</span></td><td>Disabled</td><td>2026-09-02</td><td><button class="btn ghost">Enable</button> <button class="btn danger">Delete</button></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="grid two-col">
+      <section class="card" aria-labelledby="add-h">
+        <h2 id="add-h">Add a user</h2>
+        <form class="form">
+          <div class="field"><label for="u">Username</label><input id="u" placeholder="3–32 chars, a–z 0–9 . _ -"></div>
+          <div class="field"><label for="p">Temporary password</label><input id="p" type="password" placeholder="At least 12 characters"></div>
+          <div class="field"><label for="r">Role</label><select id="r"><option>viewer</option><option selected>operator</option><option>admin</option></select></div>
+          <button class="btn primary" type="button">Create account</button>
+        </form>
+      </section>
+      <section class="card" aria-labelledby="roles-h">
+        <h2 id="roles-h">What each role can do</h2>
+        <table class="table">
+          <thead><tr><th scope="col">Capability</th><th scope="col">Viewer</th><th scope="col">Operator</th><th scope="col">Admin</th></tr></thead>
+          <tbody>
+            <tr><td>View status and logs</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Restart the bot</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+            <tr><td>Manage users</td><td>No</td><td>No</td><td>Yes</td></tr>
+            <tr><td>Guild settings</td><td>No</td><td>No</td><td>Yes</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+</div>
+</body>
+</html>

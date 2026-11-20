@@ -1,0 +1,90 @@
+{
+  "schema": "ruckus-plan/sources@1",
+  "generated": "2026-11-16",
+  "sources": [
+    {
+      "id": "SRC-001",
+      "title": "Git repository history and default branch",
+      "url": "https://github.com/jtmb/ruckus_bot",
+      "accessed": "2026-11-16",
+      "supports": "Baseline commit 711ff12 (2026-09-09); branches feat/shak, feat-shak and codex/production-source-maintenance-20261027 (2026-10-26)."
+    },
+    {
+      "id": "SRC-002",
+      "title": "Node.js release index",
+      "url": "https://nodejs.org/dist/index.json",
+      "accessed": "2026-11-16",
+      "supports": "Node 26.13.1 LTS (2026-11-10), 24.22.3 LTS, 22.23.5; Node 18 last release 18.20.8 (2025-03-27)."
+    },
+    {
+      "id": "SRC-003",
+      "title": "endoflife.date Node.js",
+      "url": "https://endoflife.date/nodejs",
+      "accessed": "2026-11-16",
+      "supports": "Node 18 security support ended 2025-04-30; Node 26 active support to 2027-10-27, security to 2029-04-30."
+    },
+    {
+      "id": "SRC-004",
+      "title": "endoflife.date MySQL",
+      "url": "https://endoflife.date/mysql",
+      "accessed": "2026-11-16",
+      "supports": "MySQL 5.7 extended support ended 2023-10-31; 8.0 ended 2026-04-30; 8.4 LTS premier to 2029-04-30."
+    },
+    {
+      "id": "SRC-005",
+      "title": "npm registry package metadata (versions, engines, dist-tags)",
+      "url": "https://registry.npmjs.org",
+      "accessed": "2026-11-16",
+      "supports": "Versions used in data/dependencies.json; next@16.4.6 engines node>=20.9.0; express latest 5.3.0 / latest-4 4.22.3."
+    },
+    {
+      "id": "SRC-006",
+      "title": "npm audit advisories for this repository",
+      "url": "local `npm audit --omit=dev` in api/, bot/, dashboard/",
+      "accessed": "2026-11-16",
+      "supports": "api 14 vulnerabilities (3 critical, 7 high); bot 9 (1 critical, 6 high); dashboard 4 (1 critical, 3 high)."
+    },
+    {
+      "id": "SRC-007",
+      "title": "Discord embed limits",
+      "url": "https://discord.com/developers/docs/resources/message#embed-object-embed-limits",
+      "accessed": "2026-11-16",
+      "supports": "title 256, description 4096, field name 256, field value 1024, max 25 fields, 6000 characters across a message."
+    },
+    {
+      "id": "SRC-008",
+      "title": "Discord rate limits",
+      "url": "https://discord.com/developers/docs/topics/rate-limits",
+      "accessed": "2026-11-16",
+      "supports": "Bots may make 50 requests/second globally; 401/403/429 responses count toward a 10,000 per 10 minutes invalid-request limit."
+    },
+    {
+      "id": "SRC-009",
+      "title": "Discord MESSAGE_CONTENT intent warning",
+      "url": "https://discord.com/developers/docs/resources/message",
+      "accessed": "2026-11-16",
+      "supports": "Content, embeds, attachments and components are empty unless the privileged MESSAGE_CONTENT intent is approved."
+    },
+    {
+      "id": "SRC-010",
+      "title": "Next.js route segment config",
+      "url": "https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config",
+      "accessed": "2026-11-16",
+      "supports": "Route-level caching/dynamic configuration; in v16 the dynamic/revalidate options are removed when Cache Components is enabled, so behaviour must be verified per version."
+    },
+    {
+      "id": "SRC-011",
+      "title": "Hetzner Cloud pricing",
+      "url": "https://www.hetzner.com/cloud/",
+      "accessed": "2026-11-16",
+      "supports": "Regular Performance cloud servers from EUR 5.49/month excluding VAT; used only as the low-cost scenario."
+    },
+    {
+      "id": "SRC-012",
+      "title": "Executed baseline probes",
+      "url": "docs/planning/evidence/2026-11-16-baseline-review.md",
+      "accessed": "2026-11-16",
+      "supports": "API, bot handler, build and browser observations on main@711ff12 with MySQL 8.0 and Node 22.23.1."
+    }
+  ]
+}

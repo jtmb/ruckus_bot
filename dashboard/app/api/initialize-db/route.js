@@ -1,26 +1,21 @@
 // app/api/initialize-db/route.js
+// Legacy idempotent migration trigger. No longer anonymous: the caller's session is
+// required and forwarded, and the API enforces the admin role (REG-013 compatibility).
 import { NextResponse } from 'next/server';
+import { callApi, sameOrigin, forbidden, tokenOf } from '../../lib/server';
 
-export async function POST() {
-    const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003';
+export const dynamic = 'force-dynamic';
 
+export async function POST(request) {
+    if (!sameOrigin(request)) return forbidden();
+    const token = tokenOf(request);
+    if (!token) return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     try {
-        // Call the backend to initialize the database
-        const initializeResponse = await fetch(`${apiEndpoint}/initialize-db`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (!initializeResponse.ok) {
-            throw new Error('Failed to initialize database');
-        }
-
-        const initializeResult = await initializeResponse.json();
-        console.log('Database initialization result:', initializeResult);
-
-        return NextResponse.json(initializeResult);
+        const r = await callApi('/initialize-db', { method: 'POST', token });
+        if (!r.ok) return NextResponse.json({ error: r.json?.error || 'Failed to initialize database' }, { status: r.status });
+        return NextResponse.json(r.json);
     } catch (error) {
-        console.error('Error initializing database:', error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        console.error('Error initializing database:', error.message);
+        return NextResponse.json({ error: error.message }, { status: 502 });
     }
 }

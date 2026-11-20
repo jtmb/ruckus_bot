@@ -1,113 +1,63 @@
 // botResponses.js
+const sendRandomQuote = require("./randomQuote");
+const { logEvent } = require("./mysql");
+const { handleWeatherCommands } = require("./weatherHandling");
+const handleNChainResponse = require("./nChain");
+const handleJokeCommand = require("./jokeComHandling");
+const handleEasterEgg = require("./easterEgg");
+const handleInsults = require("./dontTreadOnMe");
+const handleHeadsOrTails = require("./headsOrTails");
+const handleGameGiveaways = require("./gameGiveaways");
+const Dedupe = require("./dedupe");
+const { safeSend } = require("./safeSend");
+const { getCommandList, getHelpList, setBotId } = require("./commandList");
 
-// Imports
-const sendRandomQuote = require('./randomQuote');
-const { logEvent } = require('./mysql');
-const { fetchJoke } = require('./jokeAPI');
-const { handleWeatherCommands } = require('./weatherHandling');
-const handleNChainResponse = require('./nChain');
-const handleJokeCommand = require('./jokeComHandling');
-const handleEasterEgg = require('./easterEgg');
-const handleBotReady = require('./isOnline');
-const handleInsults = require('./dontTreadOnMe');
-const handleHeadsOrTails = require('./headsOrTails');
-const handleGameGiveaways = require('./gameGiveaways'); // Import handleGameGiveaways
-const { getCommandList, getHelpList } = require('./commandList');
+const handlers = [handleWeatherCommands, handleNChainResponse, handleJokeCommand, handleEasterEgg, handleInsults, handleHeadsOrTails];
 
-async function handleBotResponses(client) {
-    // Map to track messages the bot has replied to
-    const repliedMessages = new Map();
+// Processes one message. Exported separately so it can be tested without Discord.
+async function processMessage(message, client, replied, log = logEvent) {
+  // Configure help text with the live Discord client id (never hardcoded) before any reply.
+  setBotId(client.user && client.user.id);
+  if (replied.has(message.id)) return;
+  if (message.author.bot) return;
+  const content = message.content.toLowerCase();
+  replied.set(message.id);
 
-    // Event listener for bot ready event
-    client.once('ready', () => {
-        handleBotReady(client);
-    });
+  log("user_interaction", {
+    userId: message.author.id,
+    username: message.author.username,
+    messageContent: message.content,
+    timestamp: new Date(),
+    channelId: message.channel.id,
+    guildId: message.guild ? message.guild.id : null,
+  });
 
-    // Event listener for messageCreate event
-    client.on('messageCreate', async (message) => {
-        // Check if the message has already been processed
-        if (repliedMessages.has(message.id)) return;
+  let handled = false;
+  if (content.includes("!freegames") || (message.mentions.users.has(client.user.id) && content.includes("free games"))) {
+    await handleGameGiveaways(message);
+    handled = true;
+  }
+  if (!handled) {
+    for (const handler of handlers) {
+      if (await handler(message, client, replied, log)) { handled = true; break; }
+    }
+  }
+  if (handled) return;
 
-        // Log the received message
-        console.log('Message received:', message.content);
+  if (content === "!commands") await safeSend(message.channel, getCommandList());
+  if (content === "!help") await safeSend(message.channel, getHelpList());
 
-        const content = message.content.toLowerCase();
+  if (message.mentions.has(client.user) && !content.includes("flip a coin")) {
+    await safeSend(message.channel, sendRandomQuote());
+  }
+}
 
-        // Check if the message author is the bot itself
-        if (message.author.bot) return;
-
-        // Log user interactions
-        logEvent('user_interaction', {
-            userId: message.author.id,
-            username: message.author.username,
-            messageContent: message.content,
-            timestamp: new Date(),
-            channelId: message.channel.id,
-            guildId: message.guild ? message.guild.id : null, // Check if message.guild exists to avoid errors
-        });
-
-        // Flag to track if the message contains a known command or "game giveaways"
-        let containsCommand = false;
-
-        // Check if the message contains "game giveaways"
-        if (content.includes('!freegames') || (message.mentions.users.has(client.user.id) && (content.includes('free games')))) {
-            await handleGameGiveaways(message);
-            containsCommand = true;
-        }
-
-        // Array of handler functions
-        const handlers = [
-            handleWeatherCommands,
-            handleNChainResponse,
-            handleJokeCommand,
-            handleEasterEgg,
-            handleInsults,
-            handleHeadsOrTails,
-        ];
-
-        // Loop through handler functions
-        for (const handler of handlers) {
-            // Execute handler and check if it was triggered
-            const result = await handler(message, client, repliedMessages, logEvent); // Pass logEvent
-            if (result) {
-                containsCommand = true;
-                break;
-            }
-        }
-
-        // If the message contains a known command or "game giveaways", do not send a random quote
-        if (containsCommand) {
-            // Mark the message as processed
-            repliedMessages.set(message.id, true);
-            return;
-        }
-        // Check if the message is "!commands"
-        if (content === '!commands') {
-            // Get the list of available commands
-            const commandList = getCommandList();
-            // Send the list of commands as a reply
-            await message.channel.send(commandList);
-        }
-
-        // Check if the message is "!help" or "!commands"
-        if (content === '!help') {
-            // Get the list of available commands
-            const helpList = getHelpList();
-            // Send the list of commands as a reply
-            await message.channel.send(helpList);
-        }
-
-
-        // If the bot is mentioned and the message doesn't contain specific commands
-        // Send a random quote
-        if (message.mentions.has(client.user) && !content.includes('flip a coin')) {
-            const randomQuote = sendRandomQuote();
-            await message.channel.send(randomQuote);
-        }
-
-        // Mark the message as processed
-        repliedMessages.set(message.id, true);
-    });
+function handleBotResponses(client) {
+  const replied = new Dedupe();
+  client.on("messageCreate", (message) => {
+    processMessage(message, client, replied).catch((e) => console.error("Message handling failed:", e.message));
+  });
 }
 
 module.exports = handleBotResponses;
+module.exports.processMessage = processMessage;

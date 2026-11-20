@@ -1,53 +1,73 @@
-const mysql = require('mysql');
+const mysql = require("mysql2");
 
-// Create a MySQL connection pool
-const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE
-});
+let pool = null;
+function getPool() {
+  if (!pool) {
+    const { load } = require("../config");
+    const c = load().mysql;
+    pool = mysql.createPool({ ...c, connectionLimit: 5, waitForConnections: true, queueLimit: 200 });
+  }
+  return pool;
+}
 
-// Function to create tables if they don't exist
+const DDL = [
+  `CREATE TABLE IF NOT EXISTS bot_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_type VARCHAR(255) NOT NULL,
+    event_data TEXT,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  )`,
+  `CREATE TABLE IF NOT EXISTS bot_heartbeat (
+    id TINYINT PRIMARY KEY,
+    bot_id VARCHAR(64) NOT NULL,
+    bot_name VARCHAR(255) NOT NULL,
+    guilds TEXT,
+    started_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  )`,
+];
+
 function createTablesIfNotExists() {
-    const createTableQuery = `
-        CREATE TABLE IF NOT EXISTS bot_logs (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            event_type VARCHAR(255) NOT NULL,
-            event_data TEXT,
-            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    `;
+  return Promise.all(DDL.map((sql) => getPool().promise().query(sql)))
+    .then(() => console.log("Tables created or already exist."))
+    .catch((e) => console.error("Error creating tables:", e.message));
+}
 
-    pool.query(createTableQuery, (error, results) => {
+// Logs an event. Returns a promise; the optional callback is invoked exactly once (error or success).
+// Dropped events are counted instead of queued without bound.
+let dropped = 0;
+function logEvent(eventType, eventData, cb) {
+  let settled = false;
+  const done = (err, res) => {
+    if (settled) return;
+    settled = true;
+    if (typeof cb === "function") cb(err || null, res);
+  };
+  return new Promise((resolve, reject) => {
+    getPool().query(
+      "INSERT INTO bot_logs (event_type, event_data, timestamp) VALUES (?, ?, ?)",
+      [eventType, JSON.stringify(eventData), new Date()],
+      (error, results) => {
         if (error) {
-            console.error('Error creating tables:', error);
-            return;
+          dropped += 1;
+          console.error(`Error inserting log (dropped=${dropped}):`, error.message);
+          done(error);
+          return reject(error);
         }
-        console.log('Tables created or already exist.');
-    });
-}
-
-// Function to log bot events
-function logEvent(eventType, eventData) {
-    pool.query(
-        "INSERT INTO bot_logs (event_type, event_data, timestamp) VALUES (?, ?, ?)",
-        [eventType, JSON.stringify(eventData), new Date()],
-        (error, results, fields) => {
-            if (error) {
-                console.error('Error inserting log:', error);
-                return;
-            }
-            // Log only affectedRows and insertId
-            console.log('Log inserted successfully - affectedRows:', results.affectedRows, ', insertId:', results.insertId);
-        }
+        done(null, results);
+        resolve(results);
+      }
     );
+  }).catch(() => undefined); // never an unhandled rejection from fire-and-forget callers
 }
 
-// Create tables when the module is loaded
-createTablesIfNotExists();
+function writeHeartbeat(client, startedAt) {
+  const guilds = JSON.stringify(client.guilds.cache.map((g) => ({ id: g.id, name: g.name })));
+  return getPool().promise().query(
+    `INSERT INTO bot_heartbeat (id, bot_id, bot_name, guilds, started_at, updated_at) VALUES (1, ?, ?, ?, ?, NOW())
+     ON DUPLICATE KEY UPDATE bot_id = VALUES(bot_id), bot_name = VALUES(bot_name), guilds = VALUES(guilds), started_at = VALUES(started_at), updated_at = NOW()`,
+    [client.user.id, client.user.username, guilds, startedAt]
+  );
+}
 
-// Export the logEvent function
-module.exports = {
-    logEvent
-};
+module.exports = { logEvent, createTablesIfNotExists, writeHeartbeat, getPool, droppedCount: () => dropped };

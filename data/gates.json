@@ -1,0 +1,102 @@
+{
+  "schema": "ruckus-plan/gates@1",
+  "generated": "2026-11-16",
+  "gates": [
+    {
+      "id": "G0",
+      "title": "Planning package complete and internally consistent",
+      "state": "passed",
+      "owner": "Planning integrator",
+      "criteria": "All nine documents, records, workbooks, diagrams and mockups exist and reconcile.",
+      "evidence": "docs/planning/validation-report.md"
+    },
+    {
+      "id": "G1",
+      "title": "Operating kit installed and discovered in the selected harness (OpenCode v2)",
+      "state": "passed",
+      "owner": "Integrator",
+      "criteria": "Skills are installed only with authorisation and discovered in OpenCode v2.",
+      "evidence": "Installed with owner authorisation on 2026-11-18 at .opencode/skills/<skill-id>/ and discovered in OpenCode v2.3.2. See docs/planning/evidence/2026-11-18-harness-and-registry.md"
+    },
+    {
+      "id": "G2",
+      "title": "OpenCode v2 harness checks (harness only)",
+      "state": "passed",
+      "owner": "Integrator",
+      "criteria": "Discovery, explicit reference, natural triggering, nested guidance, permissions, concurrent ownership and fresh-session continuity observed on OpenCode v2.3.0 in a fresh session with installed skills. WP2 migration compatibility is NOT covered by this gate; it has its own criterion in G11 and WP2 exit_criteria.",
+      "evidence": "Seven checks observed in fresh sessions on OpenCode v2.3.2 (gate text says v2.3.0): discovery, explicit reference, natural triggering, nested guidance, permissions (after adding the external-directory rule), concurrent ownership, fresh-session continuity. See docs/planning/evidence/2026-11-18-harness-and-registry.md"
+    },
+    {
+      "id": "G3",
+      "title": "Retired (single-harness project)",
+      "state": "retired",
+      "owner": "Integrator",
+      "criteria": "Not applicable: OpenCode v2 is the only harness.",
+      "evidence": "Retired 2026-11-17; the OpenCode checks are covered by G2."
+    },
+    {
+      "id": "G4",
+      "title": "Repository hygiene gate",
+      "state": "passed_local",
+      "owner": "Implementer",
+      "criteria": "No tracked node_modules, lockfile installs, hermetic dashboard build, no critical/high audit findings.",
+      "evidence": "Executed 2026-11-17: git ls-files|grep node_modules empty; `npm audit --omit=dev` 0 vulnerabilities in api/bot/dashboard; `next build` succeeds with API stopped; `docker build` (slim + alpine) healthy; `docker compose config` valid. See docs/planning/evidence/2026-11-17-implementation.md. Re-confirmed locally 2026-11-18 by the final-image build (build.log: node:26.13.1-slim, Next 16.4.6, 0 audit findings, manifest digest 45c942c9...); see docs/planning/evidence/2026-11-18-final-local.md. Local evidence only; no full gate closure."
+    },
+    {
+      "id": "G5",
+      "title": "Security gate",
+      "state": "passed_local",
+      "owner": "Reviewer",
+      "criteria": "Route/role matrix passes, no hash leakage, sessions and CSRF verified, audit clean.",
+      "evidence": "Executed: 16 API integration tests incl. role matrix, hash scan, bootstrap, throttle, CORS preflight, malformed JSON; live takeover reproductions now 401. Not yet verified behind the production ingress. 2026-11-18 locally supported: 75 API tests pass in the integrated run and 28 browser checks cover anon 401, cross-origin 403, hardened HttpOnly/SameSite cookie with no body leak and no external egress. Still not verified behind a production ingress; role model/security contracts remain incomplete. See docs/planning/evidence/2026-11-18-final-local.md."
+    },
+    {
+      "id": "G6",
+      "title": "Bot regression gate",
+      "state": "passed_local",
+      "owner": "Reviewer",
+      "criteria": "REG-001..REG-009 covered by tests and manual fixture checks; no unhandled rejections.",
+      "evidence": "Executed: 13 bot tests for every preserved command path, bounded cache (50k messages), provider failure fixtures, no outbound call for ordinary messages. Live Discord intents not verified (ASM-001): the production token was deliberately not used locally. 2026-11-18 integrated run passes 31 bot tests; isolated smoke shows bot supervisor RUNNING with BOT_NODE_PROCESS_ABSENT fail-closed and expected EAI_AGAIN without a token. See docs/planning/evidence/2026-11-18-final-local.md."
+    },
+    {
+      "id": "G7",
+      "title": "Dashboard gate",
+      "state": "partial_local",
+      "owner": "Reviewer",
+      "criteria": "Full acceptance requires: live status verified without rebuild; auth bypass attempts fail; keyboard-only journey completes; 360 px and 1280 px responsive screenshots and a contrast table re-measured from the implemented tokens. Focused API/container checks cover only the first two parts and do not close this gate.",
+      "evidence": "Verified locally against the container: heartbeat insert flips /api/bot-status to online without rebuild; logout/401 verified; stale->offline in an API test. 2026-11-18: the final rebuilt image's 28 browser checks (browser-results.json, all pass) now locally support the keyboard-only journey, 360/1280 px no-overflow screenshots, focus rings, WCAG-AA contrast table, logins filter/CSV, anon 401 and cross-origin 403; fresh screens in final-f73d1f411426/screens/ replace the stale 2026-11-16 PNGs. State stays partial_local: these are locally supported subcriteria, not full gate closure, while the wider dashboard contracts (rich filters, role model, security behind a production ingress) remain incomplete. See docs/planning/evidence/2026-11-18-final-local.md."
+    },
+    {
+      "id": "G8",
+      "title": "Operations gate",
+      "state": "not_passed",
+      "owner": "Operator",
+      "criteria": "Health/readiness, graceful shutdown, restore drill, alerting and rollback evidence recorded.",
+      "evidence": "WP8 exit criteria. 2026-11-18: 46 ops guard unit tests pass in the final-image run (ops-tests.log) covering backup/restore guards and an isolated migration drill, but no live restore, real rollback, alert delivery, restart job or production-ingress evidence exists. state/migration-drill-events.jsonl is an isolated fixture with synthetic RUNMIG rows and the three real shipped migrations \u2014 planning evidence only, not a drill over production data; no qualified production dump (ASM-003). See docs/planning/evidence/2026-11-18-final-local.md."
+    },
+    {
+      "id": "G9",
+      "title": "Release gate",
+      "state": "not_passed",
+      "owner": "Operator",
+      "criteria": "Image digest, migrations, smoke results, CHANGELOG and rollback target recorded for the release commit.",
+      "evidence": "WP9 and OPS-007. 2026-11-18: the final image ruckus_bot:final-verify-f73d1f411426 was built and confirmed locally (sha256:45c942c97add5dda37ab58a9da370a3995d640547d32ce5995460fc4c1e0f507), but no registry credentials exist, nothing was pushed or deployed, no production dump was qualified and no rollback target was recorded. Focused local checks are not release evidence. See docs/planning/evidence/2026-11-18-final-local.md."
+    },
+    {
+      "id": "G10",
+      "title": "Additive feature gate",
+      "state": "not_passed",
+      "owner": "Reviewer",
+      "criteria": "Each later-phase feature has its own acceptance test, the full REG regression still passes, and no existing page, command or action was removed.",
+      "evidence": "WP10 exit criteria. WP10 remains pending at 2026-11-18: rich filters, the role model, security and the remaining additive features are incomplete, so no per-feature acceptance or full REG regression is claimed. The final-image browser checks exercise only the existing logins filter and CSV export. See docs/planning/evidence/2026-11-18-final-local.md."
+    },
+    {
+      "id": "G11",
+      "title": "WP2 migration compatibility gate (separate from harness G2)",
+      "state": "not_passed",
+      "owner": "Implementer-api",
+      "criteria": "Explicit separate acceptance criterion for WP2: a fresh MySQL 8.4 instance initialises from numbered migrations with no manual SQL; a re-run is a no-op; a pre-migration schema is adopted idempotently; paging inputs 0, -1, abc, 101 and 1000000000 are validated; and the retention job prunes seeded old rows. This is migration compatibility only, not the OpenCode harness matrix.",
+      "evidence": "Persisted in data/work-packages.json WP2 exit_criteria and recorded by DEC-028. No qualified live/owned MySQL fixture and no production dump are available; synthetic or focused migration tests are planning evidence only and must never be reported as a pass for this gate. 2026-11-18: state/migration-drill-events.jsonl (run bea6b672) applied the three real shipped migrations in an isolated network:none fixture with synthetic RUNMIG rows and verified a mode-600 backup/restore; this is isolated real-migrations recovery evidence, still synthetic data with no real rollback and no production compatibility (ASM-003 open). Gate remains not_passed. See docs/planning/evidence/2026-11-18-final-local.md."
+    }
+  ]
+}

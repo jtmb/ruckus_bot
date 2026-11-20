@@ -1,0 +1,329 @@
+{
+  "schema": "ruckus-plan/work-packages@1",
+  "generated": "2026-11-16",
+  "work_packages": [
+    {
+      "id": "WP0",
+      "title": "Operating kit and harness compatibility checks",
+      "sequence": 1,
+      "gate": "G1",
+      "gates": ["G1", "G2"],
+      "objective": "Install the proposed skills and agent guides only after authorisation, then record discovery, explicit reference, natural triggering, nested guidance, permissions and fresh-session evidence in OpenCode v2, the only harness. G1 covers authorised install/discovery and G2 the seven-check matrix; G3 was retired 2026-11-17.",
+      "exit_criteria": [
+        "5 skill designs and 3 feature guides exist",
+        "OpenCode v2.3.0 check results recorded",
+        "G1 and G2 remain unpassed until installation is approved and the matrix is executed"
+      ],
+      "stop_condition": "No application source changes.",
+      "owner": "integrator",
+      "depends_on": [],
+      "requirement_ids": [],
+      "state": "not_started"
+    },
+    {
+      "id": "WP1",
+      "title": "Repository hygiene and dependency baseline",
+      "sequence": 2,
+      "gate": "G4",
+      "objective": "Remove committed node_modules, add .dockerignore and lockfile installs, pin supported Node/Next/Express/mysql2 versions, fix the vulnerable advisory set, make the dashboard build hermetic, and repair readme/compose.",
+      "exit_criteria": [
+        "clean clone build succeeds",
+        "npm audit shows no critical/high",
+        "git ls-files has no node_modules",
+        "docker compose config validates"
+      ],
+      "stop_condition": "Stop if a dependency pin cannot be installed from the registry; record the exact failing package.",
+      "owner": "integrator",
+      "depends_on": [
+        "WP0"
+      ],
+      "requirement_ids": [
+        "FIX-009",
+        "FIX-028",
+        "FIX-029",
+        "FIX-030",
+        "FIX-034",
+        "FIX-040",
+        "REG-014"
+      ],
+      "state": "not_started"
+    },
+    {
+      "id": "WP2",
+      "title": "Data, configuration and migration foundation",
+      "sequence": 3,
+      "gate": "G11",
+      "gates": ["G11"],
+      "objective": "Add a validated config module, MYSQL_PORT support in all pools, numbered migrations that create both tables idempotently, ordered/clamped log queries, bounded log writes and retention. Migration compatibility is tracked by the separate gate G11, not by the harness gate G2 (DEC-028).",
+      "exit_criteria": [
+        "fresh empty database initialises",
+        "paging contract tests pass",
+        "retention job prunes seeded rows",
+        "SEPARATE PERSISTED ACCEPTANCE CRITERION - migration compatibility (gate G11, not harness G2): fresh MySQL 8.4 initialises from numbered migrations with no manual SQL; a re-run is a no-op; a pre-migration schema is adopted idempotently; paging inputs 0, -1, abc, 101 and 1000000000 are validated; the retention job prunes seeded old rows. Synthetic or focused tests never satisfy this criterion or G2; gate closure requires cited evidence under DEC-028."
+      ],
+      "stop_condition": "Stop if existing production data must be preserved without a qualified owned dump; the legacy prod-pre-1.1.0-20261117T011520.sql dump is not qualified (9p/DrvFS, 0777, no 0600) and must not be used as a fixture or rollback.",
+      "owner": "implementer-api",
+      "depends_on": [
+        "WP1"
+      ],
+      "requirement_ids": [
+        "FIX-001",
+        "FIX-007",
+        "FIX-008",
+        "FIX-018",
+        "FIX-020",
+        "FIX-027",
+        "FIX-035",
+        "REG-013"
+      ],
+      "state": "not_started"
+    },
+    {
+      "id": "WP3",
+      "title": "API security and contracts",
+      "sequence": 4,
+      "gate": "G5",
+      "objective": "Add sessions, roles, CSRF, validation, rate limits, correlation ids, CORS allowlist, hash redaction, restart job endpoint and the .env.example.",
+      "exit_criteria": [
+        "route/role matrix test passes",
+        "anonymous requests are rejected",
+        "no hash appears in responses or logs"
+      ],
+      "stop_condition": "Stop if the owner requires an external identity provider; record the requirement.",
+      "owner": "implementer-api",
+      "depends_on": [
+        "WP2"
+      ],
+      "requirement_ids": [
+        "FEAT-016",
+        "FIX-003",
+        "FIX-004",
+        "FIX-005",
+        "FIX-006",
+        "FIX-019",
+        "FIX-024",
+        "FIX-026",
+        "FIX-031",
+        "FIX-039",
+        "REG-012",
+        "SEC-001",
+        "SEC-002",
+        "SEC-003",
+        "SEC-004",
+        "SEC-005",
+        "SEC-006",
+        "SEC-007",
+        "SEC-008",
+        "SEC-009",
+        "SEC-010"
+      ],
+      "state": "not_started"
+    },
+    {
+      "id": "WP4",
+      "title": "Bot command core refactor",
+      "sequence": 5,
+      "gate": "G6",
+      "objective": "Introduce a single command context and handler contract, bounded dedupe cache, awaited sends, one ready handler, dynamic help and the flip/nchain/joke fixes.",
+      "exit_criteria": [
+        "regression suite covers REG-001..009",
+        "no unhandledRejection in fault injection",
+        "dedupe cache bounded"
+      ],
+      "stop_condition": "Stop if a fix would change a preserved reply's wording without a recorded decision.",
+      "owner": "implementer-bot",
+      "depends_on": [
+        "WP1",
+        "WP2"
+      ],
+      "requirement_ids": [
+        "FIX-010",
+        "FIX-011",
+        "FIX-012",
+        "FIX-013",
+        "FIX-014",
+        "FIX-022",
+        "FIX-023",
+        "FIX-025",
+        "FIX-038",
+        "REG-001",
+        "REG-002",
+        "REG-003",
+        "REG-006",
+        "REG-007",
+        "REG-009"
+      ],
+      "state": "not_started"
+    },
+    {
+      "id": "WP5",
+      "title": "Command-specific fixes",
+      "sequence": 6,
+      "gate": "G6",
+      "objective": "Fix weather parsing/timeouts/errors, bound the free-games response, cache the profanity list with safe fallback, and add regression fixtures.",
+      "exit_criteria": [
+        "weather and giveaway fixtures pass",
+        "ordinary message causes no outbound call",
+        "one message per freegames invocation"
+      ],
+      "stop_condition": "Stop if the upstream API shape changed; record the new fixture.",
+      "owner": "implementer-bot",
+      "depends_on": [
+        "WP4"
+      ],
+      "requirement_ids": [
+        "FIX-015",
+        "FIX-016",
+        "FIX-017",
+        "REG-004",
+        "REG-005",
+        "REG-008"
+      ],
+      "state": "not_started"
+    },
+    {
+      "id": "WP6",
+      "title": "Live status and dashboard data",
+      "sequence": 7,
+      "gate": "G7",
+      "objective": "Add heartbeat/uptime, make the status route dynamic, show real guild and heartbeat data, and add per-guild health.",
+      "exit_criteria": [
+        "status reflects a new login without rebuild",
+        "stale session shows offline within threshold"
+      ],
+      "stop_condition": "Stop if dashboard polling cannot be verified without a browser; record the limitation.",
+      "owner": "implementer-ui",
+      "depends_on": [
+        "WP2",
+        "WP3"
+      ],
+      "requirement_ids": [
+        "FEAT-001",
+        "FEAT-018",
+        "FIX-002",
+        "REG-010"
+      ],
+      "state": "not_started"
+    },
+    {
+      "id": "WP7",
+      "title": "Dashboard security and operator UI",
+      "sequence": 8,
+      "gate": "G7",
+      "objective": "Server-validated sessions, login/logout/CSRF, user management, log explorer with export, analytics data, responsive accessible theme and self-hosted assets.",
+      "exit_criteria": [
+        "auth bypass attempts fail",
+        "keyboard-only journey completes",
+        "log export matches filter"
+      ],
+      "stop_condition": "Stop if visual review is impossible; record the unverified visual gate.",
+      "owner": "implementer-ui",
+      "depends_on": [
+        "WP3",
+        "WP6"
+      ],
+      "requirement_ids": [
+        "FEAT-002",
+        "FEAT-003",
+        "FEAT-007",
+        "FEAT-015",
+        "FIX-032",
+        "FIX-036"
+      ],
+      "state": "not_started"
+    },
+    {
+      "id": "WP8",
+      "title": "Observability, backups and operations",
+      "sequence": 9,
+      "gate": "G8",
+      "objective": "Health/readiness endpoints, metrics, alerting, restart job flow, backup/restore drill, structured logs, release/rollback runbook.",
+      "exit_criteria": [
+        "restore drill passes",
+        "offline alert fires once and recovers once",
+        "rollback to previous digest verified"
+      ],
+      "stop_condition": "Stop if no hosting target is provided; keep local evidence only.",
+      "owner": "operator",
+      "depends_on": [
+        "WP3",
+        "WP6"
+      ],
+      "requirement_ids": [
+        "FEAT-012",
+        "FEAT-013",
+        "FEAT-014",
+        "FIX-021",
+        "FIX-037",
+        "OPS-001",
+        "OPS-002",
+        "OPS-003",
+        "OPS-004",
+        "OPS-005",
+        "OPS-006",
+        "OPS-007",
+        "OPS-008",
+        "OPS-009",
+        "OPS-010",
+        "REG-011"
+      ],
+      "state": "not_started"
+    },
+    {
+      "id": "WP9",
+      "title": "Verification suite and documentation",
+      "sequence": 10,
+      "gate": "G9",
+      "objective": "Local unit, HTTP contract, integration and build checks; `npm run verify`; per-area guides and CHANGELOG.",
+      "exit_criteria": [
+        "verify passes from a clean clone",
+        "docs match shipped commands",
+        "CHANGELOG lists closed IDs"
+      ],
+      "stop_condition": "Stop if a check needs credentials the environment does not have; mark it as an activation input.",
+      "owner": "integrator",
+      "depends_on": [
+        "WP5",
+        "WP7"
+      ],
+      "requirement_ids": [
+        "DOC-001",
+        "DOC-002",
+        "DOC-003",
+        "DOC-004",
+        "FEAT-017",
+        "FIX-033"
+      ],
+      "state": "not_started"
+    },
+    {
+      "id": "WP10",
+      "title": "Additive feature set",
+      "sequence": 11,
+      "gate": "G10",
+      "objective": "Slash commands, per-guild settings, cooldowns, digest/filters, weather upgrade, quote management and analytics charts, each behind its requirement ID.",
+      "exit_criteria": [
+        "each feature has an acceptance test",
+        "message commands still pass regression",
+        "no removed user-visible behaviour"
+      ],
+      "stop_condition": "Defer any feature that conflicts with a preserved behaviour; record the conflict.",
+      "owner": "implementer-api",
+      "depends_on": [
+        "WP5",
+        "WP6",
+        "WP9"
+      ],
+      "requirement_ids": [
+        "FEAT-004",
+        "FEAT-005",
+        "FEAT-006",
+        "FEAT-008",
+        "FEAT-009",
+        "FEAT-010",
+        "FEAT-011"
+      ],
+      "state": "not_started"
+    }
+  ]
+}

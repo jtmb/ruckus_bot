@@ -20,8 +20,11 @@
 }
 
 .logo-img {
+    display: block;
     width: 40px;
     height: 40px;
+    color: #fff;
+    flex: none;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -33,6 +36,17 @@
 .header-actions {
     display: flex;
     align-items: center;
+    min-width: 0;
+}
+
+.restart-status {
+    max-width: min(280px, 45vw);
+    overflow-wrap: anywhere;
+}
+
+.header :focus-visible {
+    outline: 3px solid #6aa9ff;
+    outline-offset: 2px;
 }
 
 .restart-button {
@@ -79,47 +93,54 @@
     border-radius: 50%;
 }
 
+/* Open state is driven by aria-expanded/hidden from the button, never by :hover. */
 .dropdown-menu {
     position: absolute;
-    top: 60px;
-    /* Adjust based on header height */
+    top: calc(100% + 8px);
     right: 0;
-    background-color: #333;
-    /* Matches header background */
-    border: 1px solid #444;
-    /* Subtle border color */
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    min-width: 190px;
+    background-color: #1e222b;
+    border: 1px solid #2a2f3a;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     z-index: 1000;
-    width: 150px;
-    color: #fff;
-    /* Text color for dropdown items */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    color: #e8ecf3;
 }
 
-.profile-container:hover .dropdown-menu {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+.dropdown-menu[hidden] {
+    display: none;
 }
 
 .dropdown-item {
     display: block;
-    padding: 10px 20px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    text-align: left;
     width: 100%;
     box-sizing: border-box;
-    color: #fff;
-    /* Matches header text color */
+    padding: 10px 16px;
+    border: 0;
+    background: none;
+    color: #e8ecf3;
+    font: inherit;
+    font-size: 13.5px;
+    line-height: 1.5;
+    text-align: left;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
 }
 
-.dropdown-item:hover {
-    background-color: #555;
-    /* Slightly lighter on hover */
+.dropdown-item:hover,
+.dropdown-item:focus-visible {
+    background-color: #2a2f3a;
+}
+
+@media (max-width: 480px) {
+    .header { padding: 8px; }
+    .logo-img { width: 34px; height: 34px; }
+    .profile-button { padding: 3px; }
+    .profile-img { width: 36px; height: 36px; }
+    .profile-container { margin-left: 8px; }
+    .restart-button { margin-left: 8px; padding: 8px 10px; font-size: 13px; }
+    /* Restart feedback drops to its own line so a long message cannot widen the header. */
+    .header-actions { flex-wrap: wrap; justify-content: flex-end; }
+    .restart-status { flex-basis: 100%; margin-left: 0; text-align: right; }
 }

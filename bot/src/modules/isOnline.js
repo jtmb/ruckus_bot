@@ -1,71 +1,54 @@
-const { logEvent } = require('./mysql');
+const { logEvent, writeHeartbeat } = require("./mysql");
 
-// Helper function to retry logging
+const HEARTBEAT_MS = 30000;
+let timer = null;
+
 async function retryLogEvent(eventType, eventData, retries = 3, delay = 15000) {
-    let attempt = 0;
-
-    while (attempt < retries) {
-        try {
-            await new Promise((resolve, reject) => {
-                logEvent(eventType, eventData, (error) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve();
-                    }
-                });
-            });
-            console.log('Log event successful');
-            return; // Exit if logEvent is successful
-        } catch (error) {
-            attempt++;
-            console.error(`Log event failed (attempt ${attempt}/${retries}):`, error);
-            if (attempt < retries) {
-                await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
-            } else {
-                console.error('Failed to log event after multiple attempts');
-            }
-        }
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      await new Promise((resolve, reject) => {
+        logEvent(eventType, eventData, (error) => (error ? reject(error) : resolve()));
+      });
+      console.log("Log event successful");
+      return;
+    } catch (error) {
+      console.error(`Log event failed (attempt ${attempt}/${retries}):`, error.message);
+      if (attempt < retries) await new Promise((r) => setTimeout(r, delay));
+      else console.error("Failed to log event after multiple attempts");
     }
+  }
 }
 
 function handleBotReady(client) {
-    console.log('Checking client object:', client);
-    if (!client || !client.user) {
-        console.error('Error: Client object or client.user is null.');
-        return;
-    }
+  if (!client || !client.user) {
+    console.error("Error: Client object or client.user is null.");
+    return;
+  }
+  const botId = client.user.id;
+  const botName = client.user.username;
+  const guilds = client.guilds.cache;
+  const startedAt = new Date();
 
-    const botId = client.user.id;
-    const botName = client.user.username;
+  if (guilds.size > 0) {
+    console.log(`Bot is Online ✅ Bot ID: ${botId}, Bot Name: ${botName}`);
+    console.log("Connected Guilds:");
+    guilds.forEach((guild) => console.log(`- ${guild.name} (ID: ${guild.id})`));
+  } else {
+    console.log(`Bot is Online ✅ Bot ID: ${botId}, Bot Name: ${botName}. No connected guilds found.`);
+  }
 
-    // Get all guilds the bot is connected to
-    const guilds = client.guilds.cache;
-    if (guilds.size > 0) {
-        console.log(`Bot is Online ✅ Bot ID: ${botId}, Bot Name: ${botName}`);
-        console.log('Connected Guilds:');
+  retryLogEvent("bot_login", {
+    botId,
+    botName,
+    guilds: guilds.map((guild) => ({ id: guild.id, name: guild.name })),
+    timestamp: new Date(),
+  });
 
-        guilds.forEach(guild => {
-            console.log(`- ${guild.name} (ID: ${guild.id})`);
-        });
-
-        // Log event with all guilds
-        retryLogEvent('bot_login', {
-            botId,
-            botName,
-            guilds: guilds.map(guild => ({ id: guild.id, name: guild.name })),
-            timestamp: new Date()
-        });
-    } else {
-        console.log('Bot is Online ✅ Bot ID: ${botId}, Bot Name: ${botName}. No connected guilds found.');
-        // Log event with no guilds
-        retryLogEvent('bot_login', {
-            botId,
-            botName,
-            guilds: [],
-            timestamp: new Date()
-        });
-    }
+  if (timer) clearInterval(timer);
+  const beat = () => writeHeartbeat(client, startedAt).catch((e) => console.error("Heartbeat failed:", e.message));
+  beat();
+  timer = setInterval(beat, HEARTBEAT_MS);
+  timer.unref();
 }
 
 module.exports = handleBotReady;

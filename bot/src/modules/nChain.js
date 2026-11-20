@@ -1,44 +1,38 @@
-// nChain.js
+// nChain.js — per-channel chain state with 10 minute expiry. Never sends an empty message.
+const { safeReply } = require("./safeSend");
 
-// Variable to track if 'g' has been replied to in the N chain
-let gReplied = false;
+const responses = { n: "i", i: "g", g: "e", e: "r" };
+const EXPIRY_MS = 10 * 60 * 1000;
+const state = new Map(); // channelId -> { gReplied, at }
 
-// Define message-response pairs for the N chain
-const responses = {
-    'n': 'i',
-    'i': 'g',
-    'g': 'e',
-    'e': 'r',
-};
-
-// Function to handle N chain responses
-function handleNChainResponse(message, client, repliedMessages, logEvent) {
-    const content = message.content.toLowerCase();
-
-    // Check if the message content matches any key in the responses object
-    if (responses.hasOwnProperty(content)) {
-        // If the content is 'g' and 'g' has not been replied to yet
-        if (content === 'g' && !gReplied) {
-            message.reply('g'); // Send 'g' a second time
-            gReplied = true; // Set gReplied to true to indicate that 'g' has been replied to
-        } else if (content === 'e' && !gReplied) {
-            // If 'g' has not been replied to yet, do not reply with 'e'
-            message.reply(''); // Send an empty message
-        } else {
-            // Respond with the corresponding value from the responses object
-            const response = responses[content];
-            message.reply(response);
-            // Log the bot response to the N chain
-            logEvent('bot_response', {
-                eventType: 'N_chain_response',
-                responseData: response,
-                timestamp: new Date()
-            });
-        }
-    }
-
-    // Mark the message as processed
-    repliedMessages.set(message.id, true);
+function getState(channelId, now) {
+  const s = state.get(channelId);
+  if (!s || now - s.at > EXPIRY_MS) { state.delete(channelId); return { gReplied: false, at: now }; }
+  return s;
 }
 
+async function handleNChainResponse(message, client, repliedMessages, logEvent) {
+  const content = message.content.toLowerCase();
+  if (!Object.prototype.hasOwnProperty.call(responses, content)) return false;
+
+  const now = Date.now();
+  const channelId = message.channel ? message.channel.id : "dm";
+  const s = getState(channelId, now);
+
+  if (content === "g" && !s.gReplied) {
+    await safeReply(message, "g");
+    state.set(channelId, { gReplied: true, at: now });
+    if (state.size > 1000) state.delete(state.keys().next().value);
+  } else if (content === "e" && !s.gReplied) {
+    // Chain not in progress for this channel: stay silent rather than send an empty message.
+  } else {
+    const response = responses[content];
+    await safeReply(message, response);
+    if (content === "e") state.delete(channelId);
+    logEvent("bot_response", { eventType: "N_chain_response", responseData: response, timestamp: new Date() });
+  }
+  return true;
+}
+
+handleNChainResponse._state = state;
 module.exports = handleNChainResponse;

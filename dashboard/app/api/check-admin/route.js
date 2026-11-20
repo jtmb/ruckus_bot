@@ -1,39 +1,18 @@
 // api/check-admin/route.js
+// Reports first-run state only. Migrations run at API startup; checking whether an
+// admin exists must not perform an anonymous database-initialisation call.
 import { NextResponse } from 'next/server';
+import { callApi } from '../../lib/server';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
-    const apiEndpoint = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003'; // Adjust the port for Next.js
-
     try {
-        // Initialize the database by calling the new API route
-        const initializeResponse = await fetch(`${apiEndpoint}/api/initialize-db`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (!initializeResponse.ok) {
-            throw new Error('Failed to initialize database');
-        }
-
-        const initializeResult = await initializeResponse.json();
-        console.log('Database initialization result:', initializeResult);
-
-        // Fetch users after database initialization
-        const usersResponse = await fetch(`${apiEndpoint}/users`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (!usersResponse.ok) {
-            throw new Error('Failed to fetch users');
-        }
-
-        const users = await usersResponse.json();
-        const adminExists = users.some(user => user.role === 'admin'); // Check if any user has role 'admin'
-
-        return NextResponse.json({ adminExists });
+        const r = await callApi('/auth/bootstrap');
+        if (!r.ok) throw new Error('Failed to check administrators');
+        return NextResponse.json({ adminExists: Boolean(r.json.adminExists) });
     } catch (error) {
-        console.error('Error checking admin existence:', error);
+        console.error('Error checking admin existence:', error.message);
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
